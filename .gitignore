@@ -16,3 +16,8 @@ RestRequest/obj/RestRequest.csproj.nuget.g.targets
 *.dll
 *.pdb
 *.cache
+.vs/WZL.RestRequest/v15/.suo
+.vs/WZL.RestRequest/v15/Server/sqlite3/db.lock
+.vs/WZL.RestRequest/v15/Server/sqlite3/storage.ide
+.vs/WZL.RestRequest/v15/Server/sqlite3/storage.ide-shm
+.vs/WZL.RestRequest/v15/Server/sqlite3/storage.ide-wal
