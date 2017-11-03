@@ -5,8 +5,8 @@
 > 直接返回响应字符串
 > HttpRequest.Get("url").ResponseString();
 
-> 把返回值转换成类型T
-> HttpRequest.Get("url").ResponseValue<T>();
+> 把返回值转换成指定的类型
+> HttpRequest.Get("url").ResponseValue<obj>();
   
   
 ## Post请求 
@@ -17,7 +17,7 @@
 > HttpRequest.Post("url").Form(new{name="jack"}).ResponseString();
 
 > 把返回值转换成类型T
-> HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<T>();
+> HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<obj>();
   
 > HttpRequest.Post("url").Body(new{name="jack"}).ResponseString();
 
