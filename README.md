@@ -19,12 +19,11 @@ HttpRequest.Get("url").ResponseValue<obj>();
 直接返回响应字符串
 ```csharp
 HttpRequest.Post("url").Form(new{name="jack"}).ResponseString();
+HttpRequest.Post("url").Body(new{name="jack"}).ResponseString();
 ```
 把返回值转换成指定类型
 ```csharp
 HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<obj>();
-
-HttpRequest.Post("url").Body(new{name="jack"}).ResponseString();
 ```
 ### 也可以上传文件 默认Content-Type是multipart/form-data
 ```csharp
