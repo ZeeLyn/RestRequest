@@ -1,4 +1,4 @@
-# RestHttp 使用方法
+# RestHttp是基于.NET Standard 2.0 封装的http请求库
 
 ## Get请求 Content-Type默认是application/json
 
