@@ -26,12 +26,10 @@ HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<obj>();
 
 HttpRequest.Post("url").Body(new{name="jack"}).ResponseString();
 ```
-### 也可以上传文件
+### 也可以上传文件 默认Content-Type是multipart/form-data
 ```csharp
 HttpRequest.Post("url").Form(
-      new List<NamedFileStream>{
-				new NamedFileStream("name","filename",FileStream)
-			}, new{name="jack"}).Headers(new { Authorization = "bearar dsafadsfasf" }).ResponseValue<string>();
+      new List<NamedFileStream>{new NamedFileStream("name","filename",FileStream)}, new{name="jack"}).ResponseValue<string>();
 ```
 
 ### 可以通过Headers设置自定义头
