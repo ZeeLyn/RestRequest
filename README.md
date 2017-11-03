@@ -40,3 +40,13 @@ HttpRequest.Post("url").Body(new{name="jack"}).Headers(new{Authorization = "Bear
 ```csharp
 HttpRequest.Post("url").Body(new{name="jack"}).ContentType("html/text").ResponseString();
 ```
+
+### 异步回调
+```csharp
+HttpRequest.Post("url").OnSuccess((statuscode, content) => {
+
+			}).OnFail(ex => {
+
+			}).Start();
+```
+
