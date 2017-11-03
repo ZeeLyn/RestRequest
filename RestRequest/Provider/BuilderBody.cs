@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestRequest.interfaces;
@@ -57,6 +55,22 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		public IBuilderNoneBody Form(string text)
+		{
+			if (string.IsNullOrWhiteSpace(text))
+				throw new NullReferenceException("Post文本内容不能为空");
+			RequestBody = new TextBody(text);
+			return this;
+		}
+
+		public IBuilderNoneBody Form(Stream stream)
+		{
+			if (stream == null)
+				throw new ArgumentNullException("Post stream is null");
+			RequestBody = new StreamBody(stream);
+			return this;
+		}
+
 		public IBuilderNoneBody Form(IEnumerable<NamedFileStream> files, Dictionary<string, string> parameters)
 		{
 			var body = new MultipartBody();
@@ -94,6 +108,11 @@ namespace RestRequest.Provider
 			foreach (var item in properties)
 				RequestHeaders[item.Name] = item.GetValue(headers).ToString();
 			return this;
+		}
+
+		public Stream DownloadStream()
+		{
+			throw new NotImplementedException("Post方式不支持下载");
 		}
 
 		public void Start()

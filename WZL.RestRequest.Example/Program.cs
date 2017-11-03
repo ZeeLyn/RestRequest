@@ -14,7 +14,9 @@ namespace WZL.RestRequest.Example
 		{
 			var r = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list").Headers(new { Authorization = "bearar dsafadsfasf" }).ContentType("html/text").ResponseValue<JObject>();
 
-			Console.WriteLine(r.Content);
+			HttpRequest.Post("").Download();
+
+			Console.WriteLine();
 			Console.WriteLine("Hello World!");
 			Console.ReadKey();
 		}

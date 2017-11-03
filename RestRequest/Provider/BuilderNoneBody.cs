@@ -111,5 +111,10 @@ namespace RestRequest.Provider
 				Content = JsonConvert.DeserializeObject<T>(res.Content)
 			};
 		}
+
+		public Stream DownloadStream()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
