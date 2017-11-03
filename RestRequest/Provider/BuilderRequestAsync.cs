@@ -22,11 +22,14 @@ namespace RestRequest.Provider
 		{
 			Request = (HttpWebRequest)WebRequest.Create(Builder.Url);
 			Request.Method = Builder.Method.ToString().ToUpper();
-			Request.ContentType = Builder.RequestBody.GetContentType();
+			if (Builder.RequestBody != null)
+				Request.ContentType = Builder.RequestBody?.GetContentType();
 		}
 
 		internal async Task BuildRequest()
 		{
+			if (Builder.RequestBody == null)
+				return;
 			using (var bodyStream = Builder.RequestBody.GetBody())
 			{
 				Request.ContentLength = bodyStream.Length;

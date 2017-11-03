@@ -23,7 +23,8 @@ namespace RestRequest.Provider
 		{
 			Request = (HttpWebRequest)WebRequest.Create(Builder.Url);
 			Request.Method = Builder.Method.ToString().ToUpper();
-			Request.ContentType = Builder.RequestBody.GetContentType();
+			if (Builder.RequestBody != null)
+				Request.ContentType = Builder.RequestBody.GetContentType();
 			if (Builder.RequestHeaders != null && Builder.RequestHeaders.Count > 0)
 				Request.Headers = Builder.RequestHeaders;
 
@@ -31,6 +32,8 @@ namespace RestRequest.Provider
 
 		internal void BuildRequest()
 		{
+			if (Builder.RequestBody == null)
+				return;
 			using (var bodyStream = Builder.RequestBody.GetBody())
 			{
 				Request.ContentLength = bodyStream.Length;
