@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestRequest.interfaces;
 
@@ -76,6 +78,24 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		public IBuilderNoneBody Headers(Dictionary<string, string> headers)
+		{
+			if (!(headers?.Count > 0)) return this;
+			foreach (var item in headers)
+				RequestHeaders[item.Key] = item.Value;
+			return this;
+		}
+
+		public IBuilderNoneBody Headers(object headers)
+		{
+			if (headers == null)
+				return this;
+			var properties = headers.GetType().GetProperties();
+			foreach (var item in properties)
+				RequestHeaders[item.Name] = item.GetValue(headers).ToString();
+			return this;
+		}
+
 		public void Start()
 		{
 			var builder = new BuilderRequest(this);
@@ -96,27 +116,47 @@ namespace RestRequest.Provider
 			builder.CreateRequest();
 			builder.BuildRequest();
 			var res = builder.GetResponse();
-
 			return new ResponseResult<string>
 			{
 				Succeed = res.Success,
 				StatusCode = res.StatusCode,
 				Content = res.ResponseContent
 			};
-
 		}
 
-		public ResponseResult<T> RresponseValue<T>()
+		public async Task<ResponseResult<string>> ResponseStringAsync()
 		{
-			var builder = new BuilderRequest(this);
+			var builder = new BuilderRequestAsync(this);
 			builder.CreateRequest();
-			builder.BuildRequest();
-			var res = builder.GetResponse();
-			return new ResponseResult<T>
+			await builder.BuildRequest();
+			var res = await builder.GetResponse();
+			return new ResponseResult<string>
 			{
 				Succeed = res.Success,
 				StatusCode = res.StatusCode,
-				Content = JsonConvert.DeserializeObject<T>(res.ResponseContent)
+				Content = res.ResponseContent
+			};
+		}
+
+		public ResponseResult<T> ResponseValue<T>()
+		{
+			var res = ResponseString();
+			return new ResponseResult<T>
+			{
+				Succeed = res.Succeed,
+				StatusCode = res.StatusCode,
+				Content = JsonConvert.DeserializeObject<T>(res.Content)
+			};
+		}
+
+		public async Task<ResponseResult<T>> ResponseValueAsync<T>()
+		{
+			var res = await ResponseStringAsync();
+			return new ResponseResult<T>
+			{
+				Succeed = res.Succeed,
+				StatusCode = res.StatusCode,
+				Content = JsonConvert.DeserializeObject<T>(res.Content)
 			};
 		}
 	}

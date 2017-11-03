@@ -23,7 +23,8 @@ namespace RestRequest.Provider
 
 		public Stream GetBody()
 		{
-
+			if (_parameters == null)
+				return BodyStream;
 			BodyStream = new MemoryStream();
 			var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(_parameters));
 			BodyStream.Write(bytes, 0, bytes.Length);

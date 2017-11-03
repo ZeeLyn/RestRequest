@@ -14,15 +14,19 @@ namespace RestRequest.Provider
 
 		internal HttpMethod Method { get; set; }
 
+		internal WebHeaderCollection RequestHeaders { get; set; }
+
 		internal IBody RequestBody { get; set; }
 
 		protected Action<HttpStatusCode, string> SuccessAction { get; set; }
+
 		protected Action<WebException> FailAction { get; set; }
 
 		public BuilderBase(string url, HttpMethod method)
 		{
 			Url = new Uri(url);
 			Method = method;
+			RequestHeaders = new WebHeaderCollection();
 		}
 
 		public IBuilderCallback GetCallBack()

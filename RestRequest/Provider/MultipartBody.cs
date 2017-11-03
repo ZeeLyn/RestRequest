@@ -39,7 +39,7 @@ namespace RestRequest.Provider
 			var itemBytes = Encoding.ASCII.GetBytes(itemboundary);
 			var endBytes = Encoding.ASCII.GetBytes(endboundary);
 			Stream bodyStream = new MemoryStream();
-			if (Parameters != null)
+			if (Parameters != null && Parameters.Count > 0)
 			{
 				var formdataTemplate = "\r\n--" + Boundary +
 									   "\r\nContent-Disposition: form-data; name=\"{0}\";\r\n\r\n{1}";
@@ -78,6 +78,8 @@ namespace RestRequest.Provider
 
 		public void AddParameters(object parameters)
 		{
+			if (parameters == null)
+				return;
 			var properties = parameters.GetType().GetProperties();
 			foreach (var enumerator in properties)
 			{
@@ -87,11 +89,14 @@ namespace RestRequest.Provider
 
 		public void AddParameters(Dictionary<string, string> parameters)
 		{
-			Parameters = parameters;
+			if (parameters != null && parameters.Count > 0)
+				Parameters = parameters;
 		}
 
 		public void AddFiles(IEnumerable<NamedFileStream> files)
 		{
+			if (files == null || !files.Any())
+				return;
 			_files.AddRange(files);
 		}
 	}

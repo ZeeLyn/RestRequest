@@ -21,3 +21,6 @@ RestRequest/obj/RestRequest.csproj.nuget.g.targets
 .vs/WZL.RestRequest/v15/Server/sqlite3/storage.ide
 .vs/WZL.RestRequest/v15/Server/sqlite3/storage.ide-shm
 .vs/WZL.RestRequest/v15/Server/sqlite3/storage.ide-wal
+*.DotSettings
+WZL.RestRequest.Example/obj/Debug/netcoreapp2.0/WZL.RestRequest.Example.csproj.FileListAbsolute.txt
+*.txt

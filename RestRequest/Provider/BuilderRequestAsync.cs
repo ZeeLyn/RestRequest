@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Text;
-using RestRequest.interfaces;
+using System.Threading.Tasks;
 
 namespace RestRequest.Provider
 {
-	internal class BuilderRequest
+	internal class BuilderRequestAsync
 	{
 		private HttpWebRequest Request { get; set; }
 
 		private BuilderBase Builder { get; }
 
-		internal BuilderRequest(BuilderBase builder)
+		internal BuilderRequestAsync(BuilderBase builder)
 		{
 			Builder = builder;
 		}
@@ -24,22 +23,19 @@ namespace RestRequest.Provider
 			Request = (HttpWebRequest)WebRequest.Create(Builder.Url);
 			Request.Method = Builder.Method.ToString().ToUpper();
 			Request.ContentType = Builder.RequestBody.GetContentType();
-			if (Builder.RequestHeaders != null && Builder.RequestHeaders.Count > 0)
-				Request.Headers = Builder.RequestHeaders;
-
 		}
 
-		internal void BuildRequest()
+		internal async Task BuildRequest()
 		{
 			using (var bodyStream = Builder.RequestBody.GetBody())
 			{
 				Request.ContentLength = bodyStream.Length;
-				using (var requestStream = Request.GetRequestStream())
+				using (var requestStream = await Request.GetRequestStreamAsync())
 				{
 					bodyStream.Position = 0;
 					var bytes = new byte[bodyStream.Length];
-					bodyStream.Read(bytes, 0, bytes.Length);
-					requestStream.Write(bytes, 0, bytes.Length);
+					await bodyStream.ReadAsync(bytes, 0, bytes.Length);
+					await requestStream.WriteAsync(bytes, 0, bytes.Length);
 				}
 			}
 		}
@@ -50,7 +46,7 @@ namespace RestRequest.Provider
 			{
 				Request.ContentType = Builder.RequestBody.GetContentType();
 				{
-					Request.BeginGetRequestStream(r =>
+					Request.BeginGetRequestStream(async r =>
 					{
 						var request = (HttpWebRequest)r.AsyncState;
 						using (var bodyStream = Builder.RequestBody.GetBody())
@@ -60,7 +56,7 @@ namespace RestRequest.Provider
 							{
 								var bytes = new byte[bodyStream.Length];
 								bodyStream.Read(bytes, 0, bytes.Length);
-								requestStream.Write(bytes, 0, bytes.Length);
+								await requestStream.WriteAsync(bytes, 0, bytes.Length);
 							}
 						}
 						var callback = Builder.GetCallBack();
@@ -97,15 +93,15 @@ namespace RestRequest.Provider
 		}
 
 
-		internal (bool Success, HttpStatusCode StatusCode, string ResponseContent) GetResponse()
+		internal async Task<(bool Success, HttpStatusCode StatusCode, string ResponseContent)> GetResponse()
 		{
 			try
 			{
-				using (var response = (HttpWebResponse)Request.GetResponse())
+				using (var response = (HttpWebResponse)await Request.GetResponseAsync())
 				using (var res = response.GetResponseStream())
 				using (var reader = new StreamReader(res))
 				{
-					return (true, response.StatusCode, reader.ReadToEnd());
+					return (true, response.StatusCode, await reader.ReadToEndAsync());
 				}
 			}
 			catch (WebException e)
@@ -116,7 +112,7 @@ namespace RestRequest.Provider
 				using (var res = badRes.GetResponseStream())
 				using (var reader = new StreamReader(res))
 				{
-					return (false, badRes.StatusCode, reader.ReadToEnd());
+					return (false, badRes.StatusCode, await reader.ReadToEndAsync());
 				}
 			}
 		}

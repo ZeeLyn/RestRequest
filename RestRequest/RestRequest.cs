@@ -18,5 +18,15 @@ namespace RestRequest
 		{
 			return new BuilderBody(url, HttpMethod.Post);
 		}
+
+		public static IBuilder Put(string url)
+		{
+			return new BuilderBody(url, HttpMethod.Put);
+		}
+
+		public static IBuilderNoneBody Delete(string url)
+		{
+			return new BuilderNoneBody(url, HttpMethod.Delete);
+		}
 	}
 }

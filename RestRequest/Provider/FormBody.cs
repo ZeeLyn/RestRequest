@@ -21,6 +21,8 @@ namespace RestRequest.Provider
 
 		public Stream GetBody()
 		{
+			if (_parameters == null || _parameters.Count == 0)
+				return BodyStream;
 			var query = new StringBuilder();
 			foreach (var item in _parameters)
 			{
@@ -44,11 +46,15 @@ namespace RestRequest.Provider
 
 		public void AddParameter(Dictionary<string, string> parameters)
 		{
+			if (parameters == null || parameters.Count == 0)
+				return;
 			_parameters = parameters;
 		}
 
 		public void AddParameter(object parameters)
 		{
+			if (parameters == null)
+				return;
 			var properties = parameters.GetType().GetProperties();
 			foreach (var enumerator in properties)
 			{
