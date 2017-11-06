@@ -9,7 +9,7 @@ namespace RestRequest.Provider
 {
 	public class BuilderCallback : IBuilderCallback
 	{
-		public Action<HttpStatusCode, string> Success { get; set; }
+		public Action<HttpStatusCode, Stream> Success { get; set; }
 		public Action<WebException> Fail { get; set; }
 	}
 }

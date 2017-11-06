@@ -49,7 +49,7 @@ namespace RestRequest.Provider
 
 		internal void BuildRequestAndCallback()
 		{
-			if (Builder.RequestBody != null)
+			if (Builder.RequestBody != null && (Request.Method.Equals(HttpMethod.Post.ToString(), StringComparison.CurrentCultureIgnoreCase) || Request.Method.Equals(HttpMethod.Put.ToString(), StringComparison.CurrentCultureIgnoreCase)))
 			{
 				Request.ContentType = Builder.RequestBody.GetContentType();
 				{
@@ -78,50 +78,52 @@ namespace RestRequest.Provider
 			}
 		}
 
-		protected AsyncCallback ProcessCallback(Action<HttpStatusCode, string> success, Action<WebException> fail)
+		protected AsyncCallback ProcessCallback(Action<HttpStatusCode, Stream> success, Action<WebException> fail)
 		{
 			return r =>
 			{
-				var webRequest = (HttpWebRequest)r.AsyncState;
 				try
 				{
+					var webRequest = (HttpWebRequest)r.AsyncState;
 					using (var response = (HttpWebResponse)webRequest.EndGetResponse(r))
-					using (var res = response.GetResponseStream())
-					using (var reader = new StreamReader(res))
+					using (var stream = response.GetResponseStream())
 					{
-						success?.Invoke(response.StatusCode, reader.ReadToEnd());
+						success?.Invoke(response.StatusCode, stream);
 					}
 				}
 				catch (WebException ex)
 				{
 					fail?.Invoke(ex);
 				}
+				finally
+				{
+					Request.Abort();
+				}
 			};
 		}
 
 
-		internal (bool Success, HttpStatusCode StatusCode, string ResponseContent) GetResponse()
+		internal (bool Success, HttpStatusCode StatusCode, Stream ResponseContent, HttpWebResponse Response) GetResponse()
 		{
+			HttpWebResponse response = null;
 			try
 			{
-				using (var response = (HttpWebResponse)Request.GetResponse())
-				using (var res = response.GetResponseStream())
-				using (var reader = new StreamReader(res))
-				{
-					return (true, response.StatusCode, reader.ReadToEnd());
-				}
+				response = (HttpWebResponse)Request.GetResponse();
+				return (true, response.StatusCode, response.GetResponseStream(), response);
 			}
 			catch (WebException e)
 			{
+				response?.Close();
 				if (e.Response == null)
-					return (false, HttpStatusCode.InternalServerError, e.Message);
-				using (var badRes = (HttpWebResponse)e.Response)
-				using (var res = badRes.GetResponseStream())
-				using (var reader = new StreamReader(res))
-				{
-					return (false, badRes.StatusCode, reader.ReadToEnd());
-				}
+					return (false, HttpStatusCode.InternalServerError, new MemoryStream(Encoding.UTF8.GetBytes(e.Message)), null);
+				var badRes = (HttpWebResponse)e.Response;
+				return (false, badRes.StatusCode, new MemoryStream(Encoding.UTF8.GetBytes(e.Message)), badRes);
 			}
+		}
+
+		public void Dispose()
+		{
+			Request?.Abort();
 		}
 	}
 }

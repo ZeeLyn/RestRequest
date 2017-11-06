@@ -8,7 +8,7 @@ namespace RestRequest.interfaces
 {
 	public interface IBuilderCallback
 	{
-		Action<HttpStatusCode, string> Success { get; }
+		Action<HttpStatusCode, Stream> Success { get; }
 
 		Action<WebException> Fail { get; }
 	}

@@ -13,6 +13,9 @@ namespace RestRequest.Provider
 	{
 		public BuilderBody(string url, HttpMethod method) : base(url, method)
 		{
+			var body = new JsonBody();
+			body.SetContentType("application/x-www-form-urlencoded");
+			RequestBody = body;
 		}
 		public IBuilderNoneBody Body(object parameters)
 		{
@@ -80,9 +83,21 @@ namespace RestRequest.Provider
 			return this;
 		}
 
-		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action)
+		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action)
 		{
 			SuccessAction = action;
+			return this;
+		}
+
+		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action)
+		{
+			SuccessAction = (statuscode, stream) =>
+			{
+				using (var reader = new StreamReader(stream))
+				{
+					action(statuscode, reader.ReadToEnd());
+				}
+			};
 			return this;
 		}
 
@@ -110,11 +125,6 @@ namespace RestRequest.Provider
 			return this;
 		}
 
-		public Stream DownloadStream()
-		{
-			throw new NotImplementedException("Post方式不支持下载");
-		}
-
 		public void Start()
 		{
 			var builder = new BuilderRequest(this);
@@ -129,32 +139,68 @@ namespace RestRequest.Provider
 		}
 
 
-		public ResponseResult<string> ResponseString()
+		public ResponseResult<Stream> ResponseStream()
 		{
 			var builder = new BuilderRequest(this);
 			builder.CreateRequest();
 			builder.BuildRequest();
 			var res = builder.GetResponse();
-			return new ResponseResult<string>
+			builder.Dispose();
+			return new ResponseResult<Stream>
 			{
 				Succeed = res.Success,
 				StatusCode = res.StatusCode,
-				Content = res.ResponseContent
+				Content = res.ResponseContent,
+				Response = res.Response
 			};
+		}
+
+		public async Task<ResponseResult<Stream>> ResponseStreamAsync()
+		{
+			var builder = new BuilderRequestAsync(this);
+			builder.CreateRequest();
+			await builder.BuildRequestAsync();
+			var res = await builder.GetResponseAsync();
+			builder.Dispose();
+			return new ResponseResult<Stream>
+			{
+				Succeed = res.Success,
+				StatusCode = res.StatusCode,
+				Content = res.ResponseContent,
+				Response = res.Response
+			};
+		}
+
+		public ResponseResult<string> ResponseString()
+		{
+			var res = ResponseStream();
+			using (var stream = res.Content)
+			using (var reader = new StreamReader(stream))
+			{
+				return new ResponseResult<string>
+				{
+					Succeed = res.Succeed,
+					StatusCode = res.StatusCode,
+					Content = reader.ReadToEnd(),
+					Response = res.Response
+				};
+			}
 		}
 
 		public async Task<ResponseResult<string>> ResponseStringAsync()
 		{
-			var builder = new BuilderRequestAsync(this);
-			builder.CreateRequest();
-			await builder.BuildRequest();
-			var res = await builder.GetResponse();
-			return new ResponseResult<string>
+			var res = await ResponseStreamAsync();
+			using (var stream = res.Content)
+			using (var reader = new StreamReader(stream))
 			{
-				Succeed = res.Success,
-				StatusCode = res.StatusCode,
-				Content = res.ResponseContent
-			};
+				return new ResponseResult<string>
+				{
+					Succeed = res.Succeed,
+					StatusCode = res.StatusCode,
+					Content = await reader.ReadToEndAsync(),
+					Response = res.Response
+				};
+			}
 		}
 
 		public ResponseResult<T> ResponseValue<T>()
@@ -164,7 +210,8 @@ namespace RestRequest.Provider
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = JsonConvert.DeserializeObject<T>(res.Content)
+				Content = JsonConvert.DeserializeObject<T>(res.Content),
+				Response = res.Response
 			};
 		}
 
@@ -175,7 +222,8 @@ namespace RestRequest.Provider
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = JsonConvert.DeserializeObject<T>(res.Content)
+				Content = JsonConvert.DeserializeObject<T>(res.Content),
+				Response = res.Response
 			};
 		}
 	}

@@ -18,7 +18,7 @@ namespace RestRequest.Provider
 
 		internal IBody RequestBody { get; set; }
 
-		protected Action<HttpStatusCode, string> SuccessAction { get; set; }
+		protected Action<HttpStatusCode, Stream> SuccessAction { get; set; }
 
 		protected Action<WebException> FailAction { get; set; }
 

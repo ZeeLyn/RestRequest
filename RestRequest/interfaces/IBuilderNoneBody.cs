@@ -10,6 +10,16 @@ namespace RestRequest.interfaces
 	public interface IBuilderNoneBody : IActionBackResult
 	{
 		/// <summary>
+		/// 获取响应流
+		/// </summary>
+		/// <returns></returns>
+		ResponseResult<Stream> ResponseStream();
+		/// <summary>
+		/// 获取响应流
+		/// </summary>
+		/// <returns></returns>
+		Task<ResponseResult<Stream>> ResponseStreamAsync();
+		/// <summary>
 		/// 获取响应字符串
 		/// </summary>
 		/// <returns></returns>
@@ -49,9 +59,5 @@ namespace RestRequest.interfaces
 		/// <returns></returns>
 		IBuilderNoneBody Headers(object headers);
 
-		/// <summary>
-		/// 下载返回Stream，只支持Get方式
-		/// </summary>
-		Stream DownloadStream();
 	}
 }

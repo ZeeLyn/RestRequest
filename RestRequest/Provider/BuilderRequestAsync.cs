@@ -26,7 +26,7 @@ namespace RestRequest.Provider
 				Request.ContentType = Builder.RequestBody?.GetContentType();
 		}
 
-		internal async Task BuildRequest()
+		internal async Task BuildRequestAsync()
 		{
 			if (Builder.RequestBody == null)
 				return;
@@ -44,28 +44,25 @@ namespace RestRequest.Provider
 		}
 
 
-		internal async Task<(bool Success, HttpStatusCode StatusCode, string ResponseContent)> GetResponse()
+		internal async Task<(bool Success, HttpStatusCode StatusCode, Stream ResponseContent, HttpWebResponse Response)> GetResponseAsync()
 		{
 			try
 			{
-				using (var response = (HttpWebResponse)await Request.GetResponseAsync())
-				using (var res = response.GetResponseStream())
-				using (var reader = new StreamReader(res))
-				{
-					return (true, response.StatusCode, await reader.ReadToEndAsync());
-				}
+				var response = (HttpWebResponse)await Request.GetResponseAsync();
+				return (true, response.StatusCode, response.GetResponseStream(), response);
 			}
 			catch (WebException e)
 			{
 				if (e.Response == null)
-					return (false, HttpStatusCode.InternalServerError, e.Message);
-				using (var badRes = (HttpWebResponse)e.Response)
-				using (var res = badRes.GetResponseStream())
-				using (var reader = new StreamReader(res))
-				{
-					return (false, badRes.StatusCode, await reader.ReadToEndAsync());
-				}
+					return (false, HttpStatusCode.InternalServerError, new MemoryStream(Encoding.UTF8.GetBytes(e.Message)), null);
+				var badRes = (HttpWebResponse)e.Response;
+				return (false, badRes.StatusCode, new MemoryStream(Encoding.UTF8.GetBytes(e.Message)), badRes);
 			}
+		}
+
+		public void Dispose()
+		{
+			Request?.Abort();
 		}
 	}
 }

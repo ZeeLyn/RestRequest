@@ -9,6 +9,8 @@ namespace RestRequest.interfaces
 	public interface IActionCallback
 	{
 
+		IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action);
+
 		IActionCallback OnSuccess(Action<HttpStatusCode, string> action);
 
 		IActionCallback OnFail(Action<WebException> action);
