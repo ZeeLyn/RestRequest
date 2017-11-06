@@ -14,7 +14,9 @@ namespace WZL.RestRequest.Example
 	{
 		static void Main(string[] args)
 		{
-			//var r = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list").Headers(new { Authorization = "bearar dsafadsfasf" }).ContentType("html/text").ResponseValue<JObject>();
+			var r = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list/false").Headers(new { Authorization = "bearar dsafadsfasf" }).ContentType("html/text").ResponseStringAsync().Result;
+
+			Console.WriteLine(r.Content);
 
 			//using (var r = HttpRequest.Get("https://www.baidu.com/").ResponseStream())
 			//{
@@ -66,7 +68,7 @@ namespace WZL.RestRequest.Example
 
 			//using (var res = HttpRequest.Post("http://localhost:11353/api/v2.0/push/testpost").Form(new List<NamedFileStream>{
 			//	new NamedFileStream("file","d:\\download1.jpeg",File.OpenRead("d:\\download1.jpeg"))
-			//}, new { name = "abd" }).ResponseString())
+			//}, new { name = "abd" }).Headers(new { Authorization = "Bearer safasfasf" }).ResponseStringAsync().Result)
 			//{
 			//	//var c = res.Content;
 			//	//var reader = new StreamReader(res.Content);
@@ -74,16 +76,16 @@ namespace WZL.RestRequest.Example
 			//	Console.WriteLine(res.Content);
 			//}
 
-			HttpRequest.Post("http://localhost:11353/api/v2.0/push/testpost").Form(new List<NamedFileStream>
-			{
-				new NamedFileStream("file", "d:\\download1.jpeg", File.OpenRead("d:\\download1.jpeg"))
-			}, new { name = "abd" }).OnSuccess((HttpStatusCode code, string content) =>
-			{
-				var r = content;
-			}).OnFail(ex =>
-			{
-				var r = ex;
-			}).Start();
+			//HttpRequest.Post("http://localhost:11353/api/v2.0/push/testpost").Form(new List<NamedFileStream>
+			//{
+			//	new NamedFileStream("file", "d:\\download1.jpeg", File.OpenRead("d:\\download1.jpeg"))
+			//}, new { name = "abd" }).OnSuccess((HttpStatusCode code, string content) =>
+			//{
+			//	var r = content;
+			//}).OnFail(ex =>
+			//{
+			//	var r = ex;
+			//}).Start();
 
 
 			Console.WriteLine();

@@ -22,10 +22,10 @@ namespace RestRequest.Provider
 		{
 			Request = (HttpWebRequest)WebRequest.Create(Builder.Url);
 			Request.Method = Builder.Method.ToString().ToUpper();
-			if (Builder.RequestBody != null)
-				Request.ContentType = Builder.RequestBody?.GetContentType();
 			if (Builder.RequestHeaders != null && Builder.RequestHeaders.Count > 0)
 				Request.Headers = Builder.RequestHeaders;
+			if (Builder.RequestBody != null)
+				Request.ContentType = Builder.RequestBody.GetContentType();
 		}
 
 		internal async Task BuildRequestAsync()
