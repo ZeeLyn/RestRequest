@@ -36,7 +36,7 @@ HttpRequest.Post("url").Form(
 HttpRequest.Post("url").Body(new{name="jack"}).Headers(new{Authorization = "Bearar token"}).ResponseString();
 ```
 
-### 可以通过ContentType设置Content-Type值
+### 可以通过ContentType设置Content-Type值,但是不支持自定义multipart/form-data
 ```csharp
 HttpRequest.Post("url").Body(new{name="jack"}).ContentType("html/text").ResponseString();
 ```
