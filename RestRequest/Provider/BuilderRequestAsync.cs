@@ -24,6 +24,8 @@ namespace RestRequest.Provider
 			Request.Method = Builder.Method.ToString().ToUpper();
 			if (Builder.RequestBody != null)
 				Request.ContentType = Builder.RequestBody?.GetContentType();
+			if (Builder.RequestHeaders != null && Builder.RequestHeaders.Count > 0)
+				Request.Headers = Builder.RequestHeaders;
 		}
 
 		internal async Task BuildRequestAsync()
