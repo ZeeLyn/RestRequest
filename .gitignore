@@ -24,3 +24,11 @@ RestRequest/obj/RestRequest.csproj.nuget.g.targets
 *.DotSettings
 WZL.RestRequest.Example/obj/Debug/netcoreapp2.0/WZL.RestRequest.Example.csproj.FileListAbsolute.txt
 *.txt
+RestRequest/bin/Release/netstandard2.0/RestRequest.deps.json
+RestRequest/bin/Release/RestRequest.1.0.0.nupkg
+RestRequest/obj/Release/netstandard2.0/RestRequest.AssemblyInfo.cs
+RestRequest/obj/Release/RestRequest.1.0.0.nuspec
+WZL.RestRequest.Example/obj/project.assets.json
+WZL.RestRequest.Example/obj/WZL.RestRequest.Example.csproj.nuget.g.props
+WZL.RestRequest.Example/obj/WZL.RestRequest.Example.csproj.nuget.g.props
+*.props

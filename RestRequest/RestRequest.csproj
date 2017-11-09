@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <SignAssembly>false</SignAssembly>
+    <Description>RestRequest是基于.NET Standard 2.0 封装的轻量级restful http请求库</Description>
+    <Authors>wangzelin</Authors>
+    <Company />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/ww198643/RestRequest</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
