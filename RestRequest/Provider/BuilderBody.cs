@@ -144,6 +144,39 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		public IBuilderNoneBody UserAgent(string userAgent)
+		{
+			base.UserAgent = userAgent;
+			return this;
+		}
+
+		public IBuilderNoneBody Timeout(int timeout)
+		{
+			if (timeout <= 0)
+				throw new ArgumentOutOfRangeException("超时时间必须大于0");
+			base.Timeout = timeout;
+			return this;
+		}
+
+		public IBuilderNoneBody Cookies(object cookies)
+		{
+			if (cookies == null) return this;
+			base.Cookies = new Dictionary<string, string>();
+			var properties = cookies.GetType().GetProperties();
+			foreach (var enumerator in properties)
+			{
+				base.Cookies.Add(enumerator.Name, enumerator.GetValue(cookies).ToString());
+			}
+			return this;
+		}
+
+		public IBuilderNoneBody Cookies(Dictionary<string, string> cookies)
+		{
+			if (cookies != null && cookies.Count > 0)
+				base.Cookies = cookies;
+			return this;
+		}
+
 		public void Start()
 		{
 			var builder = new BuilderRequest(this);

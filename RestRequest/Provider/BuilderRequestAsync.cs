@@ -30,6 +30,11 @@ namespace RestRequest.Provider
 				Request.ServerCertificateValidationCallback = ValidationCertificate.VerifyServerCertificate;
 			if (Builder.ClientCertificates != null && Builder.ClientCertificates.Count > 0)
 				Request.ClientCertificates.AddRange(Builder.ClientCertificates);
+			if (!string.IsNullOrWhiteSpace(Builder.UserAgent))
+				Request.UserAgent = Builder.UserAgent;
+			if (Builder.Timeout > 0)
+				Request.Timeout = Builder.Timeout;
+
 		}
 
 		internal async Task BuildRequestAsync()

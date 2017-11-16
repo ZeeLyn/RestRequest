@@ -39,3 +39,4 @@ WZL.RestRequest.Example/obj/project.assets.json
 WZL.RestRequest.Example/obj/WZL.RestRequest.Example.csproj.nuget.g.props
 WZL.RestRequest.Example/obj/WZL.RestRequest.Example.csproj.nuget.g.targets
 *.targets
+*.nupkg

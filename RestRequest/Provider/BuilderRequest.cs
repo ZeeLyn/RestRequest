@@ -29,6 +29,18 @@ namespace RestRequest.Provider
 				Request.ServerCertificateValidationCallback = ValidationCertificate.VerifyServerCertificate;
 			if (Builder.ClientCertificates != null && Builder.ClientCertificates.Count > 0)
 				Request.ClientCertificates.AddRange(Builder.ClientCertificates);
+			if (!string.IsNullOrWhiteSpace(Builder.UserAgent))
+				Request.UserAgent = Builder.UserAgent;
+			if (Builder.Timeout > 0)
+				Request.Timeout = Builder.Timeout;
+			if (Builder.Cookies?.Count > 0)
+			{
+				Request.CookieContainer = new CookieContainer();
+				foreach (var cookie in Builder.Cookies)
+				{
+					Request.CookieContainer.Add(new Cookie { Name = cookie.Key, Value = cookie.Value, Domain = Builder.Url.Host });
+				}
+			}
 		}
 
 		internal void BuildRequest()

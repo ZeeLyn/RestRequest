@@ -27,6 +27,12 @@ namespace RestRequest.Provider
 
 		internal X509CertificateCollection ClientCertificates { get; set; } = new X509CertificateCollection();
 
+		internal string UserAgent { get; set; }
+
+		internal int Timeout { get; set; }
+
+		internal Dictionary<string, string> Cookies { get; set; }
+
 		public BuilderBase(string url, HttpMethod method, bool ignoreCertificateError)
 		{
 			Url = new Uri(url);

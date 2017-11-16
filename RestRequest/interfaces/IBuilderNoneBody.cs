@@ -82,5 +82,33 @@ namespace RestRequest.interfaces
 		/// <param name="cert"></param>
 		/// <returns></returns>
 		IBuilderNoneBody AddCertificate(X509Certificate cert);
+
+		/// <summary>
+		/// 设置UserAgent
+		/// </summary>
+		/// <param name="userAgent"></param>
+		/// <returns></returns>
+		IBuilderNoneBody UserAgent(string userAgent);
+
+		/// <summary>
+		/// 设置超时时间（单位毫秒）
+		/// </summary>
+		/// <param name="timeout"></param>
+		/// <returns></returns>
+		IBuilderNoneBody Timeout(int timeout);
+
+		/// <summary>
+		/// 设置cookie
+		/// </summary>
+		/// <param name="cookies"></param>
+		/// <returns></returns>
+		IBuilderNoneBody Cookies(object cookies);
+
+		/// <summary>
+		/// 设置cookie
+		/// </summary>
+		/// <param name="cookies"></param>
+		/// <returns></returns>
+		IBuilderNoneBody Cookies(Dictionary<string, string> cookies);
 	}
 }
