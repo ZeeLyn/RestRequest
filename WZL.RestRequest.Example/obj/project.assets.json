@@ -921,7 +921,7 @@
           "lib/netstandard1.3/System.Xml.XmlDocument.dll": {}
         }
       },
-      "RestRequest/1.0.0": {
+      "RestRequest/1.0.1": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
@@ -3785,7 +3785,7 @@
         "system.xml.xmldocument.nuspec"
       ]
     },
-    "RestRequest/1.0.0": {
+    "RestRequest/1.0.1": {
       "type": "project",
       "path": "../RestRequest/RestRequest.csproj",
       "msbuildProject": "../RestRequest/RestRequest.csproj"
@@ -3795,7 +3795,7 @@
     ".NETCoreApp,Version=v2.0": [
       "CaptchaGen.NetCore >= 1.0.2",
       "Microsoft.NETCore.App >= 2.0.0",
-      "RestRequest >= 1.0.0"
+      "RestRequest >= 1.0.1"
     ]
   },
   "packageFolders": {
