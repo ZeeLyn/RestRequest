@@ -19,6 +19,12 @@ namespace RestRequest.Provider
 			body.SetContentType("application/x-www-form-urlencoded");
 			RequestBody = body;
 		}
+
+		/// <summary>
+		/// 设置json数据
+		/// </summary>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
 		public IBuilderNoneBody Body(object parameters)
 		{
 			var body = new JsonBody();
@@ -27,6 +33,12 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		/// <summary>
+		/// 设置表单数据
+		/// content-type=application/x-www-form-urlencoded
+		/// </summary>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
 		public IBuilderNoneBody Form(object parameters)
 		{
 			var body = new FormBody();
@@ -35,6 +47,12 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		/// <summary>
+		/// 设置表单数据
+		/// content-type=application/x-www-form-urlencoded
+		/// </summary>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
 		public IBuilderNoneBody Form(Dictionary<string, string> parameters)
 		{
 			var body = new FormBody();
@@ -43,6 +61,13 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		/// <summary>
+		/// 设置表单数据和上传的文件
+		/// content-type=multipart/form-data
+		/// </summary>
+		/// <param name="files">上传的文件信息</param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
 		public IBuilderNoneBody Form(IEnumerable<NamedFileStream> files, object parameters)
 		{
 			var body = new MultipartBody();
@@ -52,6 +77,12 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		/// <summary>
+		/// 设置上传的文件
+		/// content-type=multipart/form-data
+		/// </summary>
+		/// <param name="files">上传的文件信息</param>
+		/// <returns></returns>
 		public IBuilderNoneBody Form(IEnumerable<NamedFileStream> files)
 		{
 			var body = new MultipartBody();
@@ -60,6 +91,12 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		/// <summary>
+		/// 设置提交的文本
+		/// content-type=application/text
+		/// </summary>
+		/// <param name="text">提交文本</param>
+		/// <returns></returns>
 		public IBuilderNoneBody Form(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -68,14 +105,27 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		/// <summary>
+		/// 设置提交的Stream
+		/// content-type=application/octet-stream
+		/// </summary>
+		/// <param name="stream"></param>
+		/// <returns></returns>
 		public IBuilderNoneBody Form(Stream stream)
 		{
 			if (stream == null)
-				throw new ArgumentNullException("Post stream is null");
+				throw new ArgumentNullException("the stream is null");
 			RequestBody = new StreamBody(stream);
 			return this;
 		}
 
+		/// <summary>
+		/// 设置表单数据和上传的文件
+		/// content-type=multipart/form-data
+		/// </summary>
+		/// <param name="files">上传的文件信息</param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
 		public IBuilderNoneBody Form(IEnumerable<NamedFileStream> files, Dictionary<string, string> parameters)
 		{
 			var body = new MultipartBody();
@@ -129,6 +179,8 @@ namespace RestRequest.Provider
 
 		public IBuilderNoneBody AddCertificate(string certificateUrl, string certificatePassword)
 		{
+			if (!File.Exists(certificateUrl))
+				throw new FileNotFoundException($"证书文件不存在{certificateUrl}");
 			if (ClientCertificates == null)
 				ClientCertificates = new X509CertificateCollection();
 			ClientCertificates.Add(new X509Certificate(certificateUrl, certificatePassword));
@@ -153,7 +205,8 @@ namespace RestRequest.Provider
 
 		public IBuilderNoneBody UserAgent(string userAgent)
 		{
-			base.UserAgent = userAgent;
+			if (!string.IsNullOrWhiteSpace(userAgent))
+				base.UserAgent = userAgent;
 			return this;
 		}
 
@@ -205,7 +258,8 @@ namespace RestRequest.Provider
 
 		public IBuilderNoneBody ContentType(string contenttype)
 		{
-			RequestBody?.SetContentType(contenttype);
+			if (!string.IsNullOrWhiteSpace(contenttype))
+				RequestBody?.SetContentType(contenttype);
 			return this;
 		}
 

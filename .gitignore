@@ -42,3 +42,4 @@ WZL.RestRequest.Example/obj/WZL.RestRequest.Example.csproj.nuget.g.targets
 *.nupkg
 RestRequest/obj/Release/RestRequest.1.0.1.nuspec
 WZL.RestRequest.Example/obj/project.assets.json
+*.nuspec

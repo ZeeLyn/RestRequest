@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RestRequest.interfaces
 {
-	public interface IBuilderNoneBody : IActionBackResult
+	public interface IBuilderNoneBody : IActionCallback
 	{
 		/// <summary>
 		/// 获取响应流
@@ -45,6 +45,13 @@ namespace RestRequest.interfaces
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		Task<ResponseResult<T>> ResponseValueAsync<T>();
+
+		/// <summary>
+		/// 设置Content-Type,不支持multipart/form-data的自定义
+		/// </summary>
+		/// <param name="contenttype"></param>
+		/// <returns></returns>
+		IBuilderNoneBody ContentType(string contenttype);
 
 		/// <summary>
 		/// 设置header

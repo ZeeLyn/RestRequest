@@ -66,6 +66,8 @@ namespace RestRequest.Provider
 
 		public IBuilderNoneBody AddCertificate(string certificateUrl, string certificatePassword)
 		{
+			if (!File.Exists(certificateUrl))
+				throw new FileNotFoundException($"证书文件不存在{certificateUrl}");
 			if (ClientCertificates == null)
 				ClientCertificates = new X509CertificateCollection();
 			ClientCertificates.Add(new X509Certificate(certificateUrl, certificatePassword));
@@ -90,7 +92,8 @@ namespace RestRequest.Provider
 
 		public IBuilderNoneBody UserAgent(string userAgent)
 		{
-			base.UserAgent = userAgent;
+			if (!string.IsNullOrWhiteSpace(userAgent))
+				base.UserAgent = userAgent;
 			return this;
 		}
 
@@ -143,7 +146,8 @@ namespace RestRequest.Provider
 
 		public IBuilderNoneBody ContentType(string contenttype)
 		{
-			RequestBody?.SetContentType(contenttype);
+			if (!string.IsNullOrWhiteSpace(contenttype))
+				RequestBody?.SetContentType(contenttype);
 			return this;
 		}
 
