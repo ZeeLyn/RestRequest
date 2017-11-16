@@ -25,7 +25,7 @@ namespace RestRequest.Provider
 
 		internal bool IgnoreCertificateError { get; set; }
 
-		internal X509CertificateCollection ClientCertificates { get; set; } = new X509CertificateCollection();
+		internal X509CertificateCollection ClientCertificates { get; set; }
 
 		internal string UserAgent { get; set; }
 
@@ -33,12 +33,15 @@ namespace RestRequest.Provider
 
 		internal List<Cookie> Cookies { get; set; }
 
-		public BuilderBase(string url, HttpMethod method, bool ignoreCertificateError)
+		internal bool KeepAlive { get; set; }
+
+		public BuilderBase(string url, HttpMethod method, bool keepAlive, bool ignoreCertificateError)
 		{
 			Url = new Uri(url);
 			Method = method;
 			RequestHeaders = new WebHeaderCollection();
 			IgnoreCertificateError = ignoreCertificateError;
+			KeepAlive = keepAlive;
 		}
 
 		public IBuilderCallback GetCallBack()

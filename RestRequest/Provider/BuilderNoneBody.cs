@@ -13,7 +13,7 @@ namespace RestRequest.Provider
 {
 	public class BuilderNoneBody : BuilderBase, IBuilderNoneBody
 	{
-		public BuilderNoneBody(string url, HttpMethod method, bool ignoreCertificateError) : base(url, method, ignoreCertificateError)
+		public BuilderNoneBody(string url, HttpMethod method, bool keepAlive, bool ignoreCertificateError) : base(url, method, keepAlive, ignoreCertificateError)
 		{
 			RequestBody = new DefaultBody();
 		}
@@ -66,18 +66,24 @@ namespace RestRequest.Provider
 
 		public IBuilderNoneBody AddCertificate(string certificateUrl, string certificatePassword)
 		{
+			if (ClientCertificates == null)
+				ClientCertificates = new X509CertificateCollection();
 			ClientCertificates.Add(new X509Certificate(certificateUrl, certificatePassword));
 			return this;
 		}
 
 		public IBuilderNoneBody AddCertificate(byte[] rawData, string certificatePassword)
 		{
+			if (ClientCertificates == null)
+				ClientCertificates = new X509CertificateCollection();
 			ClientCertificates.Add(new X509Certificate(rawData, certificatePassword));
 			return this;
 		}
 
 		public IBuilderNoneBody AddCertificate(X509Certificate cert)
 		{
+			if (ClientCertificates == null)
+				ClientCertificates = new X509CertificateCollection();
 			ClientCertificates.Add(new X509Certificate(cert));
 			return this;
 		}

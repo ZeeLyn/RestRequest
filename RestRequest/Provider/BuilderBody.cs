@@ -13,7 +13,7 @@ namespace RestRequest.Provider
 {
 	public class BuilderBody : BuilderBase, IBuilder
 	{
-		public BuilderBody(string url, HttpMethod method, bool ignoreCertificateError) : base(url, method, ignoreCertificateError)
+		public BuilderBody(string url, HttpMethod method, bool keepAlive, bool ignoreCertificateError) : base(url, method, keepAlive, ignoreCertificateError)
 		{
 			var body = new JsonBody();
 			body.SetContentType("application/x-www-form-urlencoded");
@@ -129,18 +129,24 @@ namespace RestRequest.Provider
 
 		public IBuilderNoneBody AddCertificate(string certificateUrl, string certificatePassword)
 		{
+			if (ClientCertificates == null)
+				ClientCertificates = new X509CertificateCollection();
 			ClientCertificates.Add(new X509Certificate(certificateUrl, certificatePassword));
 			return this;
 		}
 
 		public IBuilderNoneBody AddCertificate(byte[] rawData, string certificatePassword)
 		{
+			if (ClientCertificates == null)
+				ClientCertificates = new X509CertificateCollection();
 			ClientCertificates.Add(new X509Certificate(rawData, certificatePassword));
 			return this;
 		}
 
 		public IBuilderNoneBody AddCertificate(X509Certificate cert)
 		{
+			if (ClientCertificates == null)
+				ClientCertificates = new X509CertificateCollection();
 			ClientCertificates.Add(new X509Certificate(cert));
 			return this;
 		}

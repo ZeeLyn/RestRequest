@@ -41,6 +41,7 @@ namespace RestRequest.Provider
 					Request.CookieContainer.Add(cookie);
 				}
 			}
+			Request.KeepAlive = Builder.KeepAlive;
 		}
 
 		internal void BuildRequest()
