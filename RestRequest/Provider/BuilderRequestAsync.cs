@@ -26,6 +26,10 @@ namespace RestRequest.Provider
 				Request.Headers = Builder.RequestHeaders;
 			if (Builder.RequestBody != null)
 				Request.ContentType = Builder.RequestBody.GetContentType();
+			if (Builder.IgnoreCertificateError)
+				Request.ServerCertificateValidationCallback = ValidationCertificate.VerifyServerCertificate;
+			if (Builder.ClientCertificates != null && Builder.ClientCertificates.Count > 0)
+				Request.ClientCertificates.AddRange(Builder.ClientCertificates);
 		}
 
 		internal async Task BuildRequestAsync()

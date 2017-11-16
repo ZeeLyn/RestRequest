@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace RestRequest
 {
@@ -11,6 +12,7 @@ namespace RestRequest
 		/// <summary>
 		/// http响应对象
 		/// </summary>
+		[JsonIgnore]
 		public HttpWebResponse Response { get; protected internal set; }
 		/// <summary>
 		/// 是否请求成功

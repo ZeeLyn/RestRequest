@@ -9,24 +9,24 @@ namespace RestRequest
 {
 	public class HttpRequest
 	{
-		public static IBuilderNoneBody Get(string url)
+		public static IBuilderNoneBody Get(string url, bool ignoreCertificateError = true)
 		{
-			return new BuilderNoneBody(url, HttpMethod.Get);
+			return new BuilderNoneBody(url, HttpMethod.Get, ignoreCertificateError);
 		}
 
-		public static IBuilder Post(string url)
+		public static IBuilder Post(string url, bool ignoreCertificateError = true)
 		{
-			return new BuilderBody(url, HttpMethod.Post);
+			return new BuilderBody(url, HttpMethod.Post, ignoreCertificateError);
 		}
 
-		public static IBuilder Put(string url)
+		public static IBuilder Put(string url, bool ignoreCertificateError = true)
 		{
-			return new BuilderBody(url, HttpMethod.Put);
+			return new BuilderBody(url, HttpMethod.Put, ignoreCertificateError);
 		}
 
-		public static IBuilderNoneBody Delete(string url)
+		public static IBuilderNoneBody Delete(string url, bool ignoreCertificateError = true)
 		{
-			return new BuilderNoneBody(url, HttpMethod.Delete);
+			return new BuilderNoneBody(url, HttpMethod.Delete, ignoreCertificateError);
 		}
 	}
 }

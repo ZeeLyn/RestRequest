@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestRequest.interfaces;
@@ -11,7 +12,7 @@ namespace RestRequest.Provider
 {
 	public class BuilderNoneBody : BuilderBase, IBuilderNoneBody
 	{
-		public BuilderNoneBody(string url, HttpMethod method) : base(url, method)
+		public BuilderNoneBody(string url, HttpMethod method, bool ignoreCertificateError) : base(url, method, ignoreCertificateError)
 		{
 			RequestBody = new DefaultBody();
 		}
@@ -59,6 +60,24 @@ namespace RestRequest.Provider
 			{
 				RequestHeaders[item.Name] = item.GetValue(headers).ToString();
 			}
+			return this;
+		}
+
+		public IBuilderNoneBody AddCertificate(string certificateUrl, string certificatePassword)
+		{
+			ClientCertificates.Add(new X509Certificate(certificateUrl, certificatePassword));
+			return this;
+		}
+
+		public IBuilderNoneBody AddCertificate(byte[] rawData, string certificatePassword)
+		{
+			ClientCertificates.Add(new X509Certificate(rawData, certificatePassword));
+			return this;
+		}
+
+		public IBuilderNoneBody AddCertificate(X509Certificate cert)
+		{
+			ClientCertificates.Add(new X509Certificate(cert));
 			return this;
 		}
 

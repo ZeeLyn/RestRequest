@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using RestRequest.interfaces;
 
 namespace RestRequest.Provider
 {
@@ -27,7 +25,10 @@ namespace RestRequest.Provider
 				Request.Headers = Builder.RequestHeaders;
 			if (Builder.RequestBody != null)
 				Request.ContentType = Builder.RequestBody.GetContentType();
-
+			if (Builder.IgnoreCertificateError)
+				Request.ServerCertificateValidationCallback = ValidationCertificate.VerifyServerCertificate;
+			if (Builder.ClientCertificates != null && Builder.ClientCertificates.Count > 0)
+				Request.ClientCertificates.AddRange(Builder.ClientCertificates);
 		}
 
 		internal void BuildRequest()

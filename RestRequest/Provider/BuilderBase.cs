@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using RestRequest.interfaces;
 
@@ -22,11 +23,16 @@ namespace RestRequest.Provider
 
 		protected Action<WebException> FailAction { get; set; }
 
-		public BuilderBase(string url, HttpMethod method)
+		internal bool IgnoreCertificateError { get; set; }
+
+		internal X509CertificateCollection ClientCertificates { get; set; } = new X509CertificateCollection();
+
+		public BuilderBase(string url, HttpMethod method, bool ignoreCertificateError)
 		{
 			Url = new Uri(url);
 			Method = method;
 			RequestHeaders = new WebHeaderCollection();
+			IgnoreCertificateError = ignoreCertificateError;
 		}
 
 		public IBuilderCallback GetCallBack()

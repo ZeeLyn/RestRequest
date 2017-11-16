@@ -14,7 +14,7 @@ namespace WZL.RestRequest.Example
 	{
 		static void Main(string[] args)
 		{
-			var r = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list/false").Headers(new { Authorization = "bearar dsafadsfasf" }).ContentType("html/text").ResponseStringAsync().Result;
+			var r = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list/false").AddCertificate("", "").Headers(new { Authorization = "bearar dsafadsfasf" }).ContentType("html/text").ResponseStringAsync().Result;
 
 			Console.WriteLine(r.Content);
 

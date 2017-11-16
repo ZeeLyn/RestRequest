@@ -1522,7 +1522,7 @@
       ]
     },
     "Newtonsoft.Json/10.0.3": {
-      "sha512": "wBM7i7i3U2WX0ecor4zdVGvgrwFUjuigBoHKiL+nH39fCOpCPjBY3RDqJM32edvdyTAVdjzlccHsg41+/+zpSA==",
+      "sha512": "hSXaFmh7hNCuEoC4XNY5DrRkLDzYHqPx/Ik23R4J86Z7PE/Y6YidhG602dFVdLBRSdG6xp9NabH3dXpcoxWvww==",
       "type": "package",
       "path": "newtonsoft.json/10.0.3",
       "files": [
@@ -3808,11 +3808,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "F:\\GitHub\\WZL.RestRequest\\RestHttp\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
+      "projectUniqueName": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
       "projectName": "WZL.RestRequest.Example",
-      "projectPath": "F:\\GitHub\\WZL.RestRequest\\RestHttp\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
+      "projectPath": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
       "packagesPath": "C:\\Users\\OWEN\\.nuget\\packages\\",
-      "outputPath": "F:\\GitHub\\WZL.RestRequest\\RestHttp\\WZL.RestRequest.Example\\obj\\",
+      "outputPath": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -3826,6 +3826,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "http://1.119.132.123:8199/nuget/": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://ci.appveyor.com/nuget/fsgit-fsharp": {},
         "https://dotnet.myget.org/F/aspnetcore-master/api/v3/index.json": {}
@@ -3833,8 +3834,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "F:\\GitHub\\WZL.RestRequest\\RestHttp\\RestRequest\\RestRequest.csproj": {
-              "projectPath": "F:\\GitHub\\WZL.RestRequest\\RestHttp\\RestRequest\\RestRequest.csproj"
+            "F:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj": {
+              "projectPath": "F:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj"
             }
           }
         }
@@ -3854,7 +3855,7 @@
           },
           "Microsoft.NETCore.App": {
             "target": "Package",
-            "version": "2.0.0",
+            "version": "2.0",
             "autoReferenced": true
           }
         },

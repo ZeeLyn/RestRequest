@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,5 +60,27 @@ namespace RestRequest.interfaces
 		/// <returns></returns>
 		IBuilderNoneBody Headers(object headers);
 
+		/// <summary>
+		/// 添加证书
+		/// </summary>
+		/// <param name="certificateUrl"></param>
+		/// <param name="certificatePassword"></param>
+		/// <returns></returns>
+		IBuilderNoneBody AddCertificate(string certificateUrl, string certificatePassword);
+
+		/// <summary>
+		/// 添加证书
+		/// </summary>
+		/// <param name="rawData"></param>
+		/// <param name="certificatePassword"></param>
+		/// <returns></returns>
+		IBuilderNoneBody AddCertificate(byte[] rawData, string certificatePassword);
+
+		/// <summary>
+		/// 添加证书
+		/// </summary>
+		/// <param name="cert"></param>
+		/// <returns></returns>
+		IBuilderNoneBody AddCertificate(X509Certificate cert);
 	}
 }
