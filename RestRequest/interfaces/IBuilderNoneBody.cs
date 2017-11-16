@@ -110,5 +110,12 @@ namespace RestRequest.interfaces
 		/// <param name="cookies"></param>
 		/// <returns></returns>
 		IBuilderNoneBody Cookies(Dictionary<string, string> cookies);
+
+		/// <summary>
+		/// 设置cookie
+		/// </summary>
+		/// <param name="cookies"></param>
+		/// <returns></returns>
+		IBuilderNoneBody Cookies(IEnumerable<Cookie> cookies);
 	}
 }

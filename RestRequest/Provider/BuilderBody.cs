@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
@@ -161,11 +162,11 @@ namespace RestRequest.Provider
 		public IBuilderNoneBody Cookies(object cookies)
 		{
 			if (cookies == null) return this;
-			base.Cookies = new Dictionary<string, string>();
+			base.Cookies = new List<Cookie>();
 			var properties = cookies.GetType().GetProperties();
 			foreach (var enumerator in properties)
 			{
-				base.Cookies.Add(enumerator.Name, enumerator.GetValue(cookies).ToString());
+				base.Cookies.Add(new Cookie { Name = enumerator.Name, Value = enumerator.GetValue(cookies).ToString(), Domain = Url.Host });
 			}
 			return this;
 		}
@@ -173,7 +174,19 @@ namespace RestRequest.Provider
 		public IBuilderNoneBody Cookies(Dictionary<string, string> cookies)
 		{
 			if (cookies != null && cookies.Count > 0)
-				base.Cookies = cookies;
+			{
+				base.Cookies = new List<Cookie>();
+				foreach (var cookie in cookies)
+				{
+					base.Cookies.Add(new Cookie { Name = cookie.Key, Value = cookie.Value, Domain = Url.Host });
+				}
+			}
+			return this;
+		}
+
+		public IBuilderNoneBody Cookies(IEnumerable<Cookie> cookies)
+		{
+			base.Cookies = cookies?.ToList();
 			return this;
 		}
 

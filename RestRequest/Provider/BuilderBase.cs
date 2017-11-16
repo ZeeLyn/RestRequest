@@ -31,7 +31,7 @@ namespace RestRequest.Provider
 
 		internal int Timeout { get; set; }
 
-		internal Dictionary<string, string> Cookies { get; set; }
+		internal List<Cookie> Cookies { get; set; }
 
 		public BuilderBase(string url, HttpMethod method, bool ignoreCertificateError)
 		{

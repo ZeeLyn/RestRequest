@@ -34,7 +34,14 @@ namespace RestRequest.Provider
 				Request.UserAgent = Builder.UserAgent;
 			if (Builder.Timeout > 0)
 				Request.Timeout = Builder.Timeout;
-
+			if (Builder.Cookies?.Count > 0)
+			{
+				Request.CookieContainer = new CookieContainer();
+				foreach (var cookie in Builder.Cookies)
+				{
+					Request.CookieContainer.Add(cookie);
+				}
+			}
 		}
 
 		internal async Task BuildRequestAsync()
