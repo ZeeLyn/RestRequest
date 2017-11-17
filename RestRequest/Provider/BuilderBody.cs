@@ -15,9 +15,9 @@ namespace RestRequest.Provider
 	{
 		public BuilderBody(string url, HttpMethod method, bool keepAlive, bool ignoreCertificateError) : base(url, method, keepAlive, ignoreCertificateError)
 		{
-			var body = new JsonBody();
-			body.SetContentType("application/x-www-form-urlencoded");
-			RequestBody = body;
+			//var body = new DefaultBody();
+			//body.SetContentType("application/x-www-form-urlencoded");
+			RequestBody = new DefaultBody();
 		}
 
 		/// <summary>

@@ -9,7 +9,7 @@
       "WZL.RestRequest.Example/1.0.0": {
         "dependencies": {
           "CaptchaGen.NetCore": "1.0.2",
-          "RestRequest": "1.0.1"
+          "RestRequest": "1.0.2"
         },
         "runtime": {
           "WZL.RestRequest.Example.dll": {}
@@ -453,7 +453,7 @@
           "System.Xml.ReaderWriter": "4.3.0"
         }
       },
-      "RestRequest/1.0.1": {
+      "RestRequest/1.0.2": {
         "dependencies": {
           "Newtonsoft.Json": "10.0.3"
         },
@@ -798,7 +798,7 @@
       "path": "system.xml.xmldocument/4.3.0",
       "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
     },
-    "RestRequest/1.0.1": {
+    "RestRequest/1.0.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

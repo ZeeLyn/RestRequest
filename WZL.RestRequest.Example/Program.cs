@@ -14,9 +14,9 @@ namespace WZL.RestRequest.Example
 	{
 		static void Main(string[] args)
 		{
-			var r = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list/false").Cookies(new { }).UserAgent("").Timeout(1).AddCertificate("", "").Headers(new { Authorization = "bearar dsafadsfasf" }).ContentType("html/text").ResponseStringAsync().Result;
+			var r = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list").Cookies(new { auth = "asfasf" }).UserAgent("ie9").Timeout(3000).Headers(new { Authorization = "bearar dsafadsfasf" }).ContentType("html/text").ResponseStringAsync().Result;
 
-			Console.WriteLine(r.Content);
+			//Console.WriteLine(r.Content);
 
 			//using (var r = HttpRequest.Get("https://www.baidu.com/").ResponseStream())
 			//{
@@ -66,9 +66,7 @@ namespace WZL.RestRequest.Example
 			//	Console.WriteLine(res.Content);
 			//}
 
-			//using (var res = HttpRequest.Post("http://localhost:11353/api/v2.0/push/testpost").Form(new List<NamedFileStream>{
-			//	new NamedFileStream("file","d:\\download1.jpeg",File.OpenRead("d:\\download1.jpeg"))
-			//}, new { name = "abd" }).Headers(new { Authorization = "Bearer safasfasf" }).ResponseStringAsync().Result)
+			//using (var res = HttpRequest.Post("http://localhost:11353/api/v2.0/push/testpost").Form(new { name = "abd" }).Headers(new { Authorization = "Bearer safasfasf" }).ResponseStringAsync().Result)
 			//{
 			//	//var c = res.Content;
 			//	//var reader = new StreamReader(res.Content);
@@ -78,7 +76,7 @@ namespace WZL.RestRequest.Example
 
 			//HttpRequest.Post("http://localhost:11353/api/v2.0/push/testpost").Form(new List<NamedFileStream>
 			//{
-			//	new NamedFileStream("file", "d:\\download1.jpeg", File.OpenRead("d:\\download1.jpeg"))
+			//	new NamedFileStream("file", "d:\\download1.jpg", File.OpenRead("d:\\download1.jpg"))
 			//}, new { name = "abd" }).OnSuccess((HttpStatusCode code, string content) =>
 			//{
 			//	var r = content;
