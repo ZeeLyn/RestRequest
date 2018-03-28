@@ -8,9 +8,9 @@
     <Company />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/ww198643/RestRequest</PackageProjectUrl>
-    <Version>1.0.2</Version>
-    <AssemblyVersion>1.0.0.2</AssemblyVersion>
-    <FileVersion>1.0.0.2</FileVersion>
+    <Version>1.0.3</Version>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
