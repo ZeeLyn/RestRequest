@@ -37,14 +37,14 @@ namespace RestRequest.interfaces
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		ResponseResult<T> ResponseValue<T>();
+		ResponseResult<T> ResponseValue<T>() where T : class;
 
 		/// <summary>
 		/// 获取响应内容，并转换成指定类型
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		Task<ResponseResult<T>> ResponseValueAsync<T>();
+		Task<ResponseResult<T>> ResponseValueAsync<T>() where T : class;
 
 		/// <summary>
 		/// 设置Content-Type,不支持multipart/form-data的自定义

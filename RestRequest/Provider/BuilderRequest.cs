@@ -8,7 +8,7 @@ namespace RestRequest.Provider
 {
 	internal class BuilderRequest
 	{
-		private HttpWebRequest Request { get; set; }
+		public HttpWebRequest Request { get; set; }
 
 		private BuilderBase Builder { get; }
 
@@ -111,7 +111,7 @@ namespace RestRequest.Provider
 				}
 				finally
 				{
-					Request.Abort();
+					Dispose();
 				}
 			};
 		}

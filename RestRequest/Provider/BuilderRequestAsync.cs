@@ -9,7 +9,7 @@ namespace RestRequest.Provider
 {
 	internal class BuilderRequestAsync
 	{
-		private HttpWebRequest Request { get; set; }
+		public HttpWebRequest Request { get; set; }
 
 		private BuilderBase Builder { get; }
 

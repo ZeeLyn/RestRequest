@@ -156,13 +156,13 @@ namespace RestRequest.Provider
 			var builder = new BuilderRequest(this);
 			builder.CreateRequest();
 			var res = builder.GetResponse();
-			builder.Dispose();
 			return new ResponseResult<Stream>
 			{
 				Succeed = res.Success,
 				StatusCode = res.StatusCode,
 				Content = res.ResponseContent,
-				Response = res.Response
+				Response = res.Response,
+				Request = builder.Request
 			};
 		}
 
@@ -171,13 +171,13 @@ namespace RestRequest.Provider
 			var builder = new BuilderRequestAsync(this);
 			builder.CreateRequest();
 			var res = await builder.GetResponseAsync();
-			builder.Dispose();
 			return new ResponseResult<Stream>
 			{
 				Succeed = res.Success,
 				StatusCode = res.StatusCode,
 				Content = res.ResponseContent,
-				Response = res.Response
+				Response = res.Response,
+				Request = builder.Request
 			};
 		}
 
@@ -192,7 +192,8 @@ namespace RestRequest.Provider
 					Succeed = res.Succeed,
 					StatusCode = res.StatusCode,
 					Content = reader.ReadToEnd(),
-					Response = res.Response
+					Response = res.Response,
+					Request = res.Request
 				};
 			}
 		}
@@ -208,12 +209,13 @@ namespace RestRequest.Provider
 					Succeed = res.Succeed,
 					StatusCode = res.StatusCode,
 					Content = await reader.ReadToEndAsync(),
-					Response = res.Response
+					Response = res.Response,
+					Request = res.Request
 				};
 			}
 		}
 
-		public ResponseResult<T> ResponseValue<T>()
+		public ResponseResult<T> ResponseValue<T>() where T : class
 		{
 			var res = ResponseString();
 			return new ResponseResult<T>
@@ -221,11 +223,12 @@ namespace RestRequest.Provider
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
 				Content = JsonConvert.DeserializeObject<T>(res.Content),
-				Response = res.Response
+				Response = res.Response,
+				Request = res.Request
 			};
 		}
 
-		public async Task<ResponseResult<T>> ResponseValueAsync<T>()
+		public async Task<ResponseResult<T>> ResponseValueAsync<T>() where T : class
 		{
 			var res = await ResponseStringAsync();
 			return new ResponseResult<T>
@@ -233,7 +236,8 @@ namespace RestRequest.Provider
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
 				Content = JsonConvert.DeserializeObject<T>(res.Content),
-				Response = res.Response
+				Response = res.Response,
+				Request = res.Request
 			};
 		}
 	}

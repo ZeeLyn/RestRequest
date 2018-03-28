@@ -14,6 +14,13 @@ namespace RestRequest
 		/// </summary>
 		[JsonIgnore]
 		public HttpWebResponse Response { get; protected internal set; }
+
+		/// <summary>
+		/// http request
+		/// </summary>
+		[JsonIgnore]
+		public HttpWebRequest Request { get; protected internal set; }
+
 		/// <summary>
 		/// 是否请求成功
 		/// </summary>
@@ -29,9 +36,10 @@ namespace RestRequest
 
 		public void Dispose()
 		{
-			Response?.Dispose();
+			Request?.Abort();
 			var stream = Content as Stream;
 			stream?.Dispose();
+			Response?.Dispose();
 		}
 	}
 }
