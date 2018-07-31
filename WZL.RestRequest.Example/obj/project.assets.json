@@ -921,7 +921,7 @@
           "lib/netstandard1.3/System.Xml.XmlDocument.dll": {}
         }
       },
-      "RestRequest/1.0.2": {
+      "RestRequest/1.0.4": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
@@ -3785,7 +3785,7 @@
         "system.xml.xmldocument.nuspec"
       ]
     },
-    "RestRequest/1.0.2": {
+    "RestRequest/1.0.4": {
       "type": "project",
       "path": "../RestRequest/RestRequest.csproj",
       "msbuildProject": "../RestRequest/RestRequest.csproj"
@@ -3795,7 +3795,7 @@
     ".NETCoreApp,Version=v2.0": [
       "CaptchaGen.NetCore >= 1.0.2",
       "Microsoft.NETCore.App >= 2.0.0",
-      "RestRequest >= 1.0.2"
+      "RestRequest >= 1.0.4"
     ]
   },
   "packageFolders": {
@@ -3804,9 +3804,6 @@
   },
   "project": {
     "version": "1.0.0",
-    "restoreSettings": {
-      "hideWarningsAndErrors": true
-    },
     "restore": {
       "projectUniqueName": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
       "projectName": "WZL.RestRequest.Example",
@@ -3826,7 +3823,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "http://1.119.132.123:8199/nuget/": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://ci.appveyor.com/nuget/fsgit-fsharp": {},
         "https://dotnet.myget.org/F/aspnetcore-master/api/v3/index.json": {}
@@ -3851,11 +3847,11 @@
         "dependencies": {
           "CaptchaGen.NetCore": {
             "target": "Package",
-            "version": "1.0.2"
+            "version": "[1.0.2, )"
           },
           "Microsoft.NETCore.App": {
             "target": "Package",
-            "version": "2.0",
+            "version": "[2.0.0, )",
             "autoReferenced": true
           }
         },

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net.Http;
 using RestRequest.interfaces;
 using RestRequest.Provider;
 
@@ -13,45 +10,38 @@ namespace RestRequest
 		/// Get请求
 		/// </summary>
 		/// <param name="url">url</param>
-		/// <param name="keepAlive">keepAlive</param>
-		/// <param name="ignoreCertificateError">忽略证书错误</param>
 		/// <returns></returns>
-		public static IBuilderNoneBody Get(string url, bool keepAlive = false, bool ignoreCertificateError = true)
+		public static IBuilderNoneBody Get(string url)
 		{
-			return new BuilderNoneBody(url, HttpMethod.Get, keepAlive, ignoreCertificateError);
+			return new BuilderNoneBody(url, HttpMethod.Get);
 		}
+
 		/// <summary>
 		/// Post请求
 		/// </summary>
 		/// <param name="url">url</param>
-		/// <param name="keepAlive">keepAlive</param>
-		/// <param name="ignoreCertificateError">忽略证书错误</param>
 		/// <returns></returns>
-		public static IBuilder Post(string url, bool keepAlive = false, bool ignoreCertificateError = true)
+		public static IBuilder Post(string url)
 		{
-			return new BuilderBody(url, HttpMethod.Post, keepAlive, ignoreCertificateError);
+			return new BuilderBody(url, HttpMethod.Post);
 		}
 		/// <summary>
 		/// Put请求
 		/// </summary>
 		/// <param name="url">url</param>
-		/// <param name="keepAlive">keepAlive</param>
-		/// <param name="ignoreCertificateError">忽略证书错误</param>
 		/// <returns></returns>
-		public static IBuilder Put(string url, bool keepAlive = false, bool ignoreCertificateError = true)
+		public static IBuilder Put(string url)
 		{
-			return new BuilderBody(url, HttpMethod.Put, keepAlive, ignoreCertificateError);
+			return new BuilderBody(url, HttpMethod.Put);
 		}
 		/// <summary>
 		/// Delete请求
 		/// </summary>
 		/// <param name="url">url</param>
-		/// <param name="keepAlive">keepAlive</param>
-		/// <param name="ignoreCertificateError">忽略证书错误</param>
 		/// <returns></returns>
-		public static IBuilderNoneBody Delete(string url, bool keepAlive = false, bool ignoreCertificateError = true)
+		public static IBuilderNoneBody Delete(string url)
 		{
-			return new BuilderNoneBody(url, HttpMethod.Delete, keepAlive, ignoreCertificateError);
+			return new BuilderNoneBody(url, HttpMethod.Delete);
 		}
 	}
 }

@@ -47,9 +47,10 @@ namespace RestRequest.Provider
 
 		internal async Task BuildRequestAsync()
 		{
-			if (Builder.RequestBody == null)
+			var bodyStream = Builder.RequestBody?.GetBody();
+			if (bodyStream == null)
 				return;
-			using (var bodyStream = Builder.RequestBody.GetBody())
+			using (bodyStream)
 			{
 				Request.ContentLength = bodyStream.Length;
 				using (var requestStream = await Request.GetRequestStreamAsync())

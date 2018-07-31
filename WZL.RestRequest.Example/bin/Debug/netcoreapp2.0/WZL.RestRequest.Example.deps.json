@@ -9,7 +9,7 @@
       "WZL.RestRequest.Example/1.0.0": {
         "dependencies": {
           "CaptchaGen.NetCore": "1.0.2",
-          "RestRequest": "1.0.0"
+          "RestRequest": "1.0.4"
         },
         "runtime": {
           "WZL.RestRequest.Example.dll": {}
@@ -20,7 +20,10 @@
           "CoreCompat.System.Drawing": "1.0.0-beta006"
         },
         "runtime": {
-          "lib/netstandard1.3/CaptchaGen.NetCore.dll": {}
+          "lib/netstandard1.3/CaptchaGen.NetCore.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
         }
       },
       "CoreCompat.System.Drawing/1.0.0-beta006": {
@@ -40,7 +43,10 @@
           "System.Threading": "4.3.0"
         },
         "runtime": {
-          "lib/netstandard1.3/CoreCompat.System.Drawing.dll": {}
+          "lib/netstandard1.3/CoreCompat.System.Drawing.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "Microsoft.CSharp/4.3.0": {
@@ -79,7 +85,10 @@
           "System.Xml.XmlDocument": "4.3.0"
         },
         "runtime": {
-          "lib/netstandard1.3/Newtonsoft.Json.dll": {}
+          "lib/netstandard1.3/Newtonsoft.Json.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.3.21018"
+          }
         }
       },
       "runtime.native.System/4.0.0": {
@@ -453,7 +462,7 @@
           "System.Xml.ReaderWriter": "4.3.0"
         }
       },
-      "RestRequest/1.0.0": {
+      "RestRequest/1.0.4": {
         "dependencies": {
           "Newtonsoft.Json": "10.0.3"
         },
@@ -507,7 +516,7 @@
     "Newtonsoft.Json/10.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-wBM7i7i3U2WX0ecor4zdVGvgrwFUjuigBoHKiL+nH39fCOpCPjBY3RDqJM32edvdyTAVdjzlccHsg41+/+zpSA==",
+      "sha512": "sha512-hSXaFmh7hNCuEoC4XNY5DrRkLDzYHqPx/Ik23R4J86Z7PE/Y6YidhG602dFVdLBRSdG6xp9NabH3dXpcoxWvww==",
       "path": "newtonsoft.json/10.0.3",
       "hashPath": "newtonsoft.json.10.0.3.nupkg.sha512"
     },
@@ -798,7 +807,7 @@
       "path": "system.xml.xmldocument/4.3.0",
       "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
     },
-    "RestRequest/1.0.0": {
+    "RestRequest/1.0.4": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

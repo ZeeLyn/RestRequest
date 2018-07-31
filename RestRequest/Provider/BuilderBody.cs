@@ -13,7 +13,7 @@ namespace RestRequest.Provider
 {
 	public class BuilderBody : BuilderBase, IBuilder
 	{
-		public BuilderBody(string url, HttpMethod method, bool keepAlive, bool ignoreCertificateError) : base(url, method, keepAlive, ignoreCertificateError)
+		public BuilderBody(string url, HttpMethod method) : base(url, method)
 		{
 			//var body = new DefaultBody();
 			//body.SetContentType("application/x-www-form-urlencoded");
@@ -203,6 +203,18 @@ namespace RestRequest.Provider
 			return this;
 		}
 
+		public IBuilderNoneBody IgnoreCertError()
+		{
+			IgnoreCertificateError = true;
+			return this;
+		}
+
+		public IBuilderNoneBody KeepAlive()
+		{
+			base.KeepAlive = true;
+			return this;
+		}
+
 		public IBuilderNoneBody UserAgent(string userAgent)
 		{
 			if (!string.IsNullOrWhiteSpace(userAgent))
@@ -339,7 +351,7 @@ namespace RestRequest.Provider
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = JsonConvert.DeserializeObject<T>(res.Content),
+				Content = string.IsNullOrWhiteSpace(res.Content) ? default(T) : JsonConvert.DeserializeObject<T>(res.Content),
 				Response = res.Response,
 				Request = res.Request
 			};
@@ -352,7 +364,7 @@ namespace RestRequest.Provider
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = JsonConvert.DeserializeObject<T>(res.Content),
+				Content = string.IsNullOrWhiteSpace(res.Content) ? default(T) : JsonConvert.DeserializeObject<T>(res.Content),
 				Response = res.Response,
 				Request = res.Request
 			};

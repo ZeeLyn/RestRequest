@@ -35,13 +35,11 @@ namespace RestRequest.Provider
 
 		internal bool KeepAlive { get; set; }
 
-		public BuilderBase(string url, HttpMethod method, bool keepAlive, bool ignoreCertificateError)
+		public BuilderBase(string url, HttpMethod method)
 		{
 			Url = new Uri(url);
 			Method = method;
 			RequestHeaders = new WebHeaderCollection();
-			IgnoreCertificateError = ignoreCertificateError;
-			KeepAlive = keepAlive;
 		}
 
 		public IBuilderCallback GetCallBack()

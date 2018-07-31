@@ -13,7 +13,7 @@ namespace RestRequest.Provider
 {
 	public class BuilderNoneBody : BuilderBase, IBuilderNoneBody
 	{
-		public BuilderNoneBody(string url, HttpMethod method, bool keepAlive, bool ignoreCertificateError) : base(url, method, keepAlive, ignoreCertificateError)
+		public BuilderNoneBody(string url, HttpMethod method) : base(url, method)
 		{
 			RequestBody = new DefaultBody();
 		}
@@ -87,6 +87,18 @@ namespace RestRequest.Provider
 			if (ClientCertificates == null)
 				ClientCertificates = new X509CertificateCollection();
 			ClientCertificates.Add(new X509Certificate(cert));
+			return this;
+		}
+
+		public IBuilderNoneBody IgnoreCertError()
+		{
+			IgnoreCertificateError = true;
+			return this;
+		}
+
+		public IBuilderNoneBody KeepAlive()
+		{
+			base.KeepAlive = true;
 			return this;
 		}
 
@@ -222,7 +234,7 @@ namespace RestRequest.Provider
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = JsonConvert.DeserializeObject<T>(res.Content),
+				Content = string.IsNullOrWhiteSpace(res.Content) ? default(T) : JsonConvert.DeserializeObject<T>(res.Content),
 				Response = res.Response,
 				Request = res.Request
 			};
@@ -235,7 +247,7 @@ namespace RestRequest.Provider
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = JsonConvert.DeserializeObject<T>(res.Content),
+				Content = string.IsNullOrWhiteSpace(res.Content) ? default(T) : JsonConvert.DeserializeObject<T>(res.Content),
 				Response = res.Response,
 				Request = res.Request
 			};

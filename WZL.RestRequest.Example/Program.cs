@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using RestRequest;
 using System.Drawing;
+using System.Net.Http;
 
 namespace WZL.RestRequest.Example
 {
@@ -14,7 +15,10 @@ namespace WZL.RestRequest.Example
 	{
 		static void Main(string[] args)
 		{
-			var r = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list").Cookies(new { auth = "asfasf" }).UserAgent("ie9").Timeout(3000).Headers(new { Authorization = "bearar dsafadsfasf" }).ContentType("html/text").ResponseStringAsync().Result;
+			using (var r = HttpRequest.Get("http://localhost:44316/values").ResponseString())
+			{
+				Console.WriteLine(r);
+			}
 
 			//Console.WriteLine(r.Content);
 

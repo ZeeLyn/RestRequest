@@ -75,6 +75,7 @@ namespace RestRequest.interfaces
 		/// <returns></returns>
 		IBuilderNoneBody AddCertificate(string certificateUrl, string certificatePassword);
 
+
 		/// <summary>
 		/// 添加证书
 		/// </summary>
@@ -89,6 +90,14 @@ namespace RestRequest.interfaces
 		/// <param name="cert"></param>
 		/// <returns></returns>
 		IBuilderNoneBody AddCertificate(X509Certificate cert);
+
+		/// <summary>
+		/// 忽略证书错误
+		/// </summary>
+		/// <returns></returns>
+		IBuilderNoneBody IgnoreCertError();
+
+		IBuilderNoneBody KeepAlive();
 
 		/// <summary>
 		/// 设置UserAgent
