@@ -76,14 +76,6 @@ HttpRequest.Post("url").OnSuccess((statuscode, content) => {
 
 ### 证书
 
-默认忽略证书错误，如果不需要，可以通过以下代码关闭
-```csharp
-using(var res=HttpRequest.Post("url",ignoreCertificateError:false).Body(new{name="jack"}).ContentType("html/text").ResponseString())
-{
-	...
-}
-```
-
 设置证书
 ```csharp
 using(var res=HttpRequest.Post("url").Body(new{name="jack"}).AddCertificate("","").ContentType("html/text").ResponseString())
