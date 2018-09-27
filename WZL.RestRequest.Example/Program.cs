@@ -15,10 +15,12 @@ namespace WZL.RestRequest.Example
 	{
 		static void Main(string[] args)
 		{
-			using (var r = HttpRequest.Get("http://localhost:44316/values").ResponseString())
-			{
-				Console.WriteLine(r);
-			}
+			var r = HttpRequest.Get("http://localhost:55856/receive/hash").ResponseString();
+
+			//using (var r = HttpRequest.Get("http://localhost:44316/values").ResponseString())
+			//{
+			//	Console.WriteLine(r);
+			//}
 
 			//Console.WriteLine(r.Content);
 
@@ -30,7 +32,7 @@ namespace WZL.RestRequest.Example
 			//	}
 			//}
 
-			////异步回调
+			//异步回调
 			//HttpRequest.Get("http://localhost:11353/api/v2.0/push/list/false").OnSuccess((HttpStatusCode code, Stream res) =>
 			//{
 			//	//var reader = new StreamReader(res);
@@ -62,13 +64,13 @@ namespace WZL.RestRequest.Example
 			//	Image.FromStream(res.Content).Save("d://download2.jpeg");
 			//}
 
-			using (var res = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list/false").ResponseStringAsync().Result)
-			{
-				//var c = res.Content;
-				//var reader = new StreamReader(res.Content);
-				//var r = reader.ReadToEnd();
-				Console.WriteLine(res.Content);
-			}
+			//using (var res = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list/false").ResponseStringAsync().Result)
+			//{
+			//	//var c = res.Content;
+			//	//var reader = new StreamReader(res.Content);
+			//	//var r = reader.ReadToEnd();
+			//	Console.WriteLine(res.Content);
+			//}
 
 			//using (var res = HttpRequest.Post("http://localhost:11353/api/v2.0/push/testpost").Form(new { name = "abd" }).Headers(new { Authorization = "Bearer safasfasf" }).ResponseStringAsync().Result)
 			//{
