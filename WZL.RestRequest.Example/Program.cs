@@ -62,13 +62,13 @@ namespace WZL.RestRequest.Example
 			//	Image.FromStream(res.Content).Save("d://download2.jpeg");
 			//}
 
-			//using (var res = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list/false").ResponseStringAsync().Result)
-			//{
-			//	//var c = res.Content;
-			//	//var reader = new StreamReader(res.Content);
-			//	//var r = reader.ReadToEnd();
-			//	Console.WriteLine(res.Content);
-			//}
+			using (var res = HttpRequest.Get("http://localhost:11353/api/v2.0/push/list/false").ResponseStringAsync().Result)
+			{
+				//var c = res.Content;
+				//var reader = new StreamReader(res.Content);
+				//var r = reader.ReadToEnd();
+				Console.WriteLine(res.Content);
+			}
 
 			//using (var res = HttpRequest.Post("http://localhost:11353/api/v2.0/push/testpost").Form(new { name = "abd" }).Headers(new { Authorization = "Bearer safasfasf" }).ResponseStringAsync().Result)
 			//{

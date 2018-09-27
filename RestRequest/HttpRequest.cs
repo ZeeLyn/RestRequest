@@ -1,19 +1,19 @@
 ﻿using System.Net.Http;
-using RestRequest.interfaces;
-using RestRequest.Provider;
+using RestRequest.Builder;
+using RestRequest.Interface;
 
 namespace RestRequest
 {
-	public class HttpRequest
+	public static class HttpRequest
 	{
 		/// <summary>
 		/// Get请求
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
-		public static IBuilderNoneBody Get(string url)
+		public static INoneBodyBuilder Get(string url)
 		{
-			return new BuilderNoneBody(url, HttpMethod.Get);
+			return new NoneBodyBuilder(url, HttpMethod.Get);
 		}
 
 		/// <summary>
@@ -21,27 +21,27 @@ namespace RestRequest
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
-		public static IBuilder Post(string url)
+		public static IBodyBuilder Post(string url)
 		{
-			return new BuilderBody(url, HttpMethod.Post);
+			return new BodyBuilder(url, HttpMethod.Post);
 		}
 		/// <summary>
 		/// Put请求
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
-		public static IBuilder Put(string url)
+		public static IBodyBuilder Put(string url)
 		{
-			return new BuilderBody(url, HttpMethod.Put);
+			return new BodyBuilder(url, HttpMethod.Put);
 		}
 		/// <summary>
 		/// Delete请求
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
-		public static IBuilderNoneBody Delete(string url)
+		public static INoneBodyBuilder Delete(string url)
 		{
-			return new BuilderNoneBody(url, HttpMethod.Delete);
+			return new NoneBodyBuilder(url, HttpMethod.Delete);
 		}
 	}
 }
