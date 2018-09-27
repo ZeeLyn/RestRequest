@@ -11,13 +11,13 @@ namespace RestRequest
 		/// http响应对象
 		/// </summary>
 		[JsonIgnore]
-		public HttpWebResponse Response { get; protected internal set; }
+		internal HttpWebResponse Response { get; set; }
 
 		/// <summary>
 		/// http request
 		/// </summary>
 		[JsonIgnore]
-		public HttpWebRequest Request { get; protected internal set; }
+		internal HttpWebRequest Request { get; set; }
 
 		/// <summary>
 		/// 是否请求成功
@@ -28,9 +28,14 @@ namespace RestRequest
 		/// </summary>
 		public HttpStatusCode StatusCode { get; internal set; }
 		/// <summary>
-		/// 响应内容
+		/// 成功响应内容
 		/// </summary>
 		public T Content { get; internal set; }
+
+		/// <summary>
+		/// 失败响应内容
+		/// </summary>
+		public string FailedContent { get; internal set; }
 
 		public void Dispose()
 		{

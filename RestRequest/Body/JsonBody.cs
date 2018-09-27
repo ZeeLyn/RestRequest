@@ -12,7 +12,6 @@ namespace RestRequest.Body
 
 		private Stream BodyStream { get; set; }
 
-		private string ContentType { get; set; } = "application/json";
 		public JsonBody()
 		{
 			_parameters = new Dictionary<string, object>();
@@ -27,17 +26,6 @@ namespace RestRequest.Body
 			BodyStream.Write(bytes, 0, bytes.Length);
 			return BodyStream;
 		}
-
-		public string GetContentType()
-		{
-			return ContentType;
-		}
-
-		public void SetContentType(string contentType)
-		{
-			ContentType = contentType;
-		}
-
 
 		public void AddParameter(object parameters)
 		{

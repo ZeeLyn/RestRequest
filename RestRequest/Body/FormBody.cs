@@ -33,15 +33,6 @@ namespace RestRequest.Body
 			return BodyStream;
 		}
 
-		public string GetContentType()
-		{
-			return ContentType;
-		}
-
-		public void SetContentType(string contentType)
-		{
-			ContentType = contentType;
-		}
 
 		public void AddParameter(Dictionary<string, object> parameters)
 		{

@@ -9,20 +9,9 @@ namespace RestRequest.Body
 		private string Content { get; }
 		private Stream BodyStream { get; set; }
 
-		private string ContentType { get; set; } = "application/text";
-
 		public TextBody(string content)
 		{
 			Content = content;
-		}
-		public void SetContentType(string contentType)
-		{
-			ContentType = contentType;
-		}
-
-		public string GetContentType()
-		{
-			return ContentType;
 		}
 
 		public Stream GetBody()

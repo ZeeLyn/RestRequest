@@ -10,7 +10,7 @@ using RestRequest.Interface;
 
 namespace RestRequest.Builder
 {
-	public class BaseBuilder
+	public class BaseBuilder //: IActionCallback
 	{
 		internal Uri Url { get; set; }
 
@@ -22,9 +22,9 @@ namespace RestRequest.Builder
 
 		internal IBody RequestBody { get; set; }
 
-		protected Action<HttpStatusCode, Stream> SuccessAction { get; set; }
+		internal Action<HttpStatusCode, Stream> SuccessAction { get; set; }
 
-		protected Action<WebException> FailAction { get; set; }
+		internal Action<WebException> FailAction { get; set; }
 
 		internal bool IgnoreCertificateError { get; set; }
 
@@ -45,58 +45,75 @@ namespace RestRequest.Builder
 			RequestHeaders = new WebHeaderCollection();
 		}
 
-		public CallbackIBuilder GetCallBack()
-		{
-			if (SuccessAction != null || FailAction != null)
-				return new CallbackAction
-				{
-					Success = SuccessAction,
-					Fail = FailAction
-				};
-			return null;
-		}
+		//public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action)
+		//{
+		//	SuccessAction = action;
+		//	return this;
+		//}
+
+		//public IActionCallback OnSuccess(Action<HttpStatusCode, string> action)
+		//{
+		//	SuccessAction = (statusCode, stream) =>
+		//	{
+		//		using (var reader = new StreamReader(stream))
+		//		{
+		//			action(statusCode, reader.ReadToEnd());
+		//		}
+		//	};
+		//	return this;
+		//}
+
+		//public IActionCallback OnFail(Action<WebException> action)
+		//{
+		//	FailAction = action;
+		//	return this;
+		//}
 
 		public void Start()
 		{
-			var builder = new RestRequest.Execute(this);
-			builder.CreateRequest();
+			var builder = new RequestBuilder(this);
+			builder.BuildRequest();
 			builder.BuildRequestAndCallback();
 		}
 
 
-		public ResponseResult<Stream> ResponseStream()
+		public ResponseResult<Stream> ResponseStream(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var builder = new RestRequest.Execute(this);
-			builder.CreateRequest();
-			builder.BuildRequest();
-			var res = builder.GetResponse();
-			return new ResponseResult<Stream>
+			using (var builder = new RequestBuilder(this))
 			{
-				Succeed = res.Success,
-				StatusCode = res.StatusCode,
-				Content = res.ResponseContent,
-				Response = res.Response,
-				Request = builder.Request
-			};
+				builder.BuildRequest();
+				builder.WriteRequestBody();
+				var res = builder.GetResponse();
+				return new ResponseResult<Stream>
+				{
+					Succeed = res.StatusCode == succeedStatus,
+					StatusCode = res.StatusCode,
+					Content = res.GetResponseStream(),
+					Response = res,
+					Request = builder.Request
+				};
+			}
 		}
 
-		public async Task<ResponseResult<Stream>> ResponseStreamAsync()
+		public async Task<ResponseResult<Stream>> ResponseStreamAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var builder = new RestRequest.Execute(this);
-			builder.CreateRequest();
-			await builder.BuildRequestAsync();
-			var res = await builder.GetResponseAsync();
-			return new ResponseResult<Stream>
+			using (var builder = new RequestBuilder(this))
 			{
-				Succeed = res.Success,
-				StatusCode = res.StatusCode,
-				Content = res.ResponseContent,
-				Response = res.Response,
-				Request = builder.Request
-			};
+				builder.BuildRequest();
+				await builder.WriteRequestBodyAsync();
+				var res = await builder.GetResponseAsync();
+				return new ResponseResult<Stream>
+				{
+					Succeed = res.StatusCode == succeedStatus,
+					StatusCode = res.StatusCode,
+					Content = res.GetResponseStream(),
+					Response = res,
+					Request = builder.Request
+				};
+			}
 		}
 
-		public ResponseResult<string> ResponseString()
+		public ResponseResult<string> ResponseString(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = ResponseStream();
 			using (var stream = res.Content)
@@ -105,7 +122,7 @@ namespace RestRequest.Builder
 			{
 				return new ResponseResult<string>
 				{
-					Succeed = res.Succeed,
+					Succeed = res.StatusCode == succeedStatus,
 					StatusCode = res.StatusCode,
 					Content = reader.ReadToEnd(),
 					Response = res.Response,
@@ -114,7 +131,7 @@ namespace RestRequest.Builder
 			}
 		}
 
-		public async Task<ResponseResult<string>> ResponseStringAsync()
+		public async Task<ResponseResult<string>> ResponseStringAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ResponseStreamAsync();
 			using (var stream = res.Content)
@@ -123,7 +140,7 @@ namespace RestRequest.Builder
 			{
 				return new ResponseResult<string>
 				{
-					Succeed = res.Succeed,
+					Succeed = res.StatusCode == succeedStatus,
 					StatusCode = res.StatusCode,
 					Content = await reader.ReadToEndAsync(),
 					Response = res.Response,
@@ -132,12 +149,12 @@ namespace RestRequest.Builder
 			}
 		}
 
-		public ResponseResult<T> ResponseValue<T>() where T : class
+		public ResponseResult<T> ResponseValue<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK) where T : class
 		{
 			var res = ResponseString();
 			return new ResponseResult<T>
 			{
-				Succeed = res.Succeed,
+				Succeed = res.StatusCode == succeedStatus,
 				StatusCode = res.StatusCode,
 				Content = string.IsNullOrWhiteSpace(res.Content) ? default(T) : JsonConvert.DeserializeObject<T>(res.Content),
 				Response = res.Response,
@@ -145,12 +162,12 @@ namespace RestRequest.Builder
 			};
 		}
 
-		public async Task<ResponseResult<T>> ResponseValueAsync<T>() where T : class
+		public async Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK) where T : class
 		{
 			var res = await ResponseStringAsync();
 			return new ResponseResult<T>
 			{
-				Succeed = res.Succeed,
+				Succeed = res.StatusCode == succeedStatus,
 				StatusCode = res.StatusCode,
 				Content = string.IsNullOrWhiteSpace(res.Content) ? default(T) : JsonConvert.DeserializeObject<T>(res.Content),
 				Response = res.Response,

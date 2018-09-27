@@ -12,37 +12,37 @@ namespace RestRequest.Interface
 		/// 获取响应流
 		/// </summary>
 		/// <returns></returns>
-		ResponseResult<Stream> ResponseStream();
+		ResponseResult<Stream> ResponseStream(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 		/// <summary>
 		/// 获取响应流
 		/// </summary>
 		/// <returns></returns>
-		Task<ResponseResult<Stream>> ResponseStreamAsync();
+		Task<ResponseResult<Stream>> ResponseStreamAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 		/// <summary>
 		/// 获取响应字符串
 		/// </summary>
 		/// <returns></returns>
-		ResponseResult<string> ResponseString();
+		ResponseResult<string> ResponseString(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
 		/// 获取响应字符串
 		/// </summary>
 		/// <returns></returns>
-		Task<ResponseResult<string>> ResponseStringAsync();
+		Task<ResponseResult<string>> ResponseStringAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
 		/// 获取响应内容，并转换成指定类型
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		ResponseResult<T> ResponseValue<T>() where T : class;
+		ResponseResult<T> ResponseValue<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK) where T : class;
 
 		/// <summary>
 		/// 获取响应内容，并转换成指定类型
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		Task<ResponseResult<T>> ResponseValueAsync<T>() where T : class;
+		Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK) where T : class;
 
 		/// <summary>
 		/// 设置Content-Type,不支持multipart/form-data的自定义

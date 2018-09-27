@@ -12,23 +12,13 @@ namespace RestRequest.Body
 		private readonly List<NamedFileStream> _files;
 		private Dictionary<string, object> Parameters { get; set; }
 
-		private string Boundary { get; }
+		public string Boundary { get; }
 
 		public MultipartBody()
 		{
 			_files = new List<NamedFileStream>();
 			Parameters = new Dictionary<string, object>();
 			Boundary = "----------------------------" + DateTime.Now.Ticks.ToString("x");
-		}
-
-		public void SetContentType(string contentType)
-		{
-		}
-
-		public string GetContentType()
-		{
-			return "multipart/form-data; boundary=" +
-				   Boundary;
 		}
 
 		public Stream GetBody()

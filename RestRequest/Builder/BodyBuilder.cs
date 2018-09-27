@@ -14,7 +14,6 @@ namespace RestRequest.Builder
 	{
 		public BodyBuilder(string url, HttpMethod method) : base(url, method)
 		{
-			//RequestBody = new DefaultBody();
 		}
 
 		/// <summary>
@@ -27,6 +26,7 @@ namespace RestRequest.Builder
 			var body = new JsonBody();
 			body.AddParameter(parameters);
 			RequestBody = body;
+			ContentType("application/json");
 			return this;
 		}
 
@@ -41,6 +41,7 @@ namespace RestRequest.Builder
 			var body = new FormBody();
 			body.AddParameter(parameters);
 			RequestBody = body;
+
 			return this;
 		}
 
@@ -55,6 +56,7 @@ namespace RestRequest.Builder
 			var body = new FormBody();
 			body.AddParameter(parameters);
 			RequestBody = body;
+			ContentType("application/x-www-form-urlencoded");
 			return this;
 		}
 
@@ -71,6 +73,7 @@ namespace RestRequest.Builder
 			body.AddParameters(parameters);
 			body.AddFiles(files);
 			RequestBody = body;
+			ContentType("multipart/form-data; boundary=" + body.Boundary);
 			return this;
 		}
 
@@ -85,6 +88,7 @@ namespace RestRequest.Builder
 			var body = new MultipartBody();
 			body.AddFiles(files);
 			RequestBody = body;
+			ContentType("multipart/form-data; boundary=" + body.Boundary);
 			return this;
 		}
 
@@ -99,6 +103,7 @@ namespace RestRequest.Builder
 			if (string.IsNullOrWhiteSpace(text))
 				throw new NullReferenceException("Post文本内容不能为空");
 			RequestBody = new TextBody(text);
+			ContentType("application/text");
 			return this;
 		}
 
@@ -111,8 +116,9 @@ namespace RestRequest.Builder
 		public INoneBodyBuilder Form(Stream stream)
 		{
 			if (stream == null)
-				throw new ArgumentNullException("the stream is null");
+				throw new ArgumentNullException("The stream is null");
 			RequestBody = new StreamBody(stream);
+			ContentType("application/octet-stream");
 			return this;
 		}
 
@@ -129,6 +135,7 @@ namespace RestRequest.Builder
 			body.AddParameters(parameters);
 			body.AddFiles(files);
 			RequestBody = body;
+			ContentType("multipart/form-data; boundary=" + body.Boundary);
 			return this;
 		}
 
