@@ -10,11 +10,11 @@ using RestRequest.Interface;
 
 namespace RestRequest.Builder
 {
-	public class BaseBuilder //: IActionCallback
+	public class BaseBuilder
 	{
 		internal Uri Url { get; set; }
 
-		internal string ContentType { get; set; }
+		internal string ContentType { get; set; } = "application/json";
 
 		internal HttpMethod Method { get; set; }
 
@@ -24,7 +24,9 @@ namespace RestRequest.Builder
 
 		internal Action<HttpStatusCode, Stream> SuccessAction { get; set; }
 
-		internal Action<WebException> FailAction { get; set; }
+		internal HttpStatusCode SucceedStatus { get; set; }
+
+		internal Action<HttpStatusCode?, string> FailAction { get; set; }
 
 		internal bool IgnoreCertificateError { get; set; }
 
@@ -45,35 +47,12 @@ namespace RestRequest.Builder
 			RequestHeaders = new WebHeaderCollection();
 		}
 
-		//public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action)
-		//{
-		//	SuccessAction = action;
-		//	return this;
-		//}
-
-		//public IActionCallback OnSuccess(Action<HttpStatusCode, string> action)
-		//{
-		//	SuccessAction = (statusCode, stream) =>
-		//	{
-		//		using (var reader = new StreamReader(stream))
-		//		{
-		//			action(statusCode, reader.ReadToEnd());
-		//		}
-		//	};
-		//	return this;
-		//}
-
-		//public IActionCallback OnFail(Action<WebException> action)
-		//{
-		//	FailAction = action;
-		//	return this;
-		//}
 
 		public void Start()
 		{
 			var builder = new RequestBuilder(this);
 			builder.BuildRequest();
-			builder.BuildRequestAndCallback();
+			builder.BuildCallback();
 		}
 
 
@@ -84,11 +63,22 @@ namespace RestRequest.Builder
 				builder.BuildRequest();
 				builder.WriteRequestBody();
 				var res = builder.GetResponse();
+				var succeed = res.StatusCode == succeedStatus;
+				var contentStream = res.GetResponseStream();
+				var contentString = "";
+				if (!succeed && contentStream != null)
+				{
+					using (var reader = new StreamReader(contentStream))
+					{
+						contentString = reader.ReadToEnd();
+					}
+				}
 				return new ResponseResult<Stream>
 				{
-					Succeed = res.StatusCode == succeedStatus,
+					Succeed = succeed,
 					StatusCode = res.StatusCode,
-					Content = res.GetResponseStream(),
+					Content = contentStream,
+					FailedContent = contentString,
 					Response = res,
 					Request = builder.Request
 				};
@@ -102,11 +92,22 @@ namespace RestRequest.Builder
 				builder.BuildRequest();
 				await builder.WriteRequestBodyAsync();
 				var res = await builder.GetResponseAsync();
+				var succeed = res.StatusCode == succeedStatus;
+				var contentStream = res.GetResponseStream();
+				var contentString = "";
+				if (!succeed && contentStream != null)
+				{
+					using (var reader = new StreamReader(contentStream))
+					{
+						contentString = await reader.ReadToEndAsync();
+					}
+				}
 				return new ResponseResult<Stream>
 				{
-					Succeed = res.StatusCode == succeedStatus,
+					Succeed = succeed,
 					StatusCode = res.StatusCode,
-					Content = res.GetResponseStream(),
+					Content = contentStream,
+					FailedContent = contentString,
 					Response = res,
 					Request = builder.Request
 				};
@@ -149,27 +150,27 @@ namespace RestRequest.Builder
 			}
 		}
 
-		public ResponseResult<T> ResponseValue<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK) where T : class
+		public ResponseResult<T> ResponseValue<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = ResponseString();
 			return new ResponseResult<T>
 			{
 				Succeed = res.StatusCode == succeedStatus,
 				StatusCode = res.StatusCode,
-				Content = string.IsNullOrWhiteSpace(res.Content) ? default(T) : JsonConvert.DeserializeObject<T>(res.Content),
+				Content = string.IsNullOrWhiteSpace(res.Content) ? default : JsonConvert.DeserializeObject<T>(res.Content),
 				Response = res.Response,
 				Request = res.Request
 			};
 		}
 
-		public async Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK) where T : class
+		public async Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ResponseStringAsync();
 			return new ResponseResult<T>
 			{
 				Succeed = res.StatusCode == succeedStatus,
 				StatusCode = res.StatusCode,
-				Content = string.IsNullOrWhiteSpace(res.Content) ? default(T) : JsonConvert.DeserializeObject<T>(res.Content),
+				Content = string.IsNullOrWhiteSpace(res.Content) ? default : JsonConvert.DeserializeObject<T>(res.Content),
 				Response = res.Response,
 				Request = res.Request
 			};

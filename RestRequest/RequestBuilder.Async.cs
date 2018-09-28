@@ -1,13 +1,92 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestRequest
 {
 	internal partial class RequestBuilder
 	{
+		#region async callback
+		internal void BuildCallback()
+		{
+
+			if (Builder.RequestBody != null && (Builder.Method == HttpMethod.Post || Builder.Method == HttpMethod.Put))
+				Request.BeginGetRequestStream(GetRequestStreamCallback, Request);
+			else
+				Request.BeginGetResponse(GetResponseCallback, Request);
+		}
+
+		private void GetRequestStreamCallback(IAsyncResult asyncResult)
+		{
+			var request = (HttpWebRequest)asyncResult.AsyncState;
+			using (var bodyStream = Builder.RequestBody.GetBody())
+			{
+				Request.ContentLength = bodyStream.Length;
+				using (var requestStream = request.EndGetRequestStream(asyncResult))
+				{
+					var bytes = new byte[bodyStream.Length];
+					bodyStream.Read(bytes, 0, bytes.Length);
+					requestStream.Write(bytes, 0, bytes.Length);
+				}
+			}
+			request.BeginGetResponse(GetResponseCallback, Request);
+		}
+
+		private void GetResponseCallback(IAsyncResult asyncResult)
+		{
+			try
+			{
+				var webRequest = (HttpWebRequest)asyncResult.AsyncState;
+				HttpWebResponse response;
+				try
+				{
+					response = (HttpWebResponse)webRequest.EndGetResponse(asyncResult);
+				}
+				catch (WebException ex)
+				{
+					response = (HttpWebResponse)ex.Response;
+					if (response == null)
+					{
+						Builder.FailAction?.Invoke(null, ex.Message);
+					}
+				}
+
+				if (response != null)
+				{
+					using (response)
+					{
+						if (Builder.SucceedStatus == response.StatusCode)
+						{
+							using (var stream = response.GetResponseStream())
+							{
+								Builder.SuccessAction?.Invoke(response.StatusCode, stream);
+							}
+						}
+						else
+						{
+							using (var stream = response.GetResponseStream())
+							{
+								if (stream != null)
+								{
+									using (var reader = new StreamReader(stream))
+									{
+										Builder.FailAction?.Invoke(response.StatusCode, reader.ReadToEnd());
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			finally
+			{
+				Dispose();
+			}
+		}
+		#endregion
+
 		internal async Task WriteRequestBodyAsync()
 		{
 			var bodyStream = Builder.RequestBody?.GetBody();

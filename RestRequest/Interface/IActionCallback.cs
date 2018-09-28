@@ -11,21 +11,21 @@ namespace RestRequest.Interface
 		/// </summary>
 		/// <param name="action"></param>
 		/// <returns></returns>
-		IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action);
+		IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
 		/// 成功时回调
 		/// </summary>
 		/// <param name="action"></param>
 		/// <returns></returns>
-		IActionCallback OnSuccess(Action<HttpStatusCode, string> action);
+		IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
 		/// 失败时回调
 		/// </summary>
 		/// <param name="action"></param>
 		/// <returns></returns>
-		IActionCallback OnFail(Action<WebException> action);
+		IActionCallback OnFail(Action<HttpStatusCode?, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
 		/// 开始请求

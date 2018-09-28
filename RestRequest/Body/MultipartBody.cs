@@ -23,19 +23,19 @@ namespace RestRequest.Body
 
 		public Stream GetBody()
 		{
-			var itemboundary = "\r\n--" +
+			var itemBoundary = "\r\n--" +
 							   $"{Boundary}\r\n";
-			var endboundary = "\r\n--" + $"{Boundary}--";
-			var itemBytes = Encoding.ASCII.GetBytes(itemboundary);
-			var endBytes = Encoding.ASCII.GetBytes(endboundary);
+			var endBoundary = "\r\n--" + $"{Boundary}--";
+			var itemBytes = Encoding.ASCII.GetBytes(itemBoundary);
+			var endBytes = Encoding.ASCII.GetBytes(endBoundary);
 			Stream bodyStream = new MemoryStream();
 			if (Parameters != null && Parameters.Count > 0)
 			{
-				var formdataTemplate = "\r\n--" + Boundary +
+				var formDataTemplate = "\r\n--" + Boundary +
 									   "\r\nContent-Disposition: form-data; name=\"{0}\";\r\n\r\n{1}";
 				foreach (var item in Parameters)
 				{
-					var bytes = Encoding.UTF8.GetBytes(string.Format(formdataTemplate, item.Key, item.Value));
+					var bytes = Encoding.UTF8.GetBytes(string.Format(formDataTemplate, item.Key, item.Value));
 					bodyStream.Write(bytes, 0, bytes.Length);
 				}
 
@@ -47,8 +47,8 @@ namespace RestRequest.Body
 				foreach (var file in _files)
 				{
 					bodyStream.Write(itemBytes, 0, itemBytes.Length);
-					var fileheaderBytes = Encoding.UTF8.GetBytes(string.Format(headerTemplate, file.Name, file.FileName, file.ContentType));
-					bodyStream.Write(fileheaderBytes, 0, fileheaderBytes.Length);
+					var fileHeaderBytes = Encoding.UTF8.GetBytes(string.Format(headerTemplate, file.Name, file.FileName, file.ContentType));
+					bodyStream.Write(fileHeaderBytes, 0, fileHeaderBytes.Length);
 					using (var stream = file.Stream)
 					{
 						stream.Position = 0;
@@ -66,6 +66,12 @@ namespace RestRequest.Body
 			return bodyStream;
 		}
 
+		public void AddParameters(Dictionary<string, object> parameters)
+		{
+			if (parameters != null && parameters.Count > 0)
+				Parameters = parameters;
+		}
+
 		public void AddParameters(object parameters)
 		{
 			if (parameters == null)
@@ -77,11 +83,6 @@ namespace RestRequest.Body
 			}
 		}
 
-		public void AddParameters(Dictionary<string, object> parameters)
-		{
-			if (parameters != null && parameters.Count > 0)
-				Parameters = parameters;
-		}
 
 		public void AddFiles(IEnumerable<NamedFileStream> files)
 		{

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -35,14 +36,14 @@ namespace RestRequest.Interface
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		ResponseResult<T> ResponseValue<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK) where T : class;
+		ResponseResult<T> ResponseValue<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
 		/// 获取响应内容，并转换成指定类型
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK) where T : class;
+		Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
 		/// 设置Content-Type,不支持multipart/form-data的自定义

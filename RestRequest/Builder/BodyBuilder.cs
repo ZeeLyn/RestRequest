@@ -51,7 +51,7 @@ namespace RestRequest.Builder
 		/// </summary>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public INoneBodyBuilder Form(Dictionary<string, string> parameters)
+		public INoneBodyBuilder Form(Dictionary<string, object> parameters)
 		{
 			var body = new FormBody();
 			body.AddParameter(parameters);
@@ -93,6 +93,23 @@ namespace RestRequest.Builder
 		}
 
 		/// <summary>
+		/// 设置表单数据和上传的文件
+		/// content-type=multipart/form-data
+		/// </summary>
+		/// <param name="files">上传的文件信息</param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
+		public INoneBodyBuilder Form(IEnumerable<NamedFileStream> files, Dictionary<string, object> parameters)
+		{
+			var body = new MultipartBody();
+			body.AddParameters(parameters);
+			body.AddFiles(files);
+			RequestBody = body;
+			ContentType("multipart/form-data; boundary=" + body.Boundary);
+			return this;
+		}
+
+		/// <summary>
 		/// 设置提交的文本
 		/// content-type=application/text
 		/// </summary>
@@ -122,30 +139,16 @@ namespace RestRequest.Builder
 			return this;
 		}
 
-		/// <summary>
-		/// 设置表单数据和上传的文件
-		/// content-type=multipart/form-data
-		/// </summary>
-		/// <param name="files">上传的文件信息</param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-		public INoneBodyBuilder Form(IEnumerable<NamedFileStream> files, Dictionary<string, string> parameters)
-		{
-			var body = new MultipartBody();
-			body.AddParameters(parameters);
-			body.AddFiles(files);
-			RequestBody = body;
-			ContentType("multipart/form-data; boundary=" + body.Boundary);
-			return this;
-		}
 
-		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action)
+
+		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			SuccessAction = action;
+			SucceedStatus = succeedStatus;
 			return this;
 		}
 
-		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action)
+		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			SuccessAction = (statusCode, stream) =>
 			{
@@ -154,12 +157,14 @@ namespace RestRequest.Builder
 					action(statusCode, reader.ReadToEnd());
 				}
 			};
+			SucceedStatus = succeedStatus;
 			return this;
 		}
 
-		public IActionCallback OnFail(Action<WebException> action)
+		public IActionCallback OnFail(Action<HttpStatusCode?, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			FailAction = action;
+			SucceedStatus = succeedStatus;
 			return this;
 		}
 

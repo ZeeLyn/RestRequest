@@ -14,17 +14,18 @@ namespace RestRequest.Builder
 	{
 		public NoneBodyBuilder(string url, HttpMethod method) : base(url, method)
 		{
-			RequestBody = new DefaultBody();
+			//RequestBody = new DefaultBody();
 		}
 
 
-		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action)
+		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			SuccessAction = action;
+			SucceedStatus = succeedStatus;
 			return this;
 		}
 
-		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action)
+		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			SuccessAction = (statusCode, stream) =>
 			{
@@ -33,12 +34,14 @@ namespace RestRequest.Builder
 					action(statusCode, reader.ReadToEnd());
 				}
 			};
+			SucceedStatus = succeedStatus;
 			return this;
 		}
 
-		public IActionCallback OnFail(Action<WebException> action)
+		public IActionCallback OnFail(Action<HttpStatusCode?, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			FailAction = action;
+			SucceedStatus = succeedStatus;
 			return this;
 		}
 
