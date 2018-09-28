@@ -40,8 +40,6 @@ namespace RestRequest
 		public void Dispose()
 		{
 			Request?.Abort();
-			var stream = Content as Stream;
-			stream?.Dispose();
 			Response?.Dispose();
 		}
 	}

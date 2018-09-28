@@ -6,7 +6,7 @@ namespace RestRequest
 {
 	internal partial class RequestBuilder : IDisposable
 	{
-		public HttpWebRequest Request { get; private set; }
+		internal HttpWebRequest Request { get; private set; }
 
 		private BaseBuilder Builder { get; }
 
@@ -39,6 +39,7 @@ namespace RestRequest
 				}
 			}
 			Request.KeepAlive = Builder.KeepAlive;
+			Request.Referer = Builder.Referer;
 		}
 
 		internal void WriteRequestBody()

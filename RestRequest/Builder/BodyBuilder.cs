@@ -245,6 +245,12 @@ namespace RestRequest.Builder
 			return this;
 		}
 
+		public INoneBodyBuilder Referer(string referer)
+		{
+			base.Referer = referer;
+			return this;
+		}
+
 		public INoneBodyBuilder Timeout(int timeout)
 		{
 			if (timeout <= 0)

@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using RestRequest;
 using System.Drawing;
 using System.Net.Http;
+using RestRequest.Builder;
 
 namespace WZL.RestRequest.Example
 {
@@ -15,7 +16,7 @@ namespace WZL.RestRequest.Example
 	{
 		static void Main(string[] args)
 		{
-			var r = HttpRequest.Get("http://localhost:55856/receive/hash").ResponseString();
+			var r = HttpRequest.Post("http://localhost:55856/receive/hash").ResponseString();
 
 			//using (var r = HttpRequest.Get("http://localhost:44316/values").ResponseString())
 			//{
@@ -92,7 +93,7 @@ namespace WZL.RestRequest.Example
 			//}).Start();
 
 
-			Console.WriteLine();
+			Console.WriteLine(r);
 			Console.WriteLine("Hello World!");
 			Console.ReadKey();
 		}

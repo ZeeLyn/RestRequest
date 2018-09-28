@@ -34,6 +34,8 @@ namespace RestRequest.Builder
 
 		internal string UserAgent { get; set; }
 
+		internal string Referer { get; set; }
+
 		internal int Timeout { get; set; }
 
 		internal List<Cookie> Cookies { get; set; }
@@ -175,5 +177,6 @@ namespace RestRequest.Builder
 				Request = res.Request
 			};
 		}
+
 	}
 }

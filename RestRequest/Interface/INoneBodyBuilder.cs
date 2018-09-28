@@ -105,6 +105,8 @@ namespace RestRequest.Interface
 		/// <returns></returns>
 		INoneBodyBuilder UserAgent(string userAgent);
 
+		INoneBodyBuilder Referer(string referer);
+
 		/// <summary>
 		/// 设置超时时间（单位毫秒）
 		/// </summary>
