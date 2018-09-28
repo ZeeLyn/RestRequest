@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
+using Newtonsoft.Json;
 using RestRequest.Body;
 using RestRequest.Interface;
 
@@ -32,6 +33,19 @@ namespace RestRequest.Builder
 				using (var reader = new StreamReader(stream))
 				{
 					action(statusCode, reader.ReadToEnd());
+				}
+			};
+			SucceedStatus = succeedStatus;
+			return this;
+		}
+
+		public IActionCallback OnSuccess<T>(Action<HttpStatusCode, T> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			SuccessAction = (statusCode, stream) =>
+			{
+				using (var reader = new StreamReader(stream))
+				{
+					action(statusCode, JsonConvert.DeserializeObject<T>(reader.ReadToEnd()));
 				}
 			};
 			SucceedStatus = succeedStatus;

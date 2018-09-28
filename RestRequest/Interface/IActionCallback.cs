@@ -20,6 +20,8 @@ namespace RestRequest.Interface
 		/// <returns></returns>
 		IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
+		IActionCallback OnSuccess<T>(Action<HttpStatusCode, T> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
 		/// <summary>
 		/// 失败时回调
 		/// </summary>
