@@ -13,7 +13,7 @@ namespace RestRequest
 		/// <returns></returns>
 		public static INoneBodyBuilder Get(string url)
 		{
-			return new ContentBuilder(url, HttpMethod.Get);
+			return new ContextBuilder(url, HttpMethod.Get);
 		}
 
 		/// <summary>
@@ -23,7 +23,7 @@ namespace RestRequest
 		/// <returns></returns>
 		public static IBodyBuilder Post(string url)
 		{
-			return new ContentBuilder(url, HttpMethod.Post);
+			return new ContextBuilder(url, HttpMethod.Post);
 		}
 		/// <summary>
 		/// Put请求
@@ -32,7 +32,7 @@ namespace RestRequest
 		/// <returns></returns>
 		public static IBodyBuilder Put(string url)
 		{
-			return new ContentBuilder(url, HttpMethod.Put);
+			return new ContextBuilder(url, HttpMethod.Put);
 		}
 		/// <summary>
 		/// Delete请求
@@ -41,7 +41,7 @@ namespace RestRequest
 		/// <returns></returns>
 		public static INoneBodyBuilder Delete(string url)
 		{
-			return new ContentBuilder(url, HttpMethod.Delete);
+			return new ContextBuilder(url, HttpMethod.Delete);
 		}
 	}
 }

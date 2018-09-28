@@ -3805,11 +3805,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
+      "projectUniqueName": "E:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
       "projectName": "WZL.RestRequest.Example",
-      "projectPath": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
+      "projectPath": "E:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
       "packagesPath": "C:\\Users\\OWEN\\.nuget\\packages\\",
-      "outputPath": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\obj\\",
+      "outputPath": "E:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -3830,8 +3830,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "F:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj": {
-              "projectPath": "F:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj"
+            "E:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj": {
+              "projectPath": "E:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj"
             }
           }
         }

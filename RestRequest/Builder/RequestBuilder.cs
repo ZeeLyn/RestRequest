@@ -1,50 +1,49 @@
 ﻿using System;
 using System.Net;
-using RestRequest.Builder;
 
-namespace RestRequest
+namespace RestRequest.Builder
 {
 	internal partial class RequestBuilder : IDisposable
 	{
 		internal HttpWebRequest Request { get; private set; }
 
-		private BaseBuilder Builder { get; }
+		private ContextBuilder Context { get; }
 
-		internal RequestBuilder(BaseBuilder builder)
+		internal RequestBuilder(ContextBuilder context)
 		{
-			Builder = builder;
+			Context = context;
 		}
 
 		internal void BuildRequest()
 		{
-			Request = (HttpWebRequest)WebRequest.Create(Builder.Url);
-			Request.Method = Builder.Method.ToString().ToUpper();
-			if (Builder.RequestHeaders != null && Builder.RequestHeaders.Count > 0)
-				Request.Headers = Builder.RequestHeaders;
-			Request.ContentType = Builder.ContentType;
-			if (Builder.IgnoreCertificateError)
+			Request = (HttpWebRequest)WebRequest.Create(Context.Url);
+			Request.Method = Context.Method.ToString().ToUpper();
+			if (Context.RequestHeaders != null && Context.RequestHeaders.Count > 0)
+				Request.Headers = Context.RequestHeaders;
+			Request.ContentType = Context._ContentType;
+			if (Context.IgnoreCertificateError)
 				Request.ServerCertificateValidationCallback = ValidationCertificate.VerifyServerCertificate;
-			if (Builder.ClientCertificates != null && Builder.ClientCertificates.Count > 0)
-				Request.ClientCertificates.AddRange(Builder.ClientCertificates);
-			if (!string.IsNullOrWhiteSpace(Builder.UserAgent))
-				Request.UserAgent = Builder.UserAgent;
-			if (Builder.Timeout > 0)
-				Request.Timeout = Builder.Timeout;
-			if (Builder.Cookies?.Count > 0)
+			if (Context.ClientCertificates != null && Context.ClientCertificates.Count > 0)
+				Request.ClientCertificates.AddRange(Context.ClientCertificates);
+			if (!string.IsNullOrWhiteSpace(Context._UserAgent))
+				Request.UserAgent = Context._UserAgent;
+			if (Context._Timeout > 0)
+				Request.Timeout = Context._Timeout;
+			if (Context._Cookies?.Count > 0)
 			{
 				Request.CookieContainer = new CookieContainer();
-				foreach (var cookie in Builder.Cookies)
+				foreach (var cookie in Context._Cookies)
 				{
 					Request.CookieContainer.Add(cookie);
 				}
 			}
-			Request.KeepAlive = Builder.KeepAlive;
-			Request.Referer = Builder.Referer;
+			Request.KeepAlive = Context._KeepAlive;
+			Request.Referer = Context._Referer;
 		}
 
 		internal void WriteRequestBody()
 		{
-			var bodyStream = Builder.RequestBody?.GetBody();
+			var bodyStream = Context.RequestBody?.GetBody();
 			if (bodyStream == null)
 				return;
 			using (bodyStream)

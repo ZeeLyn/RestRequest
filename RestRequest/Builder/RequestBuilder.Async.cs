@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace RestRequest
+namespace RestRequest.Builder
 {
 	internal partial class RequestBuilder
 	{
@@ -12,7 +12,7 @@ namespace RestRequest
 		internal void BuildCallback()
 		{
 
-			if (Builder.RequestBody != null && (Builder.Method == HttpMethod.Post || Builder.Method == HttpMethod.Put))
+			if (Context.RequestBody != null && (Context.Method == HttpMethod.Post || Context.Method == HttpMethod.Put))
 				Request.BeginGetRequestStream(GetRequestStreamCallback, Request);
 			else
 				Request.BeginGetResponse(GetResponseCallback, Request);
@@ -21,7 +21,7 @@ namespace RestRequest
 		private void GetRequestStreamCallback(IAsyncResult asyncResult)
 		{
 			var request = (HttpWebRequest)asyncResult.AsyncState;
-			using (var bodyStream = Builder.RequestBody.GetBody())
+			using (var bodyStream = Context.RequestBody.GetBody())
 			{
 				Request.ContentLength = bodyStream.Length;
 				using (var requestStream = request.EndGetRequestStream(asyncResult))
@@ -49,7 +49,7 @@ namespace RestRequest
 					response = (HttpWebResponse)ex.Response;
 					if (response == null)
 					{
-						Builder.FailAction?.Invoke(null, ex.Message);
+						Context.FailAction?.Invoke(null, ex.Message);
 					}
 				}
 
@@ -57,11 +57,11 @@ namespace RestRequest
 				{
 					using (response)
 					{
-						if (Builder.SucceedStatus == response.StatusCode)
+						if (Context.SucceedStatus == response.StatusCode)
 						{
 							using (var stream = response.GetResponseStream())
 							{
-								Builder.SuccessAction?.Invoke(response.StatusCode, stream);
+								Context.SuccessAction?.Invoke(response.StatusCode, stream);
 							}
 						}
 						else
@@ -72,7 +72,7 @@ namespace RestRequest
 								{
 									using (var reader = new StreamReader(stream))
 									{
-										Builder.FailAction?.Invoke(response.StatusCode, reader.ReadToEnd());
+										Context.FailAction?.Invoke(response.StatusCode, reader.ReadToEnd());
 									}
 								}
 							}
@@ -89,7 +89,7 @@ namespace RestRequest
 
 		internal async Task WriteRequestBodyAsync()
 		{
-			var bodyStream = Builder.RequestBody?.GetBody();
+			var bodyStream = Context.RequestBody?.GetBody();
 			if (bodyStream == null)
 				return;
 			using (bodyStream)

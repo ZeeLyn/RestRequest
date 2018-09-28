@@ -16,7 +16,7 @@ namespace WZL.RestRequest.Example
 	{
 		static void Main(string[] args)
 		{
-			var r = HttpRequest.Post("http://localhost:55856/receive/hash").ResponseString();
+			var r = HttpRequest.Post("http://baidu.com").ResponseString();
 
 			//using (var r = HttpRequest.Get("http://localhost:44316/values").ResponseString())
 			//{

@@ -38,3 +38,17 @@ F:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRe
 F:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.dll
 F:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.pdb
 F:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.csprojAssemblyReference.cache
+E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\WZL.RestRequest.Example.deps.json
+E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\WZL.RestRequest.Example.runtimeconfig.json
+E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\WZL.RestRequest.Example.runtimeconfig.dev.json
+E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\WZL.RestRequest.Example.dll
+E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\WZL.RestRequest.Example.pdb
+E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\RestRequest.dll
+E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\RestRequest.pdb
+E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.csprojAssemblyReference.cache
+E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.csproj.CoreCompileInputs.cache
+E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.AssemblyInfoInputs.cache
+E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.AssemblyInfo.cs
+E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.csproj.CopyComplete
+E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.dll
+E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.pdb
