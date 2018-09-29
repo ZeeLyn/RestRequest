@@ -40,7 +40,7 @@ namespace RestRequest.Builder
 		internal List<Cookie> _Cookies { get; set; }
 
 		internal bool _KeepAlive { get; set; }
-		internal int _ConnectionLimit { get; set; }
+		internal int _ConnectionLimit { get; set; } = 2;
 
 		internal ContextBuilder(string url, HttpMethod method)
 		{
