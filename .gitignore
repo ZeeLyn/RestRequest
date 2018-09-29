@@ -43,3 +43,13 @@ WZL.RestRequest.Example/obj/WZL.RestRequest.Example.csproj.nuget.g.targets
 RestRequest/obj/Release/RestRequest.1.0.1.nuspec
 WZL.RestRequest.Example/obj/project.assets.json
 *.nuspec
+.vs/WZL.RestRequest/DesignTimeBuild/.dtbcache
+.vs/config/applicationhost.config
+WebApplication1/obj/Debug/netcoreapp2.1/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+WebApplication1/obj/Debug/netcoreapp2.1/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+WebApplication1/obj/Debug/netcoreapp2.1/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+WebApplication1/obj/Debug/netcoreapp2.1/WebApplication1.AssemblyInfo.cs
+WebApplication1/obj/Debug/netcoreapp2.1/WebApplication1.RazorAssemblyInfo.cs
+WebApplication1/obj/project.assets.json
+WZL.RestRequest.sln.DotSettings.user
+.gitattributes
