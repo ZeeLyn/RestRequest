@@ -49,7 +49,7 @@ namespace RestRequest.Builder
 			RequestHeaders = new WebHeaderCollection();
 		}
 
-		public INoneBodyBuilder Headers(Dictionary<string, string> headers)
+		public INoneBodyBuilder Headers(IDictionary<string, string> headers)
 		{
 			if (!(headers?.Count > 0)) return this;
 			foreach (var item in headers)
@@ -138,7 +138,7 @@ namespace RestRequest.Builder
 			return this;
 		}
 
-		public INoneBodyBuilder Cookies(Dictionary<string, string> cookies)
+		public INoneBodyBuilder Cookies(IDictionary<string, string> cookies)
 		{
 			if (cookies != null && cookies.Count > 0)
 			{

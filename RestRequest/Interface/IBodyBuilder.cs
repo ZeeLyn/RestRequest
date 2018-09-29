@@ -27,7 +27,7 @@ namespace RestRequest.Interface
 		/// </summary>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		INoneBodyBuilder Form(Dictionary<string, object> parameters);
+		INoneBodyBuilder Form(IDictionary<string, object> parameters);
 
 		/// <summary>
 		/// 同时上传文件和表单数据
@@ -36,7 +36,7 @@ namespace RestRequest.Interface
 		/// <param name="files"></param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		INoneBodyBuilder Form(IEnumerable<NamedFileStream> files, Dictionary<string, object> parameters);
+		INoneBodyBuilder Form(IEnumerable<NamedFileStream> files, IDictionary<string, object> parameters);
 
 		/// <summary>
 		/// 同时上传文件和表单数据

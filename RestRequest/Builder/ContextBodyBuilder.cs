@@ -44,7 +44,7 @@ namespace RestRequest.Builder
 		/// </summary>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public INoneBodyBuilder Form(Dictionary<string, object> parameters)
+		public INoneBodyBuilder Form(IDictionary<string, object> parameters)
 		{
 			var body = new FormBody();
 			body.AddParameter(parameters);
@@ -92,7 +92,7 @@ namespace RestRequest.Builder
 		/// <param name="files">上传的文件信息</param>
 		/// <param name="parameters"></param>
 		/// <returns></returns>
-		public INoneBodyBuilder Form(IEnumerable<NamedFileStream> files, Dictionary<string, object> parameters)
+		public INoneBodyBuilder Form(IEnumerable<NamedFileStream> files, IDictionary<string, object> parameters)
 		{
 			var body = new MultipartBody();
 			body.AddParameters(parameters);

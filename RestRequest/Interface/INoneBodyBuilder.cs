@@ -59,7 +59,7 @@ namespace RestRequest.Interface
 		/// </summary>
 		/// <param name="headers"></param>
 		/// <returns></returns>
-		INoneBodyBuilder Headers(Dictionary<string, string> headers);
+		INoneBodyBuilder Headers(IDictionary<string, string> headers);
 
 		/// <summary>
 		/// 设置header
@@ -128,7 +128,7 @@ namespace RestRequest.Interface
 		/// </summary>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		INoneBodyBuilder Cookies(Dictionary<string, string> cookies);
+		INoneBodyBuilder Cookies(IDictionary<string, string> cookies);
 
 		/// <summary>
 		/// 设置cookie
