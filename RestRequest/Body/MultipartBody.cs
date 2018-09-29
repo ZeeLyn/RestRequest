@@ -23,8 +23,7 @@ namespace RestRequest.Body
 
 		public Stream GetBody()
 		{
-			var itemBoundary = "\r\n--" +
-							   $"{Boundary}\r\n";
+			var itemBoundary = "\r\n--" + $"{Boundary}\r\n";
 			var endBoundary = "\r\n--" + $"{Boundary}--";
 			var itemBytes = Encoding.ASCII.GetBytes(itemBoundary);
 			var endBytes = Encoding.ASCII.GetBytes(endBoundary);

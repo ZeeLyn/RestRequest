@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestRequest", "RestRequest\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WZL.RestRequest.Example", "WZL.RestRequest.Example\WZL.RestRequest.Example.csproj", "{172ACFCF-65B1-4F07-8251-277AA60F15AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{CFFFB048-E580-4271-AE71-A190E4ECA9BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{172ACFCF-65B1-4F07-8251-277AA60F15AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{172ACFCF-65B1-4F07-8251-277AA60F15AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{172ACFCF-65B1-4F07-8251-277AA60F15AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFFFB048-E580-4271-AE71-A190E4ECA9BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFFB048-E580-4271-AE71-A190E4ECA9BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFFFB048-E580-4271-AE71-A190E4ECA9BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFFFB048-E580-4271-AE71-A190E4ECA9BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

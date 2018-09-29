@@ -67,12 +67,12 @@ namespace RestRequest.Builder
 				var res = builder.GetResponse();
 				var succeed = res.StatusCode == succeedStatus;
 				var contentStream = res.GetResponseStream();
-				var contentString = "";
-				if (!succeed && contentStream != null)
+				var failString = "";
+				if (!succeed && contentStream != null && contentStream.CanRead)
 				{
 					using (var reader = new StreamReader(contentStream))
 					{
-						contentString = reader.ReadToEnd();
+						failString = reader.ReadToEnd();
 					}
 				}
 				return new ResponseResult<Stream>
@@ -80,7 +80,7 @@ namespace RestRequest.Builder
 					Succeed = succeed,
 					StatusCode = res.StatusCode,
 					Content = contentStream,
-					FailedContent = contentString,
+					FailedContent = failString,
 					Response = res,
 					Request = builder.Request
 				};
@@ -96,12 +96,12 @@ namespace RestRequest.Builder
 				var res = await builder.GetResponseAsync();
 				var succeed = res.StatusCode == succeedStatus;
 				var contentStream = res.GetResponseStream();
-				var contentString = "";
-				if (!succeed && contentStream != null)
+				var failString = "";
+				if (!succeed && contentStream != null && contentStream.CanRead)
 				{
 					using (var reader = new StreamReader(contentStream))
 					{
-						contentString = await reader.ReadToEndAsync();
+						failString = await reader.ReadToEndAsync();
 					}
 				}
 				return new ResponseResult<Stream>
@@ -109,7 +109,7 @@ namespace RestRequest.Builder
 					Succeed = succeed,
 					StatusCode = res.StatusCode,
 					Content = contentStream,
-					FailedContent = contentString,
+					FailedContent = failString,
 					Response = res,
 					Request = builder.Request
 				};
@@ -119,37 +119,46 @@ namespace RestRequest.Builder
 		public ResponseResult<string> ResponseString(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = ResponseStream();
+			var result = new ResponseResult<string>
+			{
+				Succeed = res.StatusCode == succeedStatus,
+				StatusCode = res.StatusCode,
+				Response = res.Response,
+				FailedContent = res.FailedContent,
+				Request = res.Request
+			};
+			if (!res.Content.CanRead)
+				return result;
 			using (var stream = res.Content)
 			using (var reader = new StreamReader(stream))
 			using (res.Response)
 			{
-				return new ResponseResult<string>
-				{
-					Succeed = res.StatusCode == succeedStatus,
-					StatusCode = res.StatusCode,
-					Content = reader.ReadToEnd(),
-					Response = res.Response,
-					Request = res.Request
-				};
+				result.Content = reader.ReadToEnd();
 			}
+			return result;
 		}
 
 		public async Task<ResponseResult<string>> ResponseStringAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ResponseStreamAsync();
+			var result = new ResponseResult<string>
+			{
+				Succeed = res.StatusCode == succeedStatus,
+				StatusCode = res.StatusCode,
+				Response = res.Response,
+				FailedContent = res.FailedContent,
+				Request = res.Request
+			};
+			if (!res.Content.CanRead)
+				return result;
 			using (var stream = res.Content)
 			using (var reader = new StreamReader(stream))
 			using (res.Response)
 			{
-				return new ResponseResult<string>
-				{
-					Succeed = res.StatusCode == succeedStatus,
-					StatusCode = res.StatusCode,
-					Content = await reader.ReadToEndAsync(),
-					Response = res.Response,
-					Request = res.Request
-				};
+				result.Content = await reader.ReadToEndAsync();
 			}
+
+			return result;
 		}
 
 		public ResponseResult<T> ResponseValue<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK)
@@ -160,6 +169,7 @@ namespace RestRequest.Builder
 				Succeed = res.StatusCode == succeedStatus,
 				StatusCode = res.StatusCode,
 				Content = string.IsNullOrWhiteSpace(res.Content) ? default : JsonConvert.DeserializeObject<T>(res.Content),
+				FailedContent = res.FailedContent,
 				Response = res.Response,
 				Request = res.Request
 			};
@@ -173,6 +183,7 @@ namespace RestRequest.Builder
 				Succeed = res.StatusCode == succeedStatus,
 				StatusCode = res.StatusCode,
 				Content = string.IsNullOrWhiteSpace(res.Content) ? default : JsonConvert.DeserializeObject<T>(res.Content),
+				FailedContent = res.FailedContent,
 				Response = res.Response,
 				Request = res.Request
 			};

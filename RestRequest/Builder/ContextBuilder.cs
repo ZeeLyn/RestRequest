@@ -40,6 +40,7 @@ namespace RestRequest.Builder
 		internal List<Cookie> _Cookies { get; set; }
 
 		internal bool _KeepAlive { get; set; }
+		internal int _ConnectionLimit { get; set; }
 
 		internal ContextBuilder(string url, HttpMethod method)
 		{
@@ -119,8 +120,8 @@ namespace RestRequest.Builder
 
 		public INoneBodyBuilder Timeout(int timeout)
 		{
-			if (timeout <= 0)
-				throw new ArgumentOutOfRangeException("超时时间必须大于0");
+			if (timeout < 0)
+				throw new ArgumentException("Timeout cannot be less than 0.");
 			_Timeout = timeout;
 			return this;
 		}
@@ -163,6 +164,13 @@ namespace RestRequest.Builder
 			return this;
 		}
 
+		public INoneBodyBuilder ConnectionLimit(int maxLimit)
+		{
+			if (maxLimit < 1)
+				throw new ArgumentException("Limit cannot be less than 1.");
+			_ConnectionLimit = maxLimit;
+			return this;
+		}
 
 	}
 }

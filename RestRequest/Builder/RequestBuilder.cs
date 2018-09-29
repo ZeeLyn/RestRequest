@@ -39,6 +39,7 @@ namespace RestRequest.Builder
 			}
 			Request.KeepAlive = Context._KeepAlive;
 			Request.Referer = Context._Referer;
+			Request.ServicePoint.ConnectionLimit = Context._ConnectionLimit;
 		}
 
 		internal void WriteRequestBody()

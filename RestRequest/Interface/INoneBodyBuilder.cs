@@ -14,6 +14,7 @@ namespace RestRequest.Interface
 		/// </summary>
 		/// <returns></returns>
 		ResponseResult<Stream> ResponseStream(HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
 		/// <summary>
 		/// 获取响应流
 		/// </summary>
@@ -44,6 +45,7 @@ namespace RestRequest.Interface
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
 
 		/// <summary>
 		/// 设置Content-Type,不支持multipart/form-data的自定义
