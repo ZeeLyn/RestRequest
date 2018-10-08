@@ -31,6 +31,15 @@ namespace WZL.RestRequest.Example
 					JsonConvert.SerializeObject(r3.Content), r3.FailedContent);
 			}
 
+			HttpRequest.Post("http://localhost:61389/api/values/json").Body(new { name = "test1" })
+				.OnSuccess((HttpStatusCode code,
+					TestData d) =>
+				{
+					Console.WriteLine("json async:status:{0},value:{1}", code,
+						JsonConvert.SerializeObject(d));
+				})
+				.OnFail((code, err) => { Console.WriteLine("Code:{0},Error:{1}", code, err); }).Start();
+
 			using (var r4 = HttpRequest.Post("http://localhost:61389/api/values/json").Body(new { name = "error" })
 				.ResponseValue<TestData>())
 			{

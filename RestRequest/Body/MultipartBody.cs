@@ -10,7 +10,7 @@ namespace RestRequest.Body
 	public class MultipartBody : IBody
 	{
 		private readonly List<NamedFileStream> _files;
-		private Dictionary<string, object> Parameters { get; set; }
+		private IDictionary<string, object> Parameters { get; set; }
 
 		public string Boundary { get; }
 
@@ -21,51 +21,55 @@ namespace RestRequest.Body
 			Boundary = "----------------------------" + DateTime.Now.Ticks.ToString("x");
 		}
 
-		public Stream GetBody()
+		public byte[] GetBody()
 		{
 			var itemBoundary = "\r\n--" + $"{Boundary}\r\n";
 			var endBoundary = "\r\n--" + $"{Boundary}--";
 			var itemBytes = Encoding.ASCII.GetBytes(itemBoundary);
 			var endBytes = Encoding.ASCII.GetBytes(endBoundary);
-			Stream bodyStream = new MemoryStream();
-			if (Parameters != null && Parameters.Count > 0)
+			using (Stream bodyStream = new MemoryStream())
 			{
-				var formDataTemplate = "\r\n--" + Boundary +
-									   "\r\nContent-Disposition: form-data; name=\"{0}\";\r\n\r\n{1}";
-				foreach (var item in Parameters)
+				if (Parameters != null && Parameters.Count > 0)
 				{
-					var bytes = Encoding.UTF8.GetBytes(string.Format(formDataTemplate, item.Key, item.Value));
-					bodyStream.Write(bytes, 0, bytes.Length);
-				}
-
-			}
-			if (_files.Any())
-			{
-				const string headerTemplate = "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\n" +
-											  "Content-Type: {2}\r\n\r\n";
-				foreach (var file in _files)
-				{
-					bodyStream.Write(itemBytes, 0, itemBytes.Length);
-					var fileHeaderBytes = Encoding.UTF8.GetBytes(string.Format(headerTemplate, file.Name, file.FileName, file.ContentType));
-					bodyStream.Write(fileHeaderBytes, 0, fileHeaderBytes.Length);
-					using (var stream = file.Stream)
+					var formDataTemplate = "\r\n--" + Boundary +
+										   "\r\nContent-Disposition: form-data; name=\"{0}\";\r\n\r\n{1}";
+					foreach (var item in Parameters)
 					{
-						stream.Position = 0;
-						int bytesRead;
-						var buffer = new byte[1024];
-						while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) != 0)
+						var bytes = Encoding.UTF8.GetBytes(string.Format(formDataTemplate, item.Key, item.Value));
+						bodyStream.Write(bytes, 0, bytes.Length);
+					}
+
+				}
+				if (_files.Any())
+				{
+					const string headerTemplate = "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\n" +
+												  "Content-Type: {2}\r\n\r\n";
+					foreach (var file in _files)
+					{
+						bodyStream.Write(itemBytes, 0, itemBytes.Length);
+						var fileHeaderBytes = Encoding.UTF8.GetBytes(string.Format(headerTemplate, file.Name, file.FileName, file.ContentType));
+						bodyStream.Write(fileHeaderBytes, 0, fileHeaderBytes.Length);
+						using (var stream = file.Stream)
 						{
-							bodyStream.Write(buffer, 0, bytesRead);
+							stream.Position = 0;
+							int bytesRead;
+							var buffer = new byte[1024];
+							while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) != 0)
+							{
+								bodyStream.Write(buffer, 0, bytesRead);
+							}
 						}
 					}
+					bodyStream.Write(endBytes, 0, endBytes.Length);
 				}
-				bodyStream.Write(endBytes, 0, endBytes.Length);
+				bodyStream.Seek(0, SeekOrigin.Begin);
+				var result = new byte[bodyStream.Length];
+				bodyStream.Read(result, 0, result.Length);
+				return result;
 			}
-			bodyStream.Seek(0, SeekOrigin.Begin);
-			return bodyStream;
 		}
 
-		public void AddParameters(Dictionary<string, object> parameters)
+		public void AddParameters(IDictionary<string, object> parameters)
 		{
 			if (parameters != null && parameters.Count > 0)
 				Parameters = parameters;
@@ -85,9 +89,10 @@ namespace RestRequest.Body
 
 		public void AddFiles(IEnumerable<NamedFileStream> files)
 		{
-			if (files == null || !files.Any())
+			var namedFileStreams = files.ToList();
+			if (!namedFileStreams.Any())
 				return;
-			_files.AddRange(files);
+			_files.AddRange(namedFileStreams);
 		}
 	}
 }

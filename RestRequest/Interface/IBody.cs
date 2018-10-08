@@ -1,9 +1,7 @@
-﻿using System.IO;
-
-namespace RestRequest.Interface
+﻿namespace RestRequest.Interface
 {
 	public interface IBody
 	{
-		Stream GetBody();
+		byte[] GetBody();
 	}
 }

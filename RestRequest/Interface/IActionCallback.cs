@@ -10,6 +10,7 @@ namespace RestRequest.Interface
 		/// 成功时回调
 		/// </summary>
 		/// <param name="action"></param>
+		/// <param name="succeedStatus"></param>
 		/// <returns></returns>
 		IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
@@ -17,6 +18,7 @@ namespace RestRequest.Interface
 		/// 成功时回调
 		/// </summary>
 		/// <param name="action"></param>
+		/// <param name="succeedStatus"></param>
 		/// <returns></returns>
 		IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
@@ -26,6 +28,7 @@ namespace RestRequest.Interface
 		/// 失败时回调
 		/// </summary>
 		/// <param name="action"></param>
+		/// <param name="succeedStatus"></param>
 		/// <returns></returns>
 		IActionCallback OnFail(Action<HttpStatusCode?, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 

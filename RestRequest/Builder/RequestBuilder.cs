@@ -21,6 +21,9 @@ namespace RestRequest.Builder
 			if (Context.RequestHeaders != null && Context.RequestHeaders.Count > 0)
 				Request.Headers = Context.RequestHeaders;
 			Request.ContentType = Context._ContentType;
+			Request.KeepAlive = Context._KeepAlive;
+			Request.Referer = Context._Referer;
+			Request.ServicePoint.ConnectionLimit = Context._ConnectionLimit;
 			if (Context.IgnoreCertificateError)
 				Request.ServerCertificateValidationCallback = ValidationCertificate.VerifyServerCertificate;
 			if (Context.ClientCertificates != null && Context.ClientCertificates.Count > 0)
@@ -37,26 +40,18 @@ namespace RestRequest.Builder
 					Request.CookieContainer.Add(cookie);
 				}
 			}
-			Request.KeepAlive = Context._KeepAlive;
-			Request.Referer = Context._Referer;
-			Request.ServicePoint.ConnectionLimit = Context._ConnectionLimit;
 		}
 
 		internal void WriteRequestBody()
 		{
-			var bodyStream = Context.RequestBody?.GetBody();
-			if (bodyStream == null)
+			var bodyBytes = Context.RequestBody?.GetBody();
+			if (bodyBytes == null)
 				return;
-			using (bodyStream)
 			using (var requestStream = Request.GetRequestStream())
 			{
-				Request.ContentLength = bodyStream.Length;
-				bodyStream.Position = 0;
-				var bytes = new byte[bodyStream.Length];
-				bodyStream.Read(bytes, 0, bytes.Length);
-				requestStream.Write(bytes, 0, bytes.Length);
+				Request.ContentLength = bodyBytes.Length;
+				requestStream.Write(bodyBytes, 0, bodyBytes.Length);
 			}
-
 		}
 
 

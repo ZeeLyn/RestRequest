@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Text;
 using RestRequest.Interface;
@@ -8,33 +7,28 @@ namespace RestRequest.Body
 {
 	public class FormBody : IBody
 	{
-		private Dictionary<string, object> _parameters;
-		private Stream BodyStream { get; set; }
-
-		private string ContentType { get; set; } = "application/x-www-form-urlencoded";
+		private IDictionary<string, object> _parameters;
 
 		public FormBody()
 		{
 			_parameters = new Dictionary<string, object>();
 		}
 
-		public Stream GetBody()
+		public byte[] GetBody()
 		{
 			if (_parameters == null || _parameters.Count == 0)
-				return BodyStream;
+				return null;
 			var query = new StringBuilder();
 			foreach (var item in _parameters)
 			{
 				query.AppendFormat("&{0}={1}", item.Key, WebUtility.UrlEncode(item.Value.ToString()));
 			}
-			BodyStream = new MemoryStream();
-			var bytes = Encoding.UTF8.GetBytes(query.ToString().TrimStart('&'));
-			BodyStream.Write(bytes, 0, bytes.Length);
-			return BodyStream;
+
+			return Encoding.UTF8.GetBytes(query.ToString().TrimStart('&'));
 		}
 
 
-		public void AddParameter(Dictionary<string, object> parameters)
+		public void AddParameter(IDictionary<string, object> parameters)
 		{
 			if (parameters == null || parameters.Count == 0)
 				return;

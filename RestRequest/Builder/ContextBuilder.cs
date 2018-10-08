@@ -11,13 +11,13 @@ namespace RestRequest.Builder
 {
 	internal partial class ContextBuilder : IBodyBuilder
 	{
-		internal Uri Url { get; set; }
+		internal Uri Url { get; }
 
 		internal string _ContentType { get; set; } = "application/json";
 
-		internal HttpMethod Method { get; set; }
+		internal HttpMethod Method { get; }
 
-		internal WebHeaderCollection RequestHeaders { get; set; }
+		internal WebHeaderCollection RequestHeaders { get; }
 
 		internal IBody RequestBody { get; set; }
 
@@ -167,7 +167,7 @@ namespace RestRequest.Builder
 		public INoneBodyBuilder ConnectionLimit(int maxLimit)
 		{
 			if (maxLimit < 1)
-				throw new ArgumentException("Limit cannot be less than 1.");
+				throw new ArgumentException("The connection limit is equal to or less than 0.");
 			_ConnectionLimit = maxLimit;
 			return this;
 		}

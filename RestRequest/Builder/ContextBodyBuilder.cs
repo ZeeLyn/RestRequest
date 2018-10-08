@@ -126,7 +126,7 @@ namespace RestRequest.Builder
 		public INoneBodyBuilder Form(Stream stream)
 		{
 			if (stream == null)
-				throw new ArgumentNullException("The stream is null");
+				throw new ArgumentNullException(nameof(stream), "The stream is null");
 			RequestBody = new StreamBody(stream);
 			ContentType("application/octet-stream");
 			return this;

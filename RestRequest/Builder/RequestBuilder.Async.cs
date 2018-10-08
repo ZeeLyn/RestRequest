@@ -11,27 +11,22 @@ namespace RestRequest.Builder
 		#region async callback
 		internal void BuildCallback()
 		{
-
 			if (Context.RequestBody != null && (Context.Method == HttpMethod.Post || Context.Method == HttpMethod.Put))
-				Request.BeginGetRequestStream(GetRequestStreamCallback, Request);
+				Request.BeginGetRequestStream(asyncResult =>
+				{
+					var request = (HttpWebRequest)asyncResult.AsyncState;
+
+					using (var requestStream = request.EndGetRequestStream(asyncResult))
+					{
+						var bytes = Context.RequestBody.GetBody();
+						requestStream.Write(bytes, 0, bytes.Length);
+						requestStream.Close();
+					}
+
+					request.BeginGetResponse(GetResponseCallback, request);
+				}, Request);
 			else
 				Request.BeginGetResponse(GetResponseCallback, Request);
-		}
-
-		private void GetRequestStreamCallback(IAsyncResult asyncResult)
-		{
-			var request = (HttpWebRequest)asyncResult.AsyncState;
-			using (var bodyStream = Context.RequestBody.GetBody())
-			{
-				Request.ContentLength = bodyStream.Length;
-				using (var requestStream = request.EndGetRequestStream(asyncResult))
-				{
-					var bytes = new byte[bodyStream.Length];
-					bodyStream.Read(bytes, 0, bytes.Length);
-					requestStream.Write(bytes, 0, bytes.Length);
-				}
-			}
-			request.BeginGetResponse(GetResponseCallback, Request);
 		}
 
 		private void GetResponseCallback(IAsyncResult asyncResult)
@@ -89,19 +84,13 @@ namespace RestRequest.Builder
 
 		internal async Task WriteRequestBodyAsync()
 		{
-			var bodyStream = Context.RequestBody?.GetBody();
-			if (bodyStream == null)
+			var bodyBytes = Context.RequestBody?.GetBody();
+			if (bodyBytes == null)
 				return;
-			using (bodyStream)
+			Request.ContentLength = bodyBytes.Length;
+			using (var requestStream = await Request.GetRequestStreamAsync())
 			{
-				Request.ContentLength = bodyStream.Length;
-				using (var requestStream = await Request.GetRequestStreamAsync())
-				{
-					bodyStream.Position = 0;
-					var bytes = new byte[bodyStream.Length];
-					await bodyStream.ReadAsync(bytes, 0, bytes.Length);
-					await requestStream.WriteAsync(bytes, 0, bytes.Length);
-				}
+				await requestStream.WriteAsync(bodyBytes, 0, bodyBytes.Length);
 			}
 		}
 

@@ -5,7 +5,7 @@ namespace RestRequest.Body
 {
 	internal class StreamBody : IBody
 	{
-		private Stream BodyStream { get; set; }
+		private Stream BodyStream { get; }
 
 		internal StreamBody(Stream stream)
 		{
@@ -13,9 +13,14 @@ namespace RestRequest.Body
 		}
 
 
-		public Stream GetBody()
+		public byte[] GetBody()
 		{
-			return BodyStream;
+			using (BodyStream)
+			{
+				var bytes = new byte[BodyStream.Length];
+				BodyStream.Read(bytes, 0, bytes.Length);
+				return bytes;
+			}
 		}
 	}
 }
