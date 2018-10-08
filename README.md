@@ -69,7 +69,7 @@ using(var res=HttpRequest.Post("url").Body(new{name="jack"}).ContentType("html/t
 ```csharp
 HttpRequest.Post("url").OnSuccess((statuscode, content) => {
 
-			}).OnFail(ex => {
+			}).OnFail((statuscode,err) => {
 
 			}).Start();
 ```
