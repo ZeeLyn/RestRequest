@@ -25,7 +25,7 @@ namespace RestRequest.Builder
 			Request.Referer = Context._Referer;
 			Request.ServicePoint.ConnectionLimit = Context._ConnectionLimit;
 			if (Context.IgnoreCertificateError)
-				Request.ServerCertificateValidationCallback = ValidationCertificate.VerifyServerCertificate;
+				Request.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
 			if (Context.ClientCertificates != null && Context.ClientCertificates.Count > 0)
 				Request.ClientCertificates.AddRange(Context.ClientCertificates);
 			if (!string.IsNullOrWhiteSpace(Context._UserAgent))

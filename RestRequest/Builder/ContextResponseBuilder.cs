@@ -116,10 +116,10 @@ namespace RestRequest.Builder
 
 		public ResponseResult<string> ResponseString(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = ResponseStream();
+			var res = ResponseStream(succeedStatus);
 			var result = new ResponseResult<string>
 			{
-				Succeed = res.StatusCode == succeedStatus,
+				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
 				Response = res.Response,
 				FailedContent = res.FailedContent,
@@ -138,10 +138,10 @@ namespace RestRequest.Builder
 
 		public async Task<ResponseResult<string>> ResponseStringAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = await ResponseStreamAsync();
+			var res = await ResponseStreamAsync(succeedStatus);
 			var result = new ResponseResult<string>
 			{
-				Succeed = res.StatusCode == succeedStatus,
+				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
 				Response = res.Response,
 				FailedContent = res.FailedContent,
@@ -161,10 +161,10 @@ namespace RestRequest.Builder
 
 		public ResponseResult<T> ResponseValue<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = ResponseString();
+			var res = ResponseString(succeedStatus);
 			return new ResponseResult<T>
 			{
-				Succeed = res.StatusCode == succeedStatus,
+				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
 				Content = string.IsNullOrWhiteSpace(res.Content) ? default : JsonConvert.DeserializeObject<T>(res.Content),
 				FailedContent = res.FailedContent,
@@ -175,10 +175,10 @@ namespace RestRequest.Builder
 
 		public async Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = await ResponseStringAsync();
+			var res = await ResponseStringAsync(succeedStatus);
 			return new ResponseResult<T>
 			{
-				Succeed = res.StatusCode == succeedStatus,
+				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
 				Content = string.IsNullOrWhiteSpace(res.Content) ? default : JsonConvert.DeserializeObject<T>(res.Content),
 				FailedContent = res.FailedContent,
@@ -187,5 +187,40 @@ namespace RestRequest.Builder
 			};
 		}
 
+		public void Response(Action<bool, HttpStatusCode, Stream, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = ResponseStream(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+		}
+
+		public async Task ResponseAsync(Action<bool, HttpStatusCode, Stream, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = await ResponseStreamAsync(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+		}
+
+		public void Response(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = ResponseString(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+		}
+
+		public async Task ResponseAsync(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = await ResponseStringAsync(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+		}
+
+		public void Response<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = ResponseValue<T>(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+		}
+
+		public async Task ResponseAsync<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = await ResponseValueAsync<T>(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+		}
 	}
 }

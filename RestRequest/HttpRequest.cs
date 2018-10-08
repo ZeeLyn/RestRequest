@@ -7,7 +7,7 @@ namespace RestRequest
 	public static class HttpRequest
 	{
 		/// <summary>
-		/// Get请求
+		/// Get request
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
@@ -17,7 +17,37 @@ namespace RestRequest
 		}
 
 		/// <summary>
-		/// Post请求
+		/// Head request
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
+		public static INoneBodyBuilder Head(string url)
+		{
+			return new ContextBuilder(url, HttpMethod.Head);
+		}
+
+		/// <summary>
+		/// Options request
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
+		public static INoneBodyBuilder Options(string url)
+		{
+			return new ContextBuilder(url, HttpMethod.Options);
+		}
+
+		/// <summary>
+		/// Trace request
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
+		public static INoneBodyBuilder Trace(string url)
+		{
+			return new ContextBuilder(url, HttpMethod.Trace);
+		}
+
+		/// <summary>
+		/// Post request
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
@@ -25,8 +55,9 @@ namespace RestRequest
 		{
 			return new ContextBuilder(url, HttpMethod.Post);
 		}
+
 		/// <summary>
-		/// Put请求
+		/// Put request
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
@@ -34,8 +65,9 @@ namespace RestRequest
 		{
 			return new ContextBuilder(url, HttpMethod.Put);
 		}
+
 		/// <summary>
-		/// Delete请求
+		/// Delete request
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>

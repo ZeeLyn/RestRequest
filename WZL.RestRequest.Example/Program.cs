@@ -101,6 +101,13 @@ namespace WZL.RestRequest.Example
 					JsonConvert.SerializeObject(r8.Content), r8.FailedContent);
 			}
 
+			HttpRequest.Post("http://localhost:61389/api/values/form").Form(new { name = "jack" }).Response<dynamic>(
+					(succeed, code, data, err) =>
+					{
+						Console.WriteLine("r9----succeed:{0},status:{1},value:{2},error:{3}", succeed, code,
+							JsonConvert.SerializeObject(data), err);
+					});
+
 
 			Console.WriteLine("Hello World!");
 			Console.ReadKey();

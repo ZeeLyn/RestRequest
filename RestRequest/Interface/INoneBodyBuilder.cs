@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -44,6 +45,56 @@ namespace RestRequest.Interface
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="response"></param>
+		/// <param name="succeedStatus"></param>
+		void Response(Action<bool, HttpStatusCode, Stream, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="response"></param>
+		/// <param name="succeedStatus"></param>
+		/// <returns></returns>
+		Task ResponseAsync(Action<bool, HttpStatusCode, Stream, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="response"></param>
+		/// <param name="succeedStatus"></param>
+		void Response(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="response"></param>
+		/// <param name="succeedStatus"></param>
+		/// <returns></returns>
+		Task ResponseAsync(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="response"></param>
+		/// <param name="succeedStatus"></param>
+		void Response<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="response"></param>
+		/// <param name="succeedStatus"></param>
+		/// <returns></returns>
+		Task ResponseAsync<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		/// <summary>
