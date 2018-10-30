@@ -9,10 +9,10 @@ namespace RestRequest.Body
 {
 	public class MultipartBody : IBody
 	{
-		private readonly List<NamedFileStream> _files;
-		private IDictionary<string, object> Parameters { get; set; }
+		private List<NamedFileStream> _files { get; }
+		private IDictionary<string, object> Parameters { get; }
 
-		public string Boundary { get; }
+		internal string Boundary { get; }
 
 		public MultipartBody()
 		{
@@ -23,6 +23,8 @@ namespace RestRequest.Body
 
 		public byte[] GetBody()
 		{
+			if (!_files.Any() && !Parameters.Any())
+				return null;
 			var itemBoundary = "\r\n--" + $"{Boundary}\r\n";
 			var endBoundary = "\r\n--" + $"{Boundary}--";
 			var itemBytes = Encoding.ASCII.GetBytes(itemBoundary);
@@ -38,7 +40,6 @@ namespace RestRequest.Body
 						var bytes = Encoding.UTF8.GetBytes(string.Format(formDataTemplate, item.Key, item.Value));
 						bodyStream.Write(bytes, 0, bytes.Length);
 					}
-
 				}
 				if (_files.Any())
 				{
@@ -71,8 +72,13 @@ namespace RestRequest.Body
 
 		public void AddParameters(IDictionary<string, object> parameters)
 		{
-			if (parameters != null && parameters.Count > 0)
-				Parameters = parameters;
+
+			if (parameters == null || parameters.Count == 0)
+				return;
+			foreach (var item in parameters)
+			{
+				Parameters.Add(item);
+			}
 		}
 
 		public void AddParameters(object parameters)
@@ -89,10 +95,9 @@ namespace RestRequest.Body
 
 		public void AddFiles(IEnumerable<NamedFileStream> files)
 		{
-			var namedFileStreams = files.ToList();
-			if (!namedFileStreams.Any())
+			if (files == null || !files.Any())
 				return;
-			_files.AddRange(namedFileStreams);
+			_files.AddRange(files);
 		}
 	}
 }

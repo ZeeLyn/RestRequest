@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using RestRequest.Body;
 using RestRequest.Interface;
 
 namespace RestRequest.Builder
 {
-	internal partial class ContextBuilder
+	public partial class ContextBuilder
 	{
 
 		/// <summary>
@@ -18,7 +17,7 @@ namespace RestRequest.Builder
 		{
 			var body = new JsonBody();
 			body.AddParameter(parameters);
-			RequestBody = body;
+			_RequestBody = body;
 			ContentType("application/json");
 			return this;
 		}
@@ -33,7 +32,7 @@ namespace RestRequest.Builder
 		{
 			var body = new FormBody();
 			body.AddParameter(parameters);
-			RequestBody = body;
+			_RequestBody = body;
 			ContentType("application/x-www-form-urlencoded");
 			return this;
 		}
@@ -48,7 +47,7 @@ namespace RestRequest.Builder
 		{
 			var body = new FormBody();
 			body.AddParameter(parameters);
-			RequestBody = body;
+			_RequestBody = body;
 			ContentType("application/x-www-form-urlencoded");
 			return this;
 		}
@@ -65,7 +64,7 @@ namespace RestRequest.Builder
 			var body = new MultipartBody();
 			body.AddParameters(parameters);
 			body.AddFiles(files);
-			RequestBody = body;
+			_RequestBody = body;
 			ContentType("multipart/form-data; boundary=" + body.Boundary);
 			return this;
 		}
@@ -80,7 +79,7 @@ namespace RestRequest.Builder
 		{
 			var body = new MultipartBody();
 			body.AddFiles(files);
-			RequestBody = body;
+			_RequestBody = body;
 			ContentType("multipart/form-data; boundary=" + body.Boundary);
 			return this;
 		}
@@ -97,7 +96,7 @@ namespace RestRequest.Builder
 			var body = new MultipartBody();
 			body.AddParameters(parameters);
 			body.AddFiles(files);
-			RequestBody = body;
+			_RequestBody = body;
 			ContentType("multipart/form-data; boundary=" + body.Boundary);
 			return this;
 		}
@@ -111,8 +110,8 @@ namespace RestRequest.Builder
 		public INoneBodyBuilder Form(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
-				throw new NullReferenceException("Post文本内容不能为空");
-			RequestBody = new TextBody(text);
+				return this;
+			_RequestBody = new TextBody(text);
 			ContentType("application/text");
 			return this;
 		}
@@ -126,8 +125,8 @@ namespace RestRequest.Builder
 		public INoneBodyBuilder Form(Stream stream)
 		{
 			if (stream == null)
-				throw new ArgumentNullException(nameof(stream), "The stream is null");
-			RequestBody = new StreamBody(stream);
+				return this;
+			_RequestBody = new StreamBody(stream);
 			ContentType("application/octet-stream");
 			return this;
 		}

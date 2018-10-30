@@ -3,11 +3,11 @@ using RestRequest.Interface;
 
 namespace RestRequest.Body
 {
-	internal class StreamBody : IBody
+	public class StreamBody : IBody
 	{
 		private Stream BodyStream { get; }
 
-		internal StreamBody(Stream stream)
+		public StreamBody(Stream stream)
 		{
 			BodyStream = stream;
 		}
@@ -15,6 +15,8 @@ namespace RestRequest.Body
 
 		public byte[] GetBody()
 		{
+			if (BodyStream == null)
+				return null;
 			using (BodyStream)
 			{
 				var bytes = new byte[BodyStream.Length];

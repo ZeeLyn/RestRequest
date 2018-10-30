@@ -32,7 +32,8 @@ namespace RestRequest.Body
 		{
 			if (parameters == null || parameters.Count == 0)
 				return;
-			_parameters = parameters;
+			foreach (var item in parameters)
+				_parameters.Add(item);
 		}
 
 		public void AddParameter(object parameters)

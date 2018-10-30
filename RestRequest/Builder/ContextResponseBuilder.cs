@@ -7,45 +7,45 @@ using RestRequest.Interface;
 
 namespace RestRequest.Builder
 {
-	internal partial class ContextBuilder
+	public partial class ContextBuilder
 	{
 		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			SuccessAction = action;
-			SucceedStatus = succeedStatus;
+			_SuccessAction = action;
+			_SucceedStatus = succeedStatus;
 			return this;
 		}
 
 		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			SuccessAction = (statusCode, stream) =>
+			_SuccessAction = (statusCode, stream) =>
 			{
 				using (var reader = new StreamReader(stream))
 				{
 					action(statusCode, reader.ReadToEnd());
 				}
 			};
-			SucceedStatus = succeedStatus;
+			_SucceedStatus = succeedStatus;
 			return this;
 		}
 
 		public IActionCallback OnSuccess<T>(Action<HttpStatusCode, T> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			SuccessAction = (statusCode, stream) =>
+			_SuccessAction = (statusCode, stream) =>
 			{
 				using (var reader = new StreamReader(stream))
 				{
 					action(statusCode, JsonConvert.DeserializeObject<T>(reader.ReadToEnd()));
 				}
 			};
-			SucceedStatus = succeedStatus;
+			_SucceedStatus = succeedStatus;
 			return this;
 		}
 
 		public IActionCallback OnFail(Action<HttpStatusCode?, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			FailAction = action;
-			SucceedStatus = succeedStatus;
+			_FailAction = action;
+			_SucceedStatus = succeedStatus;
 			return this;
 		}
 

@@ -16,18 +16,18 @@ namespace RestRequest.Builder
 
 		internal void BuildRequest()
 		{
-			Request = (HttpWebRequest)WebRequest.Create(Context.Url);
-			Request.Method = Context.Method.ToString().ToUpper();
-			if (Context.RequestHeaders != null && Context.RequestHeaders.Count > 0)
-				Request.Headers = Context.RequestHeaders;
+			Request = (HttpWebRequest)WebRequest.Create(Context._Url);
+			Request.Method = Context._Method.ToString().ToUpper();
+			if (Context._RequestHeaders != null && Context._RequestHeaders.Count > 0)
+				Request.Headers = Context._RequestHeaders;
 			Request.ContentType = Context._ContentType;
 			Request.KeepAlive = Context._KeepAlive;
 			Request.Referer = Context._Referer;
 			Request.ServicePoint.ConnectionLimit = Context._ConnectionLimit;
-			if (Context.IgnoreCertificateError)
+			if (Context._IgnoreCertificateError)
 				Request.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
-			if (Context.ClientCertificates != null && Context.ClientCertificates.Count > 0)
-				Request.ClientCertificates.AddRange(Context.ClientCertificates);
+			if (Context._ClientCertificates != null && Context._ClientCertificates.Count > 0)
+				Request.ClientCertificates.AddRange(Context._ClientCertificates);
 			if (!string.IsNullOrWhiteSpace(Context._UserAgent))
 				Request.UserAgent = Context._UserAgent;
 			if (Context._Timeout > 0)
@@ -44,7 +44,7 @@ namespace RestRequest.Builder
 
 		internal void WriteRequestBody()
 		{
-			var bodyBytes = Context.RequestBody?.GetBody();
+			var bodyBytes = Context._RequestBody?.GetBody();
 			if (bodyBytes == null)
 				return;
 			using (var requestStream = Request.GetRequestStream())

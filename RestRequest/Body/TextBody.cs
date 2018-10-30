@@ -3,7 +3,7 @@ using RestRequest.Interface;
 
 namespace RestRequest.Body
 {
-	internal class TextBody : IBody
+	public class TextBody : IBody
 	{
 		private string Content { get; }
 
@@ -14,6 +14,8 @@ namespace RestRequest.Body
 
 		public byte[] GetBody()
 		{
+			if (string.IsNullOrWhiteSpace(Content))
+				return null;
 			return Encoding.UTF8.GetBytes(Content);
 		}
 	}

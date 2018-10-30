@@ -8,12 +8,6 @@ namespace RestRequest.Body
 	public class JsonBody : IBody
 	{
 		private object _parameters;
-
-		public JsonBody()
-		{
-			_parameters = new Dictionary<string, object>();
-		}
-
 		public byte[] GetBody()
 		{
 			if (_parameters == null)

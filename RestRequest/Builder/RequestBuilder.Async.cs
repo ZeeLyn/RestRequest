@@ -11,18 +11,16 @@ namespace RestRequest.Builder
 		#region async callback
 		internal void BuildCallback()
 		{
-			if (Context.RequestBody != null && (Context.Method == HttpMethod.Post || Context.Method == HttpMethod.Put))
+			if (Context._RequestBody != null && (Context._Method == HttpMethod.Post || Context._Method == HttpMethod.Put))
 				Request.BeginGetRequestStream(asyncResult =>
 				{
 					var request = (HttpWebRequest)asyncResult.AsyncState;
-
 					using (var requestStream = request.EndGetRequestStream(asyncResult))
 					{
-						var bytes = Context.RequestBody.GetBody();
+						var bytes = Context._RequestBody.GetBody();
 						requestStream.Write(bytes, 0, bytes.Length);
 						requestStream.Close();
 					}
-
 					request.BeginGetResponse(GetResponseCallback, request);
 				}, Request);
 			else
@@ -44,7 +42,7 @@ namespace RestRequest.Builder
 					response = (HttpWebResponse)ex.Response;
 					if (response == null)
 					{
-						Context.FailAction?.Invoke(null, ex.Message);
+						Context._FailAction?.Invoke(null, ex.Message);
 					}
 				}
 
@@ -52,11 +50,11 @@ namespace RestRequest.Builder
 				{
 					using (response)
 					{
-						if (Context.SucceedStatus == response.StatusCode)
+						if (Context._SucceedStatus == response.StatusCode)
 						{
 							using (var stream = response.GetResponseStream())
 							{
-								Context.SuccessAction?.Invoke(response.StatusCode, stream);
+								Context._SuccessAction?.Invoke(response.StatusCode, stream);
 							}
 						}
 						else
@@ -67,7 +65,7 @@ namespace RestRequest.Builder
 								{
 									using (var reader = new StreamReader(stream))
 									{
-										Context.FailAction?.Invoke(response.StatusCode, reader.ReadToEnd());
+										Context._FailAction?.Invoke(response.StatusCode, reader.ReadToEnd());
 									}
 								}
 							}
@@ -84,7 +82,7 @@ namespace RestRequest.Builder
 
 		internal async Task WriteRequestBodyAsync()
 		{
-			var bodyBytes = Context.RequestBody?.GetBody();
+			var bodyBytes = Context._RequestBody?.GetBody();
 			if (bodyBytes == null)
 				return;
 			Request.ContentLength = bodyBytes.Length;
