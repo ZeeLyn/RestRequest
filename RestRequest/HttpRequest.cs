@@ -7,7 +7,7 @@ namespace RestRequest
 	public static class HttpRequest
 	{
 		/// <summary>
-		/// Get request
+		/// Get
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
@@ -17,7 +17,7 @@ namespace RestRequest
 		}
 
 		/// <summary>
-		/// Head request
+		/// Head
 		/// </summary>
 		/// <param name="url"></param>
 		/// <returns></returns>
@@ -27,7 +27,7 @@ namespace RestRequest
 		}
 
 		/// <summary>
-		/// Options request
+		/// Options
 		/// </summary>
 		/// <param name="url"></param>
 		/// <returns></returns>
@@ -47,7 +47,7 @@ namespace RestRequest
 		}
 
 		/// <summary>
-		/// Post request
+		/// Post
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
@@ -57,7 +57,7 @@ namespace RestRequest
 		}
 
 		/// <summary>
-		/// Put request
+		/// Put
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
@@ -67,7 +67,7 @@ namespace RestRequest
 		}
 
 		/// <summary>
-		/// Delete request
+		/// Delete
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>

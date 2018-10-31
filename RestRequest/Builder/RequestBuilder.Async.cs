@@ -11,13 +11,13 @@ namespace RestRequest.Builder
 		#region async callback
 		internal void BuildCallback()
 		{
-			if (Context._RequestBody != null && (Context._Method == HttpMethod.Post || Context._Method == HttpMethod.Put))
+			if (Context._requestBody != null && (Context._method == HttpMethod.Post || Context._method == HttpMethod.Put))
 				Request.BeginGetRequestStream(asyncResult =>
 				{
 					var request = (HttpWebRequest)asyncResult.AsyncState;
 					using (var requestStream = request.EndGetRequestStream(asyncResult))
 					{
-						var bytes = Context._RequestBody.GetBody();
+						var bytes = Context._requestBody.GetBody();
 						requestStream.Write(bytes, 0, bytes.Length);
 						requestStream.Close();
 					}
@@ -42,7 +42,7 @@ namespace RestRequest.Builder
 					response = (HttpWebResponse)ex.Response;
 					if (response == null)
 					{
-						Context._FailAction?.Invoke(null, ex.Message);
+						Context._failAction?.Invoke(null, ex.Message);
 					}
 				}
 
@@ -50,11 +50,11 @@ namespace RestRequest.Builder
 				{
 					using (response)
 					{
-						if (Context._SucceedStatus == response.StatusCode)
+						if (Context._succeedStatus == response.StatusCode)
 						{
 							using (var stream = response.GetResponseStream())
 							{
-								Context._SuccessAction?.Invoke(response.StatusCode, stream);
+								Context._successAction?.Invoke(response.StatusCode, stream);
 							}
 						}
 						else
@@ -65,7 +65,7 @@ namespace RestRequest.Builder
 								{
 									using (var reader = new StreamReader(stream))
 									{
-										Context._FailAction?.Invoke(response.StatusCode, reader.ReadToEnd());
+										Context._failAction?.Invoke(response.StatusCode, reader.ReadToEnd());
 									}
 								}
 							}
@@ -82,7 +82,7 @@ namespace RestRequest.Builder
 
 		internal async Task WriteRequestBodyAsync()
 		{
-			var bodyBytes = Context._RequestBody?.GetBody();
+			var bodyBytes = Context._requestBody?.GetBody();
 			if (bodyBytes == null)
 				return;
 			Request.ContentLength = bodyBytes.Length;

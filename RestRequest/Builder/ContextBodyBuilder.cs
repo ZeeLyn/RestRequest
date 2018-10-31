@@ -17,7 +17,7 @@ namespace RestRequest.Builder
 		{
 			var body = new JsonBody();
 			body.AddParameter(parameters);
-			_RequestBody = body;
+			_requestBody = body;
 			ContentType("application/json");
 			return this;
 		}
@@ -32,7 +32,7 @@ namespace RestRequest.Builder
 		{
 			var body = new FormBody();
 			body.AddParameter(parameters);
-			_RequestBody = body;
+			_requestBody = body;
 			ContentType("application/x-www-form-urlencoded");
 			return this;
 		}
@@ -47,7 +47,7 @@ namespace RestRequest.Builder
 		{
 			var body = new FormBody();
 			body.AddParameter(parameters);
-			_RequestBody = body;
+			_requestBody = body;
 			ContentType("application/x-www-form-urlencoded");
 			return this;
 		}
@@ -64,7 +64,7 @@ namespace RestRequest.Builder
 			var body = new MultipartBody();
 			body.AddParameters(parameters);
 			body.AddFiles(files);
-			_RequestBody = body;
+			_requestBody = body;
 			ContentType("multipart/form-data; boundary=" + body.Boundary);
 			return this;
 		}
@@ -79,7 +79,7 @@ namespace RestRequest.Builder
 		{
 			var body = new MultipartBody();
 			body.AddFiles(files);
-			_RequestBody = body;
+			_requestBody = body;
 			ContentType("multipart/form-data; boundary=" + body.Boundary);
 			return this;
 		}
@@ -96,7 +96,7 @@ namespace RestRequest.Builder
 			var body = new MultipartBody();
 			body.AddParameters(parameters);
 			body.AddFiles(files);
-			_RequestBody = body;
+			_requestBody = body;
 			ContentType("multipart/form-data; boundary=" + body.Boundary);
 			return this;
 		}
@@ -111,7 +111,7 @@ namespace RestRequest.Builder
 		{
 			if (string.IsNullOrWhiteSpace(text))
 				return this;
-			_RequestBody = new TextBody(text);
+			_requestBody = new TextBody(text);
 			ContentType("application/text");
 			return this;
 		}
@@ -126,7 +126,7 @@ namespace RestRequest.Builder
 		{
 			if (stream == null)
 				return this;
-			_RequestBody = new StreamBody(stream);
+			_requestBody = new StreamBody(stream);
 			ContentType("application/octet-stream");
 			return this;
 		}

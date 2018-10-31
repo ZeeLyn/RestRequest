@@ -11,49 +11,49 @@ namespace RestRequest.Builder
 {
 	public partial class ContextBuilder : IBodyBuilder
 	{
-		public Uri _Url { get; }
+		public Uri _url { get; }
 
-		public string _ContentType { get; private set; } = "application/json";
+		public string _contentType { get; private set; } = "application/json";
 
-		public HttpMethod _Method { get; }
+		public HttpMethod _method { get; }
 
-		public WebHeaderCollection _RequestHeaders { get; }
+		public WebHeaderCollection _requestHeaders { get; }
 
-		public IBody _RequestBody { get; private set; }
+		public IBody _requestBody { get; private set; }
 
-		public Action<HttpStatusCode, Stream> _SuccessAction { get; private set; }
+		public Action<HttpStatusCode, Stream> _successAction { get; private set; }
 
-		public HttpStatusCode _SucceedStatus { get; private set; }
+		public HttpStatusCode _succeedStatus { get; private set; }
 
-		public Action<HttpStatusCode?, string> _FailAction { get; private set; }
+		public Action<HttpStatusCode?, string> _failAction { get; private set; }
 
-		public bool _IgnoreCertificateError { get; private set; }
+		public bool _ignoreCertificateError { get; private set; }
 
-		public X509CertificateCollection _ClientCertificates { get; private set; }
+		public X509CertificateCollection _clientCertificates { get; private set; }
 
-		public string _UserAgent { get; private set; }
+		public string _userAgent { get; private set; }
 
-		public string _Referer { get; private set; }
+		public string _referer { get; private set; }
 
-		public int _Timeout { get; private set; }
+		public int _timeout { get; private set; }
 
-		public List<Cookie> _Cookies { get; private set; } = new List<Cookie>();
+		public List<Cookie> _cookies { get; private set; } = new List<Cookie>();
 
-		public bool _KeepAlive { get; private set; }
-		public int _ConnectionLimit { get; private set; } = 2;
+		public bool _keepAlive { get; private set; }
+		public int _connectionLimit { get; private set; } = 2;
 
 		public ContextBuilder(string url, HttpMethod method)
 		{
-			_Url = new Uri(url);
-			_Method = method;
-			_RequestHeaders = new WebHeaderCollection();
+			_url = new Uri(url);
+			_method = method;
+			_requestHeaders = new WebHeaderCollection();
 		}
 
 		public INoneBodyBuilder Headers(IDictionary<string, string> headers)
 		{
 			if (headers == null || headers.Count == 0) return this;
 			foreach (var item in headers)
-				_RequestHeaders[item.Key] = item.Value;
+				_requestHeaders[item.Key] = item.Value;
 			return this;
 		}
 
@@ -63,59 +63,59 @@ namespace RestRequest.Builder
 				return this;
 			var properties = headers.GetType().GetProperties();
 			foreach (var item in properties)
-				_RequestHeaders[item.Name] = item.GetValue(headers).ToString();
+				_requestHeaders[item.Name] = item.GetValue(headers).ToString();
 			return this;
 		}
 
 		public INoneBodyBuilder AddCertificate(string certificateUrl, string certificatePassword)
 		{
 			if (!File.Exists(certificateUrl))
-				throw new FileNotFoundException($"证书文件不存在{certificateUrl}");
-			if (_ClientCertificates == null)
-				_ClientCertificates = new X509CertificateCollection();
-			_ClientCertificates.Add(new X509Certificate(certificateUrl, certificatePassword));
+				throw new FileNotFoundException($"Certificate file not found({certificateUrl})");
+			if (_clientCertificates == null)
+				_clientCertificates = new X509CertificateCollection();
+			_clientCertificates.Add(new X509Certificate(certificateUrl, certificatePassword));
 			return this;
 		}
 
 		public INoneBodyBuilder AddCertificate(byte[] rawData, string certificatePassword)
 		{
-			if (_ClientCertificates == null)
-				_ClientCertificates = new X509CertificateCollection();
-			_ClientCertificates.Add(new X509Certificate(rawData, certificatePassword));
+			if (_clientCertificates == null)
+				_clientCertificates = new X509CertificateCollection();
+			_clientCertificates.Add(new X509Certificate(rawData, certificatePassword));
 			return this;
 		}
 
 		public INoneBodyBuilder AddCertificate(X509Certificate cert)
 		{
-			if (_ClientCertificates == null)
-				_ClientCertificates = new X509CertificateCollection();
-			_ClientCertificates.Add(new X509Certificate(cert));
+			if (_clientCertificates == null)
+				_clientCertificates = new X509CertificateCollection();
+			_clientCertificates.Add(new X509Certificate(cert));
 			return this;
 		}
 
 		public INoneBodyBuilder IgnoreCertError()
 		{
-			_IgnoreCertificateError = true;
+			_ignoreCertificateError = true;
 			return this;
 		}
 
 		public INoneBodyBuilder KeepAlive()
 		{
-			_KeepAlive = true;
+			_keepAlive = true;
 			return this;
 		}
 
 		public INoneBodyBuilder UserAgent(string userAgent)
 		{
 			if (!string.IsNullOrWhiteSpace(userAgent))
-				_UserAgent = userAgent;
+				_userAgent = userAgent;
 			return this;
 		}
 
 		public INoneBodyBuilder Referer(string referer)
 		{
 			if (!string.IsNullOrWhiteSpace(referer))
-				_Referer = referer;
+				_referer = referer;
 			return this;
 		}
 
@@ -123,7 +123,7 @@ namespace RestRequest.Builder
 		{
 			if (timeout < 0)
 				throw new ArgumentException("Timeout cannot be less than 0.");
-			_Timeout = timeout;
+			_timeout = timeout;
 			return this;
 		}
 
@@ -133,7 +133,7 @@ namespace RestRequest.Builder
 			var properties = cookies.GetType().GetProperties();
 			foreach (var enumerator in properties)
 			{
-				_Cookies.Add(new Cookie { Name = enumerator.Name, Value = enumerator.GetValue(cookies).ToString(), Domain = _Url.Host });
+				_cookies.Add(new Cookie { Name = enumerator.Name, Value = enumerator.GetValue(cookies).ToString(), Domain = _url.Host });
 			}
 			return this;
 		}
@@ -144,7 +144,7 @@ namespace RestRequest.Builder
 			{
 				foreach (var cookie in cookies)
 				{
-					_Cookies.Add(new Cookie { Name = cookie.Key, Value = cookie.Value, Domain = _Url.Host });
+					_cookies.Add(new Cookie { Name = cookie.Key, Value = cookie.Value, Domain = _url.Host });
 				}
 			}
 			return this;
@@ -153,14 +153,14 @@ namespace RestRequest.Builder
 		public INoneBodyBuilder Cookies(IEnumerable<Cookie> cookies)
 		{
 			if (cookies != null)
-				_Cookies.AddRange(cookies);
+				_cookies.AddRange(cookies);
 			return this;
 		}
 
 		public INoneBodyBuilder ContentType(string contentType)
 		{
 			if (!string.IsNullOrWhiteSpace(contentType))
-				_ContentType = contentType;
+				_contentType = contentType;
 			return this;
 		}
 
@@ -168,7 +168,7 @@ namespace RestRequest.Builder
 		{
 			if (maxLimit < 1)
 				throw new ArgumentException("The connection limit is equal to or less than 0.");
-			_ConnectionLimit = maxLimit;
+			_connectionLimit = maxLimit;
 			return this;
 		}
 

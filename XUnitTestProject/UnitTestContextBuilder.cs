@@ -81,11 +81,11 @@ namespace XUnitTestProject
 		public void TestHeaderByDic(Dictionary<string, string> dic)
 		{
 			output.WriteLine("-------------------->" + dic?.Count.ToString());
-			var count = Builder._RequestHeaders.Count;
+			var count = Builder._requestHeaders.Count;
 			output.WriteLine("-------------------->" + count);
 			Builder.Headers(dic);
-			output.WriteLine("-------------------->" + Builder._RequestHeaders.Count);
-			Assert.Equal(Builder._RequestHeaders.Count, count + (dic?.Count ?? 0));
+			output.WriteLine("-------------------->" + Builder._requestHeaders.Count);
+			Assert.Equal(Builder._requestHeaders.Count, count + (dic?.Count ?? 0));
 		}
 
 		[Theory]
@@ -95,16 +95,16 @@ namespace XUnitTestProject
 		public void TestHeaderByObj(object obj)
 		{
 			var properties = obj?.GetType()?.GetProperties();
-			var count = Builder._RequestHeaders.Count;
+			var count = Builder._requestHeaders.Count;
 			Builder.Headers(obj);
-			Assert.Equal(Builder._RequestHeaders.Count, count + (properties?.Length ?? 0));
+			Assert.Equal(Builder._requestHeaders.Count, count + (properties?.Length ?? 0));
 		}
 
 		[Fact]
 		public void TestIgnoreCertError()
 		{
 			Builder.IgnoreCertError();
-			Assert.True(Builder._IgnoreCertificateError);
+			Assert.True(Builder._ignoreCertificateError);
 		}
 
 
@@ -112,7 +112,7 @@ namespace XUnitTestProject
 		public void TestKeepAlive()
 		{
 			Builder.KeepAlive();
-			Assert.True(Builder._KeepAlive);
+			Assert.True(Builder._keepAlive);
 		}
 
 		[Theory]
@@ -120,9 +120,9 @@ namespace XUnitTestProject
 		[InlineData("2")]
 		public void TestUserAgent(string agent)
 		{
-			var _agent = Builder._UserAgent;
+			var _agent = Builder._userAgent;
 			Builder.UserAgent(agent);
-			Assert.Equal(string.IsNullOrWhiteSpace(agent) ? _agent : agent, Builder._UserAgent);
+			Assert.Equal(string.IsNullOrWhiteSpace(agent) ? _agent : agent, Builder._userAgent);
 		}
 
 		[Theory]
@@ -130,9 +130,9 @@ namespace XUnitTestProject
 		[InlineData("")]
 		public void TestReferer(string referer)
 		{
-			var _referer = Builder._Referer;
+			var _referer = Builder._referer;
 			Builder.Referer(referer);
-			Assert.Equal(string.IsNullOrWhiteSpace(referer) ? _referer : referer, Builder._Referer);
+			Assert.Equal(string.IsNullOrWhiteSpace(referer) ? _referer : referer, Builder._referer);
 		}
 
 		[Theory]
@@ -140,9 +140,9 @@ namespace XUnitTestProject
 		[InlineData("")]
 		public void TestContentType(string contentType)
 		{
-			var _contentType = Builder._ContentType;
+			var _contentType = Builder._contentType;
 			Builder.ContentType(contentType);
-			Assert.Equal(string.IsNullOrWhiteSpace(contentType) ? _contentType : contentType, Builder._ContentType);
+			Assert.Equal(string.IsNullOrWhiteSpace(contentType) ? _contentType : contentType, Builder._contentType);
 		}
 
 
@@ -159,7 +159,7 @@ namespace XUnitTestProject
 			else
 			{
 				Builder.Timeout(timeout);
-				Assert.Equal(timeout, Builder._Timeout);
+				Assert.Equal(timeout, Builder._timeout);
 			}
 		}
 
@@ -171,11 +171,11 @@ namespace XUnitTestProject
 		public void TestCookiresByDic(Dictionary<string, string> dic)
 		{
 			output.WriteLine("-------------------->" + dic?.Count.ToString());
-			var count = Builder._Cookies.Count;
+			var count = Builder._cookies.Count;
 			output.WriteLine("-------------------->" + count);
 			Builder.Cookies(dic);
-			output.WriteLine("-------------------->" + Builder._Cookies.Count);
-			Assert.Equal(Builder._Cookies.Count, count + (dic?.Count ?? 0));
+			output.WriteLine("-------------------->" + Builder._cookies.Count);
+			Assert.Equal(Builder._cookies.Count, count + (dic?.Count ?? 0));
 		}
 
 		[Theory]
@@ -185,9 +185,9 @@ namespace XUnitTestProject
 		public void TestCookiesByObj(object obj)
 		{
 			var properties = obj?.GetType()?.GetProperties();
-			var count = Builder._Cookies.Count;
+			var count = Builder._cookies.Count;
 			Builder.Cookies(obj);
-			Assert.Equal(Builder._Cookies.Count, count + (properties?.Length ?? 0));
+			Assert.Equal(Builder._cookies.Count, count + (properties?.Length ?? 0));
 		}
 
 
@@ -214,9 +214,9 @@ namespace XUnitTestProject
 		[InlineData(null)]
 		public void TestCookiesByCookie(IEnumerable<Cookie> cookies)
 		{
-			var count = Builder._Cookies.Count;
+			var count = Builder._cookies.Count;
 			Builder.Cookies(cookies);
-			Assert.Equal(Builder._Cookies.Count, count + (cookies?.Count() ?? 0));
+			Assert.Equal(Builder._cookies.Count, count + (cookies?.Count() ?? 0));
 		}
 
 		[Theory]
@@ -229,7 +229,7 @@ namespace XUnitTestProject
 			else
 			{
 				Builder.ConnectionLimit(limit);
-				Assert.Equal(limit, Builder._ConnectionLimit);
+				Assert.Equal(limit, Builder._connectionLimit);
 			}
 		}
 

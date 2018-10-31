@@ -16,26 +16,26 @@ namespace RestRequest.Builder
 
 		internal void BuildRequest()
 		{
-			Request = (HttpWebRequest)WebRequest.Create(Context._Url);
-			Request.Method = Context._Method.ToString().ToUpper();
-			if (Context._RequestHeaders != null && Context._RequestHeaders.Count > 0)
-				Request.Headers = Context._RequestHeaders;
-			Request.ContentType = Context._ContentType;
-			Request.KeepAlive = Context._KeepAlive;
-			Request.Referer = Context._Referer;
-			Request.ServicePoint.ConnectionLimit = Context._ConnectionLimit;
-			if (Context._IgnoreCertificateError)
+			Request = (HttpWebRequest)WebRequest.Create(Context._url);
+			Request.Method = Context._method.ToString().ToUpper();
+			if (Context._requestHeaders != null && Context._requestHeaders.Count > 0)
+				Request.Headers = Context._requestHeaders;
+			Request.ContentType = Context._contentType;
+			Request.KeepAlive = Context._keepAlive;
+			Request.Referer = Context._referer;
+			Request.ServicePoint.ConnectionLimit = Context._connectionLimit;
+			if (Context._ignoreCertificateError)
 				Request.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
-			if (Context._ClientCertificates != null && Context._ClientCertificates.Count > 0)
-				Request.ClientCertificates.AddRange(Context._ClientCertificates);
-			if (!string.IsNullOrWhiteSpace(Context._UserAgent))
-				Request.UserAgent = Context._UserAgent;
-			if (Context._Timeout > 0)
-				Request.Timeout = Context._Timeout;
-			if (Context._Cookies?.Count > 0)
+			if (Context._clientCertificates != null && Context._clientCertificates.Count > 0)
+				Request.ClientCertificates.AddRange(Context._clientCertificates);
+			if (!string.IsNullOrWhiteSpace(Context._userAgent))
+				Request.UserAgent = Context._userAgent;
+			if (Context._timeout > 0)
+				Request.Timeout = Context._timeout;
+			if (Context._cookies?.Count > 0)
 			{
 				Request.CookieContainer = new CookieContainer();
-				foreach (var cookie in Context._Cookies)
+				foreach (var cookie in Context._cookies)
 				{
 					Request.CookieContainer.Add(cookie);
 				}
@@ -44,7 +44,7 @@ namespace RestRequest.Builder
 
 		internal void WriteRequestBody()
 		{
-			var bodyBytes = Context._RequestBody?.GetBody();
+			var bodyBytes = Context._requestBody?.GetBody();
 			if (bodyBytes == null)
 				return;
 			using (var requestStream = Request.GetRequestStream())

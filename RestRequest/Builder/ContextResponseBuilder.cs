@@ -11,41 +11,41 @@ namespace RestRequest.Builder
 	{
 		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			_SuccessAction = action;
-			_SucceedStatus = succeedStatus;
+			_successAction = action;
+			_succeedStatus = succeedStatus;
 			return this;
 		}
 
 		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			_SuccessAction = (statusCode, stream) =>
+			_successAction = (statusCode, stream) =>
 			{
 				using (var reader = new StreamReader(stream))
 				{
 					action(statusCode, reader.ReadToEnd());
 				}
 			};
-			_SucceedStatus = succeedStatus;
+			_succeedStatus = succeedStatus;
 			return this;
 		}
 
 		public IActionCallback OnSuccess<T>(Action<HttpStatusCode, T> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			_SuccessAction = (statusCode, stream) =>
+			_successAction = (statusCode, stream) =>
 			{
 				using (var reader = new StreamReader(stream))
 				{
 					action(statusCode, JsonConvert.DeserializeObject<T>(reader.ReadToEnd()));
 				}
 			};
-			_SucceedStatus = succeedStatus;
+			_succeedStatus = succeedStatus;
 			return this;
 		}
 
 		public IActionCallback OnFail(Action<HttpStatusCode?, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			_FailAction = action;
-			_SucceedStatus = succeedStatus;
+			_failAction = action;
+			_succeedStatus = succeedStatus;
 			return this;
 		}
 
