@@ -12,7 +12,7 @@ using(var res=HttpRequest.Get("url").ResponseString())
 
 把返回值转换成指定的类型
 ```csharp
-using(var res=HttpRequest.Get("url").ResponseValue<obj>())
+using(var res=HttpRequest.Get("url").ResponseValue<T>())
 {
 	...
 }
@@ -35,7 +35,7 @@ using(var res=HttpRequest.Post("url").Body(new{name="jack"}).ResponseString())
 ```
 把返回值转换成指定类型
 ```csharp
-using(var res=HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<obj>())
+using(var res=HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<T>())
 {
 	...
 }
@@ -43,7 +43,7 @@ using(var res=HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<obj>(
 ### 也可以上传文件 默认Content-Type是multipart/form-data
 ```csharp
 using(var res=HttpRequest.Post("url").Form(
-      new List<NamedFileStream>{new NamedFileStream("name","filename",FileStream)}, new{name="jack"}).ResponseValue<string>())
+      new List<NamedFileStream>{new NamedFileStream("name","filename",FileStream)}, new{name="jack"}).ResponseValue<T>())
       {
       	...
       }
