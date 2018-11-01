@@ -16,9 +16,10 @@ namespace RestRequest.Builder
 			{
 				builder.BuildRequest();
 				builder.WriteRequestBody();
-				var res = builder.GetResponse();
-				var contentStream = res.GetResponseStream();
+				var response = builder.GetResponse();
+				var contentStream = response.GetResponseStream();
 				var buffer = new byte[16 * 1024];
+				using (response)
 				using (contentStream)
 				using (var ms = new MemoryStream())
 				{
@@ -26,7 +27,7 @@ namespace RestRequest.Builder
 					while ((read = contentStream.Read(buffer, 0, buffer.Length)) > 0)
 						ms.Write(buffer, 0, read);
 					var bytes = ms.ToArray();
-					return (res.StatusCode == succeedStatus, res.StatusCode, succeedStatus == res.StatusCode ? bytes : null, succeedStatus == res.StatusCode ? "" : bytes.AsString());
+					return (response.StatusCode == succeedStatus, response.StatusCode, succeedStatus == response.StatusCode ? bytes : null, succeedStatus == response.StatusCode ? "" : bytes.AsString());
 				}
 
 			}
@@ -38,9 +39,10 @@ namespace RestRequest.Builder
 			{
 				builder.BuildRequest();
 				await builder.WriteRequestBodyAsync();
-				var res = await builder.GetResponseAsync();
-				var contentStream = res.GetResponseStream();
+				var response = await builder.GetResponseAsync();
+				var contentStream = response.GetResponseStream();
 				var buffer = new byte[16 * 1024];
+				using (response)
 				using (contentStream)
 				using (var ms = new MemoryStream())
 				{
@@ -48,7 +50,7 @@ namespace RestRequest.Builder
 					while ((read = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
 						ms.Write(buffer, 0, read);
 					var bytes = ms.ToArray();
-					return (res.StatusCode == succeedStatus, res.StatusCode, succeedStatus == res.StatusCode ? bytes : null, succeedStatus == res.StatusCode ? "" : bytes.AsString());
+					return (response.StatusCode == succeedStatus, response.StatusCode, succeedStatus == response.StatusCode ? bytes : null, succeedStatus == response.StatusCode ? "" : bytes.AsString());
 				}
 			}
 		}

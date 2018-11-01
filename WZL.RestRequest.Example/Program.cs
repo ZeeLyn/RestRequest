@@ -106,6 +106,8 @@ namespace WZL.RestRequest.Example
 					});
 
 
+			HttpRequest.Get("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png").Download("d://logo.png");
+
 			Console.WriteLine("Hello World!");
 			Console.ReadKey();
 		}
