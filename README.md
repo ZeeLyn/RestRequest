@@ -1,4 +1,4 @@
-# RestReuest - Simple .NET REST Client, based on .NET Standard 2.0.
+# RestRequest - Simple .NET REST Client, based on .NET Standard 2.0.
 
 
 ```csharp
