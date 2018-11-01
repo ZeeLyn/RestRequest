@@ -14,7 +14,7 @@ namespace WebApplication1.Controllers
 		[HttpGet("{id}")]
 		public IActionResult Get(int id)
 		{
-			if (id > 1)
+			if (id > 0)
 				return Ok(id);
 			return BadRequest("error msg");
 		}
@@ -38,11 +38,7 @@ namespace WebApplication1.Controllers
 		{
 			if (!Request.Form.Files.Any())
 				return BadRequest("no file");
-			return Ok(new
-			{
-				files = Request.Form.Files.Select(p => p.Length).ToList(),
-				form = Request.Form
-			});
+			return Ok(Request.Form.Files.Select(p => p.Length).ToList());
 		}
 	}
 }

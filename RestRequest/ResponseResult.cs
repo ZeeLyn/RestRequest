@@ -4,20 +4,8 @@ using Newtonsoft.Json;
 
 namespace RestRequest
 {
-	public class ResponseResult<T> : IDisposable
+	public class ResponseResult<T>
 	{
-		/// <summary>
-		/// http响应对象
-		/// </summary>
-		[JsonIgnore]
-		internal HttpWebResponse Response { get; set; }
-
-		/// <summary>
-		/// http request
-		/// </summary>
-		[JsonIgnore]
-		internal HttpWebRequest Request { get; set; }
-
 		/// <summary>
 		/// 是否请求成功
 		/// </summary>
@@ -34,12 +22,6 @@ namespace RestRequest
 		/// <summary>
 		/// 失败响应内容
 		/// </summary>
-		public string FailedContent { get; internal set; }
-
-		public void Dispose()
-		{
-			Request?.Abort();
-			Response?.Dispose();
-		}
+		public string FailMessage { get; internal set; }
 	}
 }

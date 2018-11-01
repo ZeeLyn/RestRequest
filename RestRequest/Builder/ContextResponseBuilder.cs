@@ -9,6 +9,53 @@ namespace RestRequest.Builder
 {
 	public partial class ContextBuilder
 	{
+		#region Execute request
+		private (bool Succeed, HttpStatusCode StatusCode, byte[] ResponseBytes, string FailMessage) ExecuteRequest(HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			using (var builder = new RequestBuilder(this))
+			{
+				builder.BuildRequest();
+				builder.WriteRequestBody();
+				var res = builder.GetResponse();
+				var contentStream = res.GetResponseStream();
+				var buffer = new byte[16 * 1024];
+				using (contentStream)
+				using (var ms = new MemoryStream())
+				{
+					int read;
+					while ((read = contentStream.Read(buffer, 0, buffer.Length)) > 0)
+						ms.Write(buffer, 0, read);
+					var bytes = ms.ToArray();
+					return (res.StatusCode == succeedStatus, res.StatusCode, succeedStatus == res.StatusCode ? bytes : null, succeedStatus == res.StatusCode ? "" : bytes.AsString());
+				}
+
+			}
+		}
+
+		private async Task<(bool Succeed, HttpStatusCode StatusCode, byte[] ResponseBytes, string FailMessage)> ExecuteRequestAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			using (var builder = new RequestBuilder(this))
+			{
+				builder.BuildRequest();
+				await builder.WriteRequestBodyAsync();
+				var res = await builder.GetResponseAsync();
+				var contentStream = res.GetResponseStream();
+				var buffer = new byte[16 * 1024];
+				using (contentStream)
+				using (var ms = new MemoryStream())
+				{
+					int read;
+					while ((read = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+						ms.Write(buffer, 0, read);
+					var bytes = ms.ToArray();
+					return (res.StatusCode == succeedStatus, res.StatusCode, succeedStatus == res.StatusCode ? bytes : null, succeedStatus == res.StatusCode ? "" : bytes.AsString());
+				}
+			}
+		}
+		#endregion
+
+
+		#region Async request
 		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			_successAction = action;
@@ -56,6 +103,10 @@ namespace RestRequest.Builder
 			builder.BuildCallback();
 		}
 
+		#endregion
+
+
+		#region Obsolete
 		public ResponseResult<Stream> ResponseStream(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			using (var builder = new RequestBuilder(this))
@@ -73,14 +124,14 @@ namespace RestRequest.Builder
 						failString = reader.ReadToEnd();
 					}
 				}
+
+				var statusCode = res.StatusCode;
 				return new ResponseResult<Stream>
 				{
 					Succeed = succeed,
-					StatusCode = res.StatusCode,
+					StatusCode = statusCode,
 					Content = contentStream,
-					FailedContent = failString,
-					Response = res,
-					Request = builder.Request
+					FailMessage = failString
 				};
 			}
 		}
@@ -107,120 +158,162 @@ namespace RestRequest.Builder
 					Succeed = succeed,
 					StatusCode = res.StatusCode,
 					Content = contentStream,
-					FailedContent = failString,
-					Response = res,
-					Request = builder.Request
+					FailMessage = failString
 				};
 			}
 		}
 
 		public ResponseResult<string> ResponseString(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = ResponseStream(succeedStatus);
-			var result = new ResponseResult<string>
+			var res = ExecuteRequest(succeedStatus);
+			return new ResponseResult<string>
 			{
-				Succeed = res.Succeed,
+				Succeed = res.StatusCode == succeedStatus,
+				FailMessage = res.FailMessage,
 				StatusCode = res.StatusCode,
-				Response = res.Response,
-				FailedContent = res.FailedContent,
-				Request = res.Request
+				Content = res.Succeed ? res.ResponseBytes.AsString() : ""
 			};
-			if (!res.Content.CanRead)
-				return result;
-			using (var stream = res.Content)
-			using (var reader = new StreamReader(stream))
-			using (res.Response)
-			{
-				result.Content = reader.ReadToEnd();
-			}
-			return result;
 		}
 
 		public async Task<ResponseResult<string>> ResponseStringAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = await ResponseStreamAsync(succeedStatus);
-			var result = new ResponseResult<string>
+			var res = await ExecuteRequestAsync(succeedStatus);
+			return new ResponseResult<string>
 			{
-				Succeed = res.Succeed,
+				Succeed = res.StatusCode == succeedStatus,
+				FailMessage = res.FailMessage,
 				StatusCode = res.StatusCode,
-				Response = res.Response,
-				FailedContent = res.FailedContent,
-				Request = res.Request
+				Content = res.Succeed ? res.ResponseBytes.AsString() : ""
 			};
-			if (!res.Content.CanRead)
-				return result;
-			using (var stream = res.Content)
-			using (var reader = new StreamReader(stream))
-			using (res.Response)
-			{
-				result.Content = await reader.ReadToEndAsync();
-			}
-
-			return result;
 		}
+
+		#endregion
+
+
+		#region Download
+		public ResponseResult<byte[]> Download(HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = ExecuteRequest(succeedStatus);
+			return new ResponseResult<byte[]>
+			{
+				Succeed = res.StatusCode == succeedStatus,
+				StatusCode = res.StatusCode,
+				Content = res.ResponseBytes,
+				FailMessage = res.FailMessage
+			};
+		}
+
+
+
+		public void Download(Action<ResponseResult<byte[]>> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			action?.Invoke(Download(succeedStatus));
+		}
+
+
+
+		public async Task<ResponseResult<byte[]>> DownloadAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = await ExecuteRequestAsync(succeedStatus);
+			return new ResponseResult<byte[]>
+			{
+				Succeed = res.StatusCode == succeedStatus,
+				StatusCode = res.StatusCode,
+				Content = res.ResponseBytes,
+				FailMessage = res.FailMessage
+			};
+		}
+
+
+		public async Task DownloadAsync(Action<ResponseResult<byte[]>> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			action?.Invoke(await DownloadAsync(succeedStatus));
+		}
+
+
+
+
+		public void Download(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = ExecuteRequest(succeedStatus);
+			if (res.Succeed)
+				res.ResponseBytes.SaveAs(SaveFileName);
+		}
+
+
+
+
+		public async Task DownloadAsync(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			var res = await ExecuteRequestAsync(succeedStatus);
+			if (res.Succeed)
+				res.ResponseBytes.SaveAs(SaveFileName);
+		}
+		#endregion
+
+
+		#region  Response type
 
 		public ResponseResult<T> ResponseValue<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = ResponseString(succeedStatus);
+			var res = ExecuteRequest(succeedStatus);
 			return new ResponseResult<T>
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = string.IsNullOrWhiteSpace(res.Content) ? default : JsonConvert.DeserializeObject<T>(res.Content),
-				FailedContent = res.FailedContent,
-				Response = res.Response,
-				Request = res.Request
+				Content = res.Succeed ? JsonConvert.DeserializeObject<T>(res.ResponseBytes.AsString()) : default,
+				FailMessage = res.FailMessage
 			};
 		}
 
 		public async Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = await ResponseStringAsync(succeedStatus);
+			var res = await ExecuteRequestAsync(succeedStatus);
 			return new ResponseResult<T>
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = string.IsNullOrWhiteSpace(res.Content) ? default : JsonConvert.DeserializeObject<T>(res.Content),
-				FailedContent = res.FailedContent,
-				Response = res.Response,
-				Request = res.Request
+				Content = res.Succeed ? JsonConvert.DeserializeObject<T>(res.ResponseBytes.AsString()) : default,
+				FailMessage = res.FailMessage
 			};
 		}
 
-		public void Response(Action<bool, HttpStatusCode, Stream, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public void Response(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = ResponseStream(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+			var res = ExecuteRequest(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.ResponseBytes, res.FailMessage);
 		}
 
-		public async Task ResponseAsync(Action<bool, HttpStatusCode, Stream, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public async Task ResponseAsync(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = await ResponseStreamAsync(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+			var res = await ExecuteRequestAsync(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.ResponseBytes, res.FailMessage);
 		}
 
 		public void Response(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = ResponseString(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+			var res = ExecuteRequest(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.ResponseBytes.AsString(), res.FailMessage);
 		}
 
 		public async Task ResponseAsync(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = await ResponseStringAsync(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+			var res = await ExecuteRequestAsync(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.ResponseBytes.AsString(), res.FailMessage);
 		}
 
 		public void Response<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = ResponseValue<T>(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+			var res = ExecuteRequest(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? JsonConvert.DeserializeObject<T>(res.ResponseBytes.AsString()) : default, res.FailMessage);
 		}
 
 		public async Task ResponseAsync<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
-			var res = await ResponseValueAsync<T>(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Content, res.FailedContent);
+			var res = await ExecuteRequestAsync(succeedStatus);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? JsonConvert.DeserializeObject<T>(res.ResponseBytes.AsString()) : default, res.FailMessage);
 		}
+
+		#endregion
 	}
 }

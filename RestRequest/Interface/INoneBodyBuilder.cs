@@ -13,23 +13,42 @@ namespace RestRequest.Interface
 		/// 获取响应流
 		/// </summary>
 		/// <returns></returns>
+		[Obsolete("Use Download instead")]
 		ResponseResult<Stream> ResponseStream(HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		ResponseResult<byte[]> Download(HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		void Download(Action<ResponseResult<byte[]>> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		void Download(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
 
 		/// <summary>
 		/// 获取响应流
 		/// </summary>
 		/// <returns></returns>
+		[Obsolete("Use Download instead")]
 		Task<ResponseResult<Stream>> ResponseStreamAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+
+		Task<ResponseResult<byte[]>> DownloadAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		Task DownloadAsync(Action<ResponseResult<byte[]>> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		Task DownloadAsync(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
 		/// <summary>
 		/// 获取响应字符串
 		/// </summary>
 		/// <returns></returns>
+		[Obsolete("Use ResponseValue instead")]
 		ResponseResult<string> ResponseString(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
 		/// 获取响应字符串
 		/// </summary>
 		/// <returns></returns>
+		[Obsolete("Use ResponseValue instead")]
 		Task<ResponseResult<string>> ResponseStringAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
@@ -51,7 +70,7 @@ namespace RestRequest.Interface
 		/// </summary>
 		/// <param name="response"></param>
 		/// <param name="succeedStatus"></param>
-		void Response(Action<bool, HttpStatusCode, Stream, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+		void Response(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 		/// <summary>
 		/// 
@@ -59,7 +78,7 @@ namespace RestRequest.Interface
 		/// <param name="response"></param>
 		/// <param name="succeedStatus"></param>
 		/// <returns></returns>
-		Task ResponseAsync(Action<bool, HttpStatusCode, Stream, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+		Task ResponseAsync(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		/// <summary>

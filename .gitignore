@@ -158,3 +158,5 @@ WZL.RestRequest.sln.DotSettings.user
 .vs/WZL.RestRequest/lut/coverage.lutdata
 /XUnitTestProject/bin
 /XUnitTestProject/obj
+*.txt
+WZL.RestRequest.Example/obj/Debug/netcoreapp2.0/WZL.RestRequest.Example.csproj.FileListAbsolute.txt
