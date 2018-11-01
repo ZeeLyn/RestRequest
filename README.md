@@ -1,4 +1,4 @@
-# RestReuest - Simple .NET REST Client, based on .NET Standard 2.0.
+# RestRequest - Simple .NET REST Client, based on .NET Standard 2.0.
 
 
 ```csharp
@@ -7,7 +7,8 @@ var res=HttpRequest.Get("url")
 .Timeout(2000)
 .UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
 .Referer("http://www.baidu.com")
-.Cookies(new { token = "bearer token" })
+.Headers(new { auth = "bearer token" })
+.Cookies(new { u = "123456" })
 .KeepAlive()
 .IgnoreCertError()
 .ConnectionLimit(20)
@@ -31,5 +32,8 @@ var res=HttpRequest.Post("url").Body(new{name="jack"})
 .AddCertificate("","")
 .ContentType("html/text")
 .ResponseString();
+
+
+HttpRequest.Get("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png").Download("/download/logo.png");
 ```
 
