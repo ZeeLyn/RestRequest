@@ -24,7 +24,7 @@ namespace XUnitTestProject
 		{
 			if (id > 0)
 			{
-				var result = HttpRequest.Get($"http://localhost:61389/api/values/{id}").ContentType("application/json").Timeout(2000).UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36").Referer("http://www.baidu.com").Cookies(new { token = "bearer token" }).ResponseValue<int>();
+				var result = HttpRequest.Get($"http://localhost:61389/api/values/{id}").ContentType("application/json").Timeout(2000).UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36").Referer("http://www.baidu.com").Cookies(new { token = "bearer token" }).KeepAlive().ConnectionLimit(20).ResponseValue<int>();
 				Assert.True(result.Succeed);
 				Assert.Equal(result.Content, id);
 

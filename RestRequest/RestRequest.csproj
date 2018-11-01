@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>false</SignAssembly>
-    <Description>RestRequest是基于.NET Standard 2.0 封装的轻量级restful http请求库</Description>
+    <Description>RestReuest-Simple .NET REST Client, based on .NET Standard 2.0.</Description>
     <Authors>Kakous</Authors>
     <Company />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
