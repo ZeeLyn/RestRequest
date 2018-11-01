@@ -1,64 +1,20 @@
-# RestRequest是基于.NET Standard 2.0 封装的轻量级restful http请求库
+# RestReuest-Simple .NET REST Client, based on .NET Standard 2.0.
 
-## Get请求 Content-Type默认是application/json
 
-直接返回响应字符串
 ```csharp
-var res=HttpRequest.Get("url").ResponseString();
-```
+var res=HttpRequest.Get("url").ContentType("application/json").Timeout(2000).UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36").Referer("http://www.baidu.com").Cookies(new { token = "bearer token" }).ResponseValue<T>();
 
-把返回值转换成指定的类型
-```csharp
-var res=HttpRequest.Get("url").ResponseValue<T>();
-```
-  
-## Post请求 
-### Form的Content-Type默认是application/x-www-form-urlencoded
-### Body的Content-Type默认是application/json
 
-直接返回响应字符串
-```csharp
-var res=HttpRequest.Post("url").Form(new{name="jack"}).ResponseString();
-
-var res=HttpRequest.Post("url").Body(new{name="jack"}).ResponseString();
-```
-把返回值转换成指定类型
-```csharp
 var res=HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<T>();
-```
-### 也可以上传文件 默认Content-Type是multipart/form-data
-```csharp
+
 var res=HttpRequest.Post("url").Form(
       new List<NamedFileStream>{new NamedFileStream("name","filename",FileStream)}, new{name="jack"}).ResponseValue<T>();
-```
-
-### 可以通过Headers设置自定义头
-```csharp
-var res=HttpRequest.Post("url").Body(new{name="jack"}).Headers(new{Authorization = "Bearar token"}).ResponseString();
-```
-
-### 可以通过ContentType设置Content-Type值,但是不支持自定义multipart/form-data
-```csharp
-var res=HttpRequest.Post("url").Body(new{name="jack"}).ContentType("html/text").ResponseString();
-```
-
-### 异步回调
-```csharp
+      
 HttpRequest.Post("url").OnSuccess((statuscode, content) => {
 
 			}).OnFail(ex => {
 
 			}).Start();
-```
-
-### 证书
-
-默认忽略证书错误，如果不需要，可以通过以下代码关闭
-```csharp
-var res=HttpRequest.Post("url",ignoreCertificateError:false).Body(new{name="jack"}).ContentType("html/text").ResponseString();
-```
-
-设置证书
-```csharp
 var res=HttpRequest.Post("url").Body(new{name="jack"}).AddCertificate("","").ContentType("html/text").ResponseString();
 ```
+
