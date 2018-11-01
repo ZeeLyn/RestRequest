@@ -17,7 +17,7 @@ namespace RestRequest.Interface
 
 		void Download(Action<ResponseResult<byte[]>> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
-		void Download(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+		bool Download(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		[Obsolete("Use Download instead")]

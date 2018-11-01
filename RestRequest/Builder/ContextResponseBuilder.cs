@@ -235,11 +235,12 @@ namespace RestRequest.Builder
 
 
 
-		public void Download(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public bool Download(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = ExecuteRequest(succeedStatus);
 			if (res.Succeed)
 				res.ResponseBytes.SaveAs(SaveFileName);
+			return res.Succeed;
 		}
 
 
