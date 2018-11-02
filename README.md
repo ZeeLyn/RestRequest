@@ -23,7 +23,7 @@ var res=HttpRequest.Post("url").Form(
       
 HttpRequest.Post("url").OnSuccess((statuscode, content) => {
 
-			}).OnFail(ex => {
+			}).OnFail((statuscode,error) => {
 
 			}).Start();
 			
