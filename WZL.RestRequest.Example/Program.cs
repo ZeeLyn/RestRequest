@@ -13,28 +13,6 @@ namespace WZL.RestRequest.Example
 		static void Main(string[] args)
 		{
 
-			var c = new { name = "jack", id = 1 };
-			var v = c.ReadProperties();
-			var c2 = new { name = "mick", id = 2 };
-			var v2 = c2.ReadProperties();
-
-			//for (var i = 0; i <= 5; i++)
-			//{
-			//	var c1 = new { name = "jack" + i };
-			//	Console.WriteLine(c1.GetType().ToString());
-			//}
-
-			//for (var i = 0; i <= 5; i++)
-			//{
-			//	var c1 = new { name = "jack" + i, id = i.ToString() };
-			//	Console.WriteLine(c1.GetType().ToString());
-			//}
-
-			Console.ReadKey();
-			return;
-
-
-
 			var r0 = HttpRequest.Get("http://localhost:61389/api/values/2").ResponseValue<string>();
 			Console.WriteLine("0:succeed:{0},status:{1},value:{2},error:{3}", r0.Succeed, r0.StatusCode, r0.Content,
 				r0.FailMessage);

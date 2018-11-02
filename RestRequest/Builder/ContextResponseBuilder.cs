@@ -16,20 +16,23 @@ namespace RestRequest.Builder
 			{
 				builder.BuildRequest();
 				builder.WriteRequestBody();
-				var response = builder.GetResponse();
-				var contentStream = response.GetResponseStream();
-				var buffer = new byte[16 * 1024];
-				using (response)
-				using (contentStream)
-				using (var ms = new MemoryStream())
+				using (var response = builder.GetResponse())
+				using (var contentStream = response.GetResponseStream())
 				{
-					int read;
-					while ((read = contentStream.Read(buffer, 0, buffer.Length)) > 0)
-						ms.Write(buffer, 0, read);
-					var bytes = ms.ToArray();
-					return (response.StatusCode == succeedStatus, response.StatusCode, succeedStatus == response.StatusCode ? bytes : null, succeedStatus == response.StatusCode ? "" : bytes.AsString());
+					if (contentStream == null)
+						return (response.StatusCode == succeedStatus, response.StatusCode, null, "");
+					var buffer = new byte[16 * 1024];
+					using (var ms = new MemoryStream())
+					{
+						int read;
+						while ((read = contentStream.Read(buffer, 0, buffer.Length)) > 0)
+							ms.Write(buffer, 0, read);
+						var bytes = ms.ToArray();
+						return (response.StatusCode == succeedStatus, response.StatusCode,
+							succeedStatus == response.StatusCode ? bytes : null,
+							succeedStatus == response.StatusCode ? "" : bytes.AsString());
+					}
 				}
-
 			}
 		}
 
@@ -39,18 +42,22 @@ namespace RestRequest.Builder
 			{
 				builder.BuildRequest();
 				await builder.WriteRequestBodyAsync();
-				var response = await builder.GetResponseAsync();
-				var contentStream = response.GetResponseStream();
-				var buffer = new byte[16 * 1024];
-				using (response)
-				using (contentStream)
-				using (var ms = new MemoryStream())
+				using (var response = await builder.GetResponseAsync())
+				using (var contentStream = response.GetResponseStream())
 				{
-					int read;
-					while ((read = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-						ms.Write(buffer, 0, read);
-					var bytes = ms.ToArray();
-					return (response.StatusCode == succeedStatus, response.StatusCode, succeedStatus == response.StatusCode ? bytes : null, succeedStatus == response.StatusCode ? "" : bytes.AsString());
+					if (contentStream == null)
+						return (response.StatusCode == succeedStatus, response.StatusCode, null, "");
+					var buffer = new byte[16 * 1024];
+					using (var ms = new MemoryStream())
+					{
+						int read;
+						while ((read = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+							ms.Write(buffer, 0, read);
+						var bytes = ms.ToArray();
+						return (response.StatusCode == succeedStatus, response.StatusCode,
+							succeedStatus == response.StatusCode ? bytes : null,
+							succeedStatus == response.StatusCode ? "" : bytes.AsString());
+					}
 				}
 			}
 		}
@@ -58,12 +65,6 @@ namespace RestRequest.Builder
 
 
 		#region Async request
-		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
-		{
-			_successAction = action;
-			_succeedStatus = succeedStatus;
-			return this;
-		}
 
 		public IActionCallback OnSuccess(Action<HttpStatusCode, byte[]> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
@@ -72,7 +73,7 @@ namespace RestRequest.Builder
 				action(statusCode, stream.AsBytes());
 			};
 			_succeedStatus = succeedStatus;
-			throw new NotImplementedException();
+			return this;
 		}
 
 		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
@@ -113,6 +114,13 @@ namespace RestRequest.Builder
 
 
 		#region Obsolete
+		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			_successAction = action;
+			_succeedStatus = succeedStatus;
+			return this;
+		}
+
 		public ResponseResult<Stream> ResponseStream(HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			using (var builder = new RequestBuilder(this))
@@ -239,22 +247,22 @@ namespace RestRequest.Builder
 
 
 
-		public bool Download(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public bool Download(string saveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = ExecuteRequest(succeedStatus);
 			if (res.Succeed)
-				res.ResponseBytes.SaveAs(SaveFileName);
+				res.ResponseBytes.SaveAs(saveFileName);
 			return res.Succeed;
 		}
 
 
 
 
-		public async Task DownloadAsync(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public async Task DownloadAsync(string saveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ExecuteRequestAsync(succeedStatus);
 			if (res.Succeed)
-				res.ResponseBytes.SaveAs(SaveFileName);
+				res.ResponseBytes.SaveAs(saveFileName);
 		}
 		#endregion
 

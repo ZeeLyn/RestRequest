@@ -39,13 +39,11 @@ namespace RestRequest.Builder
 			if (!string.IsNullOrWhiteSpace(Context._userAgent))
 				Request.UserAgent = Context._userAgent;
 
-			if (Context._cookies?.Count > 0)
+			if (!(Context._cookies?.Count > 0)) return;
+			Request.CookieContainer = new CookieContainer();
+			foreach (var cookie in Context._cookies)
 			{
-				Request.CookieContainer = new CookieContainer();
-				foreach (var cookie in Context._cookies)
-				{
-					Request.CookieContainer.Add(cookie);
-				}
+				Request.CookieContainer.Add(cookie);
 			}
 		}
 

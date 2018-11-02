@@ -8,7 +8,7 @@ namespace RestRequest.Builder
 {
 	internal partial class RequestBuilder
 	{
-		#region async callback
+		#region Async callback
 		internal void BuildCallback()
 		{
 			if (Context._requestBody != null && (Context._method == HttpMethod.Post || Context._method == HttpMethod.Put))
