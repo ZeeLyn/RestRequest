@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>false</SignAssembly>
-    <Description>RestReuest - Simple .NET REST Client, based on .NET Standard 2.0.</Description>
+    <Description>RestRequest - Simple .NET REST Client, based on .NET Standard 2.0.</Description>
     <Authors>Kakous</Authors>
     <Company />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
