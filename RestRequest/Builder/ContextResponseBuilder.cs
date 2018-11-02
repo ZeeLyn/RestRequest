@@ -285,37 +285,26 @@ namespace RestRequest.Builder
 			};
 		}
 
-		public void Response(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public void ResponseValue(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = ExecuteRequest(succeedStatus);
 			response?.Invoke(res.Succeed, res.StatusCode, res.ResponseBytes, res.FailMessage);
 		}
 
-		public async Task ResponseAsync(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public async Task ResponseValueAsync(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ExecuteRequestAsync(succeedStatus);
 			response?.Invoke(res.Succeed, res.StatusCode, res.ResponseBytes, res.FailMessage);
 		}
 
-		public void Response(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
-		{
-			var res = ExecuteRequest(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.ResponseBytes.AsString(), res.FailMessage);
-		}
 
-		public async Task ResponseAsync(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
-		{
-			var res = await ExecuteRequestAsync(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.ResponseBytes.AsString(), res.FailMessage);
-		}
-
-		public void Response<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public void ResponseValue<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = ExecuteRequest(succeedStatus);
 			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? JsonConvert.DeserializeObject<T>(res.ResponseBytes.AsString()) : default, res.FailMessage);
 		}
 
-		public async Task ResponseAsync<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public async Task ResponseValueAsync<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ExecuteRequestAsync(succeedStatus);
 			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? JsonConvert.DeserializeObject<T>(res.ResponseBytes.AsString()) : default, res.FailMessage);

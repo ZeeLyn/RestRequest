@@ -121,7 +121,7 @@ namespace WZL.RestRequest.Example
 			Console.WriteLine("10:succeed:{0},status:{1},value:{2},error:{3}", r8.Succeed, r8.StatusCode,
 				JsonConvert.SerializeObject(r8.Content), r8.FailMessage);
 
-			HttpRequest.Post("http://localhost:61389/api/values/form").Form(new { name = "jack" }).Response<dynamic>(
+			HttpRequest.Post("http://localhost:61389/api/values/form").Form(new { name = "jack" }).ResponseValue<dynamic>(
 					(succeed, code, data, err) =>
 					{
 						Console.WriteLine("11:succeed:{0},status:{1},value:{2},error:{3}", succeed, code,

@@ -162,3 +162,4 @@ WZL.RestRequest.sln.DotSettings.user
 WZL.RestRequest.Example/obj/Debug/netcoreapp2.0/WZL.RestRequest.Example.csproj.FileListAbsolute.txt
 RestRequest/RestRequest.csproj
 WZL.RestRequest.Example/obj/project.assets.json
+WZL.RestRequest.Example/bin/Debug/netcoreapp2.0/WZL.RestRequest.Example.deps.json

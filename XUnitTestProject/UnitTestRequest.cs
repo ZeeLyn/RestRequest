@@ -28,13 +28,13 @@ namespace XUnitTestProject
 				Assert.True(result.Succeed);
 				Assert.Equal(result.Content, id);
 
-				HttpRequest.Get($"http://localhost:61389/api/values/{id}").Response<int>((succeed, status, content,
-					error) =>
-				{
-					Assert.True(succeed);
-					Assert.Equal(content, id);
+				HttpRequest.Get($"http://localhost:61389/api/values/{id}")
+					.ResponseValue<int>((succeed, status, content, error) =>
+					{
+						Assert.True(succeed);
+						Assert.Equal(content, id);
 
-				});
+					});
 			}
 			else
 			{

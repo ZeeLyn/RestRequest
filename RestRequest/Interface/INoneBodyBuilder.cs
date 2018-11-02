@@ -18,7 +18,7 @@ namespace RestRequest.Interface
 
 		void Download(Action<ResponseResult<byte[]>> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
-		bool Download(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+		bool Download(string saveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		[Obsolete("Use Download instead")]
@@ -29,7 +29,7 @@ namespace RestRequest.Interface
 
 		Task DownloadAsync(Action<ResponseResult<byte[]>> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
-		Task DownloadAsync(string SaveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+		Task DownloadAsync(string saveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		[Obsolete("Use ResponseValue instead")]
@@ -45,24 +45,17 @@ namespace RestRequest.Interface
 		Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
-		void Response(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+		void ResponseValue(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
-		Task ResponseAsync(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
-
-
-
-		void Response(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
-
-
-		Task ResponseAsync(Action<bool, HttpStatusCode, string, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+		Task ResponseValueAsync(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 
-		void Response<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+		void ResponseValue<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
-		Task ResponseAsync<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+		Task ResponseValueAsync<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		INoneBodyBuilder ContentType(string contentType);

@@ -10,7 +10,7 @@
         "dependencies": {
           "CaptchaGen.NetCore": "1.0.2",
           "Newtonsoft.Json": "11.0.2",
-          "RestRequest": "1.0.4"
+          "RestRequest": "1.1.0"
         },
         "runtime": {
           "WZL.RestRequest.Example.dll": {}
@@ -314,7 +314,7 @@
           "System.Runtime": "4.1.0"
         }
       },
-      "RestRequest/1.0.4": {
+      "RestRequest/1.1.0": {
         "dependencies": {
           "Newtonsoft.Json": "11.0.2"
         },
@@ -575,7 +575,7 @@
       "path": "system.threading.tasks/4.0.11",
       "hashPath": "system.threading.tasks.4.0.11.nupkg.sha512"
     },
-    "RestRequest/1.0.4": {
+    "RestRequest/1.1.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
