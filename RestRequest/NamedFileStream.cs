@@ -8,7 +8,7 @@ namespace RestRequest
 
 		public string FileName { get; set; }
 
-		public string ContentType { get; set; }
+		public string ContentType { get; set; } = "application/octet-stream";
 
 		public Stream Stream { get; set; }
 
@@ -16,12 +16,12 @@ namespace RestRequest
 		{
 		}
 
-		public NamedFileStream(string name, string filename, Stream stream, string contenttype = "application/octet-stream")
+		public NamedFileStream(string name, string filename, Stream stream, string contentType = "application/octet-stream")
 		{
 			Name = name;
 			FileName = filename;
 			Stream = stream;
-			ContentType = contenttype;
+			ContentType = contentType;
 		}
 	}
 }

@@ -1,85 +1,39 @@
-# RestRequest是基于.NET Standard 2.0 封装的轻量级restful http请求库
+# RestRequest - Simple .NET REST Client, based on .NET Standard 2.0.
 
-## Get请求 Content-Type默认是application/json
 
-直接返回响应字符串
 ```csharp
-using(var res=HttpRequest.Get("url").ResponseString())
-{
-	...
-}
-```
+var res=HttpRequest.Get("url")
+.ContentType("application/json")
+.Timeout(2000)
+.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+.Referer("http://www.baidu.com")
+.Headers(new { auth = "bearer token" })
+.Cookies(new { u = "123456" })
+.KeepAlive()
+.IgnoreCertError()
+.ConnectionLimit(20)
+.ResponseValue<T>();
 
-把返回值转换成指定的类型
-```csharp
-using(var res=HttpRequest.Get("url").ResponseValue<obj>())
-{
-	...
-}
-```
-  
-## Post请求 
-### Form的Content-Type默认是application/x-www-form-urlencoded
-### Body的Content-Type默认是application/json
 
-直接返回响应字符串
-```csharp
-using(var res=HttpRequest.Post("url").Form(new{name="jack"}).ResponseString())
-{
-	...
-}
-using(var res=HttpRequest.Post("url").Body(new{name="jack"}).ResponseString())
-{
-	...
-}
-```
-把返回值转换成指定类型
-```csharp
-using(var res=HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<obj>())
-{
-	...
-}
-```
-### 也可以上传文件 默认Content-Type是multipart/form-data
-```csharp
-using(var res=HttpRequest.Post("url").Form(
-      new List<NamedFileStream>{new NamedFileStream("name","filename",FileStream)}, new{name="jack"}).ResponseValue<string>())
-      {
-      	...
-      }
-```
+var res=HttpRequest.Post("url").Form(new{name="jack"}).ResponseValue<T>();
 
-### 可以通过Headers设置自定义头
-```csharp
-using(var res=HttpRequest.Post("url").Body(new{name="jack"}).Headers(new{Authorization = "Bearar token"}).ResponseString())
-{
-	...
-}
-```
-
-### 可以通过ContentType设置Content-Type值,但是不支持自定义multipart/form-data
-```csharp
-using(var res=HttpRequest.Post("url").Body(new{name="jack"}).ContentType("html/text").ResponseString())
-{
-	...
-}
-```
-
-### 异步回调
-```csharp
+var res=HttpRequest.Post("url").Form(
+      new List<NamedFileStream>{new NamedFileStream("name","filename",FileStream)}, new{name="jack"})
+      .ResponseValue<T>();
+      
 HttpRequest.Post("url").OnSuccess((statuscode, content) => {
 
-			}).OnFail((statuscode,err) => {
+			}).OnFail(ex => {
 
 			}).Start();
+			
+			
+var res=HttpRequest.Post("url").Body(new{name="jack"})
+.AddCertificate("","")
+.ContentType("html/text")
+.ResponseString();
+
+
+HttpRequest.Get("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png").Download("/download/logo.png");
 ```
 
-### 证书
-
-设置证书
-```csharp
-using(var res=HttpRequest.Post("url").Body(new{name="jack"}).AddCertificate("","").ContentType("html/text").ResponseString())
-{
-	...
-}
-```

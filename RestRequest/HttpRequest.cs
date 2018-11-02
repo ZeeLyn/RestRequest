@@ -1,47 +1,79 @@
 ﻿using System.Net.Http;
-using RestRequest.interfaces;
-using RestRequest.Provider;
+using RestRequest.Builder;
+using RestRequest.Interface;
 
 namespace RestRequest
 {
-	public class HttpRequest
+	public static class HttpRequest
 	{
 		/// <summary>
-		/// Get请求
+		/// Get
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
-		public static IBuilderNoneBody Get(string url)
+		public static INoneBodyBuilder Get(string url)
 		{
-			return new BuilderNoneBody(url, HttpMethod.Get);
+			return new ContextBuilder(url, HttpMethod.Get);
 		}
 
 		/// <summary>
-		/// Post请求
+		/// Head
 		/// </summary>
-		/// <param name="url">url</param>
+		/// <param name="url"></param>
 		/// <returns></returns>
-		public static IBuilder Post(string url)
+		public static INoneBodyBuilder Head(string url)
 		{
-			return new BuilderBody(url, HttpMethod.Post);
+			return new ContextBuilder(url, HttpMethod.Head);
 		}
+
 		/// <summary>
-		/// Put请求
+		/// Options
 		/// </summary>
-		/// <param name="url">url</param>
+		/// <param name="url"></param>
 		/// <returns></returns>
-		public static IBuilder Put(string url)
+		public static INoneBodyBuilder Options(string url)
 		{
-			return new BuilderBody(url, HttpMethod.Put);
+			return new ContextBuilder(url, HttpMethod.Options);
 		}
+
 		/// <summary>
-		/// Delete请求
+		/// Trace request
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
+		public static INoneBodyBuilder Trace(string url)
+		{
+			return new ContextBuilder(url, HttpMethod.Trace);
+		}
+
+		/// <summary>
+		/// Post
 		/// </summary>
 		/// <param name="url">url</param>
 		/// <returns></returns>
-		public static IBuilderNoneBody Delete(string url)
+		public static IBodyBuilder Post(string url)
 		{
-			return new BuilderNoneBody(url, HttpMethod.Delete);
+			return new ContextBuilder(url, HttpMethod.Post);
+		}
+
+		/// <summary>
+		/// Put
+		/// </summary>
+		/// <param name="url">url</param>
+		/// <returns></returns>
+		public static IBodyBuilder Put(string url)
+		{
+			return new ContextBuilder(url, HttpMethod.Put);
+		}
+
+		/// <summary>
+		/// Delete
+		/// </summary>
+		/// <param name="url">url</param>
+		/// <returns></returns>
+		public static INoneBodyBuilder Delete(string url)
+		{
+			return new ContextBuilder(url, HttpMethod.Delete);
 		}
 	}
 }
