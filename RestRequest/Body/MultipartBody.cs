@@ -85,10 +85,10 @@ namespace RestRequest.Body
 		{
 			if (parameters == null)
 				return;
-			var properties = parameters.GetType().GetProperties();
+			var properties = parameters.ReadProperties();
 			foreach (var enumerator in properties)
 			{
-				Parameters.Add(enumerator.Name, enumerator.GetValue(parameters).ToString());
+				Parameters.Add(enumerator.Key, enumerator.Value);
 			}
 		}
 

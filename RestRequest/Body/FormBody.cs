@@ -40,10 +40,10 @@ namespace RestRequest.Body
 		{
 			if (parameters == null)
 				return;
-			var properties = parameters.GetType().GetProperties();
+			var properties = parameters.ReadProperties();
 			foreach (var enumerator in properties)
 			{
-				_parameters.Add(enumerator.Name, enumerator.GetValue(parameters).ToString());
+				_parameters.Add(enumerator.Key, enumerator.Value);
 			}
 		}
 	}

@@ -65,14 +65,21 @@ namespace RestRequest.Builder
 			return this;
 		}
 
+		public IActionCallback OnSuccess(Action<HttpStatusCode, byte[]> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			_successAction = (statusCode, stream) =>
+			{
+				action(statusCode, stream.AsBytes());
+			};
+			_succeedStatus = succeedStatus;
+			throw new NotImplementedException();
+		}
+
 		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			_successAction = (statusCode, stream) =>
 			{
-				using (var reader = new StreamReader(stream))
-				{
-					action(statusCode, reader.ReadToEnd());
-				}
+				action(statusCode, stream.AsBytes().AsString());
 			};
 			_succeedStatus = succeedStatus;
 			return this;
@@ -82,10 +89,7 @@ namespace RestRequest.Builder
 		{
 			_successAction = (statusCode, stream) =>
 			{
-				using (var reader = new StreamReader(stream))
-				{
-					action(statusCode, JsonConvert.DeserializeObject<T>(reader.ReadToEnd()));
-				}
+				action(statusCode, JsonConvert.DeserializeObject<T>(stream.AsBytes().AsString()));
 			};
 			_succeedStatus = succeedStatus;
 			return this;

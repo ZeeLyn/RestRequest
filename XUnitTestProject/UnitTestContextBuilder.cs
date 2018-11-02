@@ -151,14 +151,9 @@ namespace XUnitTestProject
 		[InlineData(2)]
 		public void TestTimeOut(int timeout)
 		{
-			if (timeout < 0)
-				Assert.Throws<ArgumentException>(() =>
-				{
-					Builder.Timeout(timeout);
-				});
-			else
+			Builder.Timeout(timeout);
+			if (timeout > 0)
 			{
-				Builder.Timeout(timeout);
 				Assert.Equal(timeout, Builder._timeout);
 			}
 		}
@@ -224,11 +219,9 @@ namespace XUnitTestProject
 		[InlineData(20)]
 		public void TestConnectionLimit(int limit)
 		{
-			if (limit < 1)
-				Assert.Throws<ArgumentException>(() => { Builder.ConnectionLimit(limit); });
-			else
+			Builder.ConnectionLimit(limit);
+			if (limit > 0)
 			{
-				Builder.ConnectionLimit(limit);
 				Assert.Equal(limit, Builder._connectionLimit);
 			}
 		}

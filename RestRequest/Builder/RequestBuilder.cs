@@ -20,18 +20,25 @@ namespace RestRequest.Builder
 			Request.Method = Context._method.ToString().ToUpper();
 			if (Context._requestHeaders != null && Context._requestHeaders.Count > 0)
 				Request.Headers = Context._requestHeaders;
+			Request.Pipelined = Context._pipelined;
 			Request.ContentType = Context._contentType;
 			Request.KeepAlive = Context._keepAlive;
 			Request.Referer = Context._referer;
+			Request.ServicePoint.Expect100Continue = Context._expect100Continue;
 			Request.ServicePoint.ConnectionLimit = Context._connectionLimit;
+			Request.Timeout = Context._timeout;
+			Request.ReadWriteTimeout = Context._readWriteTimeout;
+			Request.ProtocolVersion = Context._protocolVersion;
+			Request.AllowAutoRedirect = Context._allowAutoRedirect;
+			Request.MaximumAutomaticRedirections = Context._maxRedirections;
+			Request.CachePolicy = Context._cachePolicy;
 			if (Context._ignoreCertificateError)
 				Request.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
 			if (Context._clientCertificates != null && Context._clientCertificates.Count > 0)
 				Request.ClientCertificates.AddRange(Context._clientCertificates);
 			if (!string.IsNullOrWhiteSpace(Context._userAgent))
 				Request.UserAgent = Context._userAgent;
-			if (Context._timeout > 0)
-				Request.Timeout = Context._timeout;
+
 			if (Context._cookies?.Count > 0)
 			{
 				Request.CookieContainer = new CookieContainer();

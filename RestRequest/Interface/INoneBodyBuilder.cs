@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Cache;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
@@ -83,7 +84,7 @@ namespace RestRequest.Interface
 
 		INoneBodyBuilder IgnoreCertError();
 
-		INoneBodyBuilder KeepAlive();
+		INoneBodyBuilder KeepAlive(bool enable = true);
 
 
 		INoneBodyBuilder UserAgent(string userAgent);
@@ -104,5 +105,22 @@ namespace RestRequest.Interface
 
 
 		INoneBodyBuilder ConnectionLimit(int limit);
+
+
+		INoneBodyBuilder Expect100Continue(bool enable = false);
+
+
+		INoneBodyBuilder Pipelined(bool enable = true);
+
+
+		INoneBodyBuilder ReadWriteTimeout(int timeout);
+
+		INoneBodyBuilder ProtocolVersion(string version);
+
+		INoneBodyBuilder AllowAutoRedirect(bool allow = true);
+
+		INoneBodyBuilder MaxRedirections(int redirections);
+
+		INoneBodyBuilder CachePolicy(RequestCachePolicy policy);
 	}
 }
