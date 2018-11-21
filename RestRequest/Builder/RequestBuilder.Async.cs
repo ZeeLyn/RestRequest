@@ -42,32 +42,27 @@ namespace RestRequest.Builder
 				{
 					response = (HttpWebResponse)ex.Response;
 					if (response == null)
-					{
-						Context._failAction?.Invoke(null, ex.Message);
-					}
+						throw;
 				}
 
-				if (response != null)
+				using (response)
 				{
-					using (response)
+					if (Context._succeedStatus == response.StatusCode)
 					{
-						if (Context._succeedStatus == response.StatusCode)
+						using (var stream = response.GetResponseStream())
 						{
-							using (var stream = response.GetResponseStream())
-							{
-								Context._successAction?.Invoke(response.StatusCode, stream);
-							}
+							Context._successAction?.Invoke(response.StatusCode, stream);
 						}
-						else
+					}
+					else
+					{
+						using (var stream = response.GetResponseStream())
 						{
-							using (var stream = response.GetResponseStream())
+							if (stream != null)
 							{
-								if (stream != null)
+								using (var reader = new StreamReader(stream))
 								{
-									using (var reader = new StreamReader(stream))
-									{
-										Context._failAction?.Invoke(response.StatusCode, reader.ReadToEnd());
-									}
+									Context._failAction?.Invoke(response.StatusCode, reader.ReadToEnd());
 								}
 							}
 						}

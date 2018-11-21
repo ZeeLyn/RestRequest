@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace RestRequest
@@ -16,7 +18,7 @@ namespace RestRequest
 			return Encoding.UTF8.GetString(input, 0, input.Length);
 		}
 
-		public static T JsonToObject<T>(this string json)
+		public static T JsonTo<T>(this string json)
 		{
 			if (string.IsNullOrWhiteSpace(json))
 				return default;
@@ -35,7 +37,22 @@ namespace RestRequest
 			{
 				int read;
 				while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
-					ms.Write(buffer, 0, read);
+					ms.WriteAsync(buffer, 0, read);
+				return ms.ToArray();
+			}
+		}
+
+		public static async Task<byte[]> AsBytesAsync(this Stream stream, CancellationToken cancellationToken)
+		{
+			if (stream == null || !stream.CanRead)
+				return null;
+			var buffer = new byte[16 * 1024];
+			using (stream)
+			using (var ms = new MemoryStream())
+			{
+				int read;
+				while ((read = await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0)
+					await ms.WriteAsync(buffer, 0, read, cancellationToken);
 				return ms.ToArray();
 			}
 		}

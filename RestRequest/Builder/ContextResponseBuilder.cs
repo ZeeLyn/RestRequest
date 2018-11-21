@@ -22,34 +22,29 @@ namespace RestRequest.Builder
 				using (var contentStream = response.GetResponseStream())
 				{
 					var headers = response.Headers.AllKeys.ToDictionary(key => key, key => response.Headers.Get(key));
-					if (contentStream == null)
-						return (response.StatusCode == succeedStatus, response.StatusCode, null, "", headers);
-					var buffer = new byte[16 * 1024];
-					using (var ms = new MemoryStream())
-					{
-						int read;
-						while ((read = contentStream.Read(buffer, 0, buffer.Length)) > 0)
-							ms.Write(buffer, 0, read);
-						var bytes = ms.ToArray();
-						return (response.StatusCode == succeedStatus, response.StatusCode,
-							succeedStatus == response.StatusCode ? bytes : null,
-							succeedStatus == response.StatusCode ? "" : bytes.AsString(), headers);
-					}
+					var bytes = contentStream.AsBytes();
+					return (response.StatusCode == succeedStatus, response.StatusCode,
+						succeedStatus == response.StatusCode ? bytes : null,
+						succeedStatus == response.StatusCode ? "" : bytes.AsString(), headers);
 				}
 			}
 		}
-
-
 		#endregion
-
-
-
 
 
 		#region Obsolete
 		public IActionCallback OnSuccess(Action<HttpStatusCode, Stream> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			_successAction = action;
+			_succeedStatus = succeedStatus;
+			return this;
+		}
+		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		{
+			_successAction = (statusCode, stream) =>
+			{
+				action(statusCode, stream.AsBytes().AsString());
+			};
 			_succeedStatus = succeedStatus;
 			return this;
 		}
@@ -192,7 +187,7 @@ namespace RestRequest.Builder
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = res.Succeed ? res.ResponseBytes.AsString().JsonToObject<T>() : default,
+				Content = res.Succeed ? res.ResponseBytes.AsString().JsonTo<T>() : default,
 				FailMessage = res.FailMessage,
 				Headers = res.Headers
 			};
@@ -211,17 +206,16 @@ namespace RestRequest.Builder
 			response?.Invoke(res.Succeed, res.StatusCode, res.ResponseBytes, res.FailMessage, res.Headers);
 		}
 
-
 		public void ResponseValue<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = ExecuteRequest(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonToObject<T>() : default, res.FailMessage);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonTo<T>() : default, res.FailMessage);
 		}
 
 		public void ResponseValue<T>(Action<bool, HttpStatusCode, T, string, Dictionary<string, string>> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = ExecuteRequest(succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonToObject<T>() : default, res.FailMessage, res.Headers);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonTo<T>() : default, res.FailMessage, res.Headers);
 		}
 		#endregion
 	}

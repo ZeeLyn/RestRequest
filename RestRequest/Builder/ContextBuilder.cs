@@ -25,7 +25,7 @@ namespace RestRequest.Builder
 
 		public HttpStatusCode _succeedStatus { get; private set; }
 
-		public Action<HttpStatusCode?, string> _failAction { get; private set; }
+		public Action<HttpStatusCode, string> _failAction { get; private set; }
 
 		public bool _ignoreCertificateError { get; private set; }
 

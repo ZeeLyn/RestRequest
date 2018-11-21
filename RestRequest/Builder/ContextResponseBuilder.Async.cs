@@ -21,19 +21,10 @@ namespace RestRequest.Builder
 				using (var contentStream = response.GetResponseStream())
 				{
 					var headers = response.Headers.AllKeys.ToDictionary(key => key, key => response.Headers.Get(key));
-					if (contentStream == null)
-						return (response.StatusCode == succeedStatus, response.StatusCode, null, "", headers);
-					var buffer = new byte[16 * 1024];
-					using (var ms = new MemoryStream())
-					{
-						int read;
-						while ((read = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0)
-							ms.Write(buffer, 0, read);
-						var bytes = ms.ToArray();
-						return (response.StatusCode == succeedStatus, response.StatusCode,
-							succeedStatus == response.StatusCode ? bytes : null,
-							succeedStatus == response.StatusCode ? "" : bytes.AsString(), headers);
-					}
+					var bytes = await contentStream.AsBytesAsync(cancellationToken);
+					return (response.StatusCode == succeedStatus, response.StatusCode,
+						succeedStatus == response.StatusCode ? bytes : null,
+						succeedStatus == response.StatusCode ? "" : bytes.AsString(), headers);
 				}
 			}
 		}
@@ -49,27 +40,18 @@ namespace RestRequest.Builder
 			return this;
 		}
 
-		public IActionCallback OnSuccess(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
-		{
-			_successAction = (statusCode, stream) =>
-			{
-				action(statusCode, stream.AsBytes().AsString());
-			};
-			_succeedStatus = succeedStatus;
-			return this;
-		}
 
 		public IActionCallback OnSuccess<T>(Action<HttpStatusCode, T> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			_successAction = (statusCode, stream) =>
 			{
-				action(statusCode, stream.AsBytes().AsString().JsonToObject<T>());
+				action(statusCode, stream.AsBytes().AsString().JsonTo<T>());
 			};
 			_succeedStatus = succeedStatus;
 			return this;
 		}
 
-		public IActionCallback OnFail(Action<HttpStatusCode?, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
+		public IActionCallback OnFail(Action<HttpStatusCode, string> action, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			_failAction = action;
 			_succeedStatus = succeedStatus;
@@ -149,7 +131,7 @@ namespace RestRequest.Builder
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = res.Succeed ? res.ResponseBytes.AsString().JsonToObject<T>() : default,
+				Content = res.Succeed ? res.ResponseBytes.AsString().JsonTo<T>() : default,
 				FailMessage = res.FailMessage,
 				Headers = res.Headers
 			};
@@ -162,7 +144,7 @@ namespace RestRequest.Builder
 			{
 				Succeed = res.Succeed,
 				StatusCode = res.StatusCode,
-				Content = res.Succeed ? res.ResponseBytes.AsString().JsonToObject<T>() : default,
+				Content = res.Succeed ? res.ResponseBytes.AsString().JsonTo<T>() : default,
 				FailMessage = res.FailMessage,
 				Headers = res.Headers
 			};
@@ -198,7 +180,7 @@ namespace RestRequest.Builder
 		public async Task ResponseValueAsync<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ExecuteRequestAsync(CancellationToken.None, succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonToObject<T>() : default, res.FailMessage);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonTo<T>() : default, res.FailMessage);
 		}
 
 
@@ -206,20 +188,20 @@ namespace RestRequest.Builder
 			HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ExecuteRequestAsync(cancellationToken, succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonToObject<T>() : default, res.FailMessage);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonTo<T>() : default, res.FailMessage);
 		}
 
 		public async Task ResponseValueAsync<T>(Action<bool, HttpStatusCode, T, string, Dictionary<string, string>> response, HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ExecuteRequestAsync(CancellationToken.None, succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonToObject<T>() : default, res.FailMessage, res.Headers);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonTo<T>() : default, res.FailMessage, res.Headers);
 		}
 
 		public async Task ResponseValueAsync<T>(Action<bool, HttpStatusCode, T, string, Dictionary<string, string>> response, CancellationToken cancellationToken,
 			HttpStatusCode succeedStatus = HttpStatusCode.OK)
 		{
 			var res = await ExecuteRequestAsync(cancellationToken, succeedStatus);
-			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonToObject<T>() : default, res.FailMessage, res.Headers);
+			response?.Invoke(res.Succeed, res.StatusCode, res.Succeed ? res.ResponseBytes.AsString().JsonTo<T>() : default, res.FailMessage, res.Headers);
 		}
 	}
 }
