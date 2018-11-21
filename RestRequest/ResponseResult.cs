@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Newtonsoft.Json;
 
@@ -23,5 +24,7 @@ namespace RestRequest
 		/// 失败响应内容
 		/// </summary>
 		public string FailMessage { get; internal set; }
+
+		public Dictionary<string, string> Headers { get; internal set; }
 	}
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Cache;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestRequest.Interface
@@ -27,9 +28,16 @@ namespace RestRequest.Interface
 
 		Task<ResponseResult<byte[]>> DownloadAsync(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
+		Task<ResponseResult<byte[]>> DownloadAsync(CancellationToken cancellationToken, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+
 		Task DownloadAsync(Action<ResponseResult<byte[]>> action, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
+		Task DownloadAsync(Action<ResponseResult<byte[]>> action, CancellationToken cancellationToken, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
 		Task DownloadAsync(string saveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		Task DownloadAsync(string saveFileName, CancellationToken cancellationToken, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		[Obsolete("Use ResponseValue instead")]
@@ -44,18 +52,35 @@ namespace RestRequest.Interface
 
 		Task<ResponseResult<T>> ResponseValueAsync<T>(HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
+		Task<ResponseResult<T>> ResponseValueAsync<T>(CancellationToken cancellationToken, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
 
 		void ResponseValue(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		void ResponseValue(Action<bool, HttpStatusCode, byte[], string, Dictionary<string, string>> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		Task ResponseValueAsync(Action<bool, HttpStatusCode, byte[], string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
+		Task ResponseValueAsync(Action<bool, HttpStatusCode, byte[], string> response, CancellationToken cancellationToken, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		Task ResponseValueAsync(Action<bool, HttpStatusCode, byte[], string, Dictionary<string, string>> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		Task ResponseValueAsync(Action<bool, HttpStatusCode, byte[], string, Dictionary<string, string>> response, CancellationToken cancellationToken, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		void ResponseValue<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
+		void ResponseValue<T>(Action<bool, HttpStatusCode, T, string, Dictionary<string, string>> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
 
 		Task ResponseValueAsync<T>(Action<bool, HttpStatusCode, T, string> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		Task ResponseValueAsync<T>(Action<bool, HttpStatusCode, T, string> response, CancellationToken cancellationToken, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		Task ResponseValueAsync<T>(Action<bool, HttpStatusCode, T, string, Dictionary<string, string>> response, HttpStatusCode succeedStatus = HttpStatusCode.OK);
+
+		Task ResponseValueAsync<T>(Action<bool, HttpStatusCode, T, string, Dictionary<string, string>> response, CancellationToken cancellationToken, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
 		INoneBodyBuilder ContentType(string contentType);
@@ -115,5 +140,9 @@ namespace RestRequest.Interface
 		INoneBodyBuilder MaxRedirections(int redirections);
 
 		INoneBodyBuilder CachePolicy(RequestCachePolicy policy);
+
+		INoneBodyBuilder Proxy(string url, int port);
+
+		INoneBodyBuilder Proxy(IWebProxy proxy);
 	}
 }

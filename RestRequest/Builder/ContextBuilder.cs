@@ -52,6 +52,7 @@ namespace RestRequest.Builder
 
 		public Version _protocolVersion { get; private set; } = HttpVersion.Version11;
 
+		public IWebProxy _proxy { get; private set; }
 
 		public int _maxRedirections { get; private set; } = 50;
 
@@ -233,6 +234,18 @@ namespace RestRequest.Builder
 		{
 			if (policy != null)
 				_cachePolicy = policy;
+			return this;
+		}
+
+		public INoneBodyBuilder Proxy(string url, int port)
+		{
+			_proxy = new WebProxy(url, port);
+			return this;
+		}
+
+		public INoneBodyBuilder Proxy(IWebProxy proxy)
+		{
+			_proxy = proxy;
 			return this;
 		}
 	}

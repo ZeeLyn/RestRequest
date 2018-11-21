@@ -17,8 +17,7 @@ namespace RestRequest
 
 		public static List<PropertyInfo> Get(Type type)
 		{
-			Cache.TryGetValue(type, out var value);
-			return value;
+			return Cache.TryGetValue(type, out var value) ? value : default;
 		}
 	}
 }

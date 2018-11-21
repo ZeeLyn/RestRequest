@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestRequest.Builder
@@ -80,7 +81,7 @@ namespace RestRequest.Builder
 		}
 		#endregion
 
-		internal async Task WriteRequestBodyAsync()
+		internal async Task WriteRequestBodyAsync(CancellationToken cancellationToken)
 		{
 			var bodyBytes = Context._requestBody?.GetBody();
 			if (bodyBytes == null)
@@ -88,7 +89,7 @@ namespace RestRequest.Builder
 			Request.ContentLength = bodyBytes.Length;
 			using (var requestStream = await Request.GetRequestStreamAsync())
 			{
-				await requestStream.WriteAsync(bodyBytes, 0, bodyBytes.Length);
+				await requestStream.WriteAsync(bodyBytes, 0, bodyBytes.Length, cancellationToken);
 			}
 		}
 

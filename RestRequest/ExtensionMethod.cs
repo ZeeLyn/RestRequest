@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace RestRequest
 {
@@ -9,9 +11,18 @@ namespace RestRequest
 	{
 		public static string AsString(this byte[] input)
 		{
-			if (input == null)
+			if (input == null || input.Length == 0)
 				return "";
 			return Encoding.UTF8.GetString(input, 0, input.Length);
+		}
+
+		public static T JsonToObject<T>(this string json)
+		{
+			if (string.IsNullOrWhiteSpace(json))
+				return default;
+			if (typeof(T) == typeof(string))
+				return (T)Convert.ChangeType(json, typeof(string));
+			return JsonConvert.DeserializeObject<T>(json);
 		}
 
 		public static byte[] AsBytes(this Stream stream)

@@ -7,7 +7,6 @@ namespace RestRequest.Builder
 {
 	public partial class ContextBuilder
 	{
-
 		/// <summary>
 		/// 设置json数据
 		/// </summary>
