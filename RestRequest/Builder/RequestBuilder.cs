@@ -24,8 +24,8 @@ namespace RestRequest.Builder
 			Request.ContentType = Context._contentType;
 			Request.KeepAlive = Context._keepAlive;
 			Request.Referer = Context._referer;
-			//Request.ServicePoint.Expect100Continue = Context._expect100Continue;
-			//Request.ServicePoint.ConnectionLimit = Context._connectionLimit;
+			Request.ServicePoint.Expect100Continue = Context._expect100Continue;
+			Request.ServicePoint.ConnectionLimit = Context._connectionLimit;
 			Request.Timeout = Context._timeout;
 			Request.ReadWriteTimeout = Context._readWriteTimeout;
 			Request.ProtocolVersion = Context._protocolVersion;
