@@ -1,7 +1,7 @@
 # RestRequest
 Simple .NET REST Client, based on .NET Standard 2.0.
 
-# Packages & Status
+# Package & Status
 Package | NuGet
 --------|------
 RestRequest|[![NuGet package](https://buildstats.info/nuget/RestRequest)](https://www.nuget.org/packages/RestRequest)
