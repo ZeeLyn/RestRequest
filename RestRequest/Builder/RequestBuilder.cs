@@ -54,9 +54,9 @@ namespace RestRequest.Builder
 			var bodyBytes = Context._requestBody?.GetBody();
 			if (bodyBytes == null)
 				return;
-			using (var requestStream = Request.GetRequestStream())
+            Request.ContentLength = bodyBytes.Length;
+            using (var requestStream = Request.GetRequestStream())
 			{
-				Request.ContentLength = bodyBytes.Length;
 				requestStream.Write(bodyBytes, 0, bodyBytes.Length);
 			}
 		}

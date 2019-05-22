@@ -7,12 +7,14 @@
     <Authors>Kakous</Authors>
     <Company />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/ww198643/RestRequest</PackageProjectUrl>
-    <Version>1.1.2</Version>
-    <AssemblyVersion>1.1.2.0</AssemblyVersion>
-    <FileVersion>1.1.2.0</FileVersion>
-    <PackageIconUrl>https://raw.githubusercontent.com/ww198643/Dapper.Extensions/master/icon.jpg</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/1100100/RestRequest</PackageProjectUrl>
+    <Version>1.1.3</Version>
+    <AssemblyVersion>1.1.3.0</AssemblyVersion>
+    <FileVersion>1.1.3.0</FileVersion>
+    <PackageIconUrl>https://raw.githubusercontent.com/1100100/RestRequest/master/icon.png</PackageIconUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>httprequest,httpclient</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
