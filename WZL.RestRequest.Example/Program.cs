@@ -13,7 +13,7 @@ namespace WZL.RestRequest.Example
     {
         static async Task Main(string[] args)
         {
-            await HttpRequest.Get("https://lingque-oss-jssdk.oss-cn-beijing.aliyuncs.com/beiqi_drive/video/473e391c4bd64410b0012d8f7aa57538.mp4").DownloadFromBreakPointAsync("d://download/download.mp4", (total, current, progress) =>
+            await HttpRequest.Get("https://lingque-oss-jssdk.oss-cn-beijing.aliyuncs.com/beiqi_drive/video/473e391c4bd64410b0012d8f7aa57538.mp4").DownloadFromBreakPointAsync("d:\\download\\download.mp4", (total, current, progress) =>
            {
                Console.WriteLine("total:{0},download:{1},progress:{2}", total, current, progress);
            }, () =>

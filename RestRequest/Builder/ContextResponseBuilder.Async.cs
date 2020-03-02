@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using RestRequest.Interface;
@@ -166,8 +167,12 @@ namespace RestRequest.Builder
                 }
                 else
                 {
+                    var dir = Path.GetDirectoryName(saveFileName);
+                    if (!Directory.Exists(dir))
+                        Directory.CreateDirectory(dir);
                     fileStream = new FileStream(saveFileName, FileMode.Create);
                 }
+
                 var res = await ExecuteRequestReturnResponseAsync(cancellationToken);
                 var buffer = new byte[1024];
                 using (res.Response)
@@ -185,7 +190,7 @@ namespace RestRequest.Builder
                     }
                 }
                 onCompleted?.Invoke();
-                await Task.CompletedTask;
+
             }
             catch (Exception e)
             {
@@ -206,15 +211,16 @@ namespace RestRequest.Builder
                 var req = (HttpWebRequest)WebRequest.CreateDefault(uri);
                 req.Method = "HEAD";
                 req.Timeout = 5000;
-                var res = (HttpWebResponse)await req.GetResponseAsync();
-                if (res.StatusCode == HttpStatusCode.OK)
+                using (var res = (HttpWebResponse)await req.GetResponseAsync())
                 {
-                    length = res.ContentLength;
+                    if (res.StatusCode == HttpStatusCode.OK)
+                    {
+                        length = res.ContentLength;
+                    }
                 }
-                res.Close();
                 return length;
             }
-            catch (WebException wex)
+            catch (Exception)
             {
                 return 0;
             }
