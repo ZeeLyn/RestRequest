@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "3830d9400109ba311dbc7ed0413ee366fd6c9f71"
+    "signature": ""
   },
   "compilationOptions": {},
   "targets": {
@@ -10,7 +10,7 @@
         "dependencies": {
           "CaptchaGen.NetCore": "1.0.2",
           "Newtonsoft.Json": "11.0.2",
-          "RestRequest": "1.1.0"
+          "RestRequest": "1.1.4"
         },
         "runtime": {
           "WZL.RestRequest.Example.dll": {}
@@ -153,16 +153,6 @@
           "System.Runtime": "4.1.0",
           "System.Runtime.Extensions": "4.1.0",
           "System.Runtime.InteropServices": "4.1.0"
-        },
-        "runtimeTargets": {
-          "runtime/unix/lib/_._": {
-            "rid": "unix",
-            "assetType": "runtime"
-          },
-          "runtime/win/lib/_._": {
-            "rid": "win",
-            "assetType": "runtime"
-          }
         }
       },
       "System.IO/4.1.0": {
@@ -267,16 +257,6 @@
           "System.Runtime.InteropServices": "4.1.0",
           "System.Threading": "4.0.11",
           "runtime.native.System": "4.0.0"
-        },
-        "runtimeTargets": {
-          "runtime/unix/lib/_._": {
-            "rid": "unix",
-            "assetType": "runtime"
-          },
-          "runtime/win/lib/_._": {
-            "rid": "win",
-            "assetType": "runtime"
-          }
         }
       },
       "System.Text.Encoding/4.0.11": {
@@ -314,7 +294,7 @@
           "System.Runtime": "4.1.0"
         }
       },
-      "RestRequest/1.1.0": {
+      "RestRequest/1.1.4": {
         "dependencies": {
           "Newtonsoft.Json": "11.0.2"
         },
@@ -575,7 +555,7 @@
       "path": "system.threading.tasks/4.0.11",
       "hashPath": "system.threading.tasks.4.0.11.nupkg.sha512"
     },
-    "RestRequest/1.1.0": {
+    "RestRequest/1.1.4": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

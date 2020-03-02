@@ -687,7 +687,7 @@
           "ref/netstandard1.3/System.Threading.Tasks.dll": {}
         }
       },
-      "RestRequest/1.1.1": {
+      "RestRequest/1.1.4": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
@@ -2932,7 +2932,7 @@
         "system.threading.tasks.nuspec"
       ]
     },
-    "RestRequest/1.1.1": {
+    "RestRequest/1.1.4": {
       "type": "project",
       "path": "../RestRequest/RestRequest.csproj",
       "msbuildProject": "../RestRequest/RestRequest.csproj"
@@ -2943,7 +2943,7 @@
       "CaptchaGen.NetCore >= 1.0.2",
       "Microsoft.NETCore.App >= 2.0.0",
       "Newtonsoft.Json >= 11.0.2",
-      "RestRequest >= 1.1.1"
+      "RestRequest >= 1.1.4"
     ]
   },
   "packageFolders": {
@@ -2953,11 +2953,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
+      "projectUniqueName": "E:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
       "projectName": "WZL.RestRequest.Example",
-      "projectPath": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
+      "projectPath": "E:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\WZL.RestRequest.Example.csproj",
       "packagesPath": "C:\\Users\\OWEN\\.nuget\\packages\\",
-      "outputPath": "F:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\obj\\",
+      "outputPath": "E:\\GitHub\\RestRequest\\WZL.RestRequest.Example\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -2972,14 +2972,13 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {},
-        "https://ci.appveyor.com/nuget/fsgit-fsharp": {},
-        "https://dotnet.myget.org/F/aspnetcore-master/api/v3/index.json": {}
+        "https://dotnet.myget.org/F/dotnet-core/api/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "F:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj": {
-              "projectPath": "F:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj"
+            "E:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj": {
+              "projectPath": "E:\\GitHub\\RestRequest\\RestRequest\\RestRequest.csproj"
             }
           }
         }
@@ -2998,6 +2997,7 @@
             "version": "[1.0.2, )"
           },
           "Microsoft.NETCore.App": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.0.0, )",
             "autoReferenced": true
@@ -3008,10 +3008,16 @@
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

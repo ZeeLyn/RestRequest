@@ -32,7 +32,6 @@ E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\WZL.RestRe
 E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\RestRequest.dll
 E:\GitHub\RestRequest\WZL.RestRequest.Example\bin\Debug\netcoreapp2.0\RestRequest.pdb
 E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.csprojAssemblyReference.cache
-E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.csproj.CoreCompileInputs.cache
 E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.AssemblyInfoInputs.cache
 E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.AssemblyInfo.cs
 E:\GitHub\RestRequest\WZL.RestRequest.Example\obj\Debug\netcoreapp2.0\WZL.RestRequest.Example.csproj.CopyComplete
