@@ -23,7 +23,7 @@ namespace RestRequest.Interface
         bool Download(string saveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
-        Task DownloadFromBreakPointAsync(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, CancellationToken cancellationToken = default);
+        Task DownloadFromBreakPointAsync(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, CancellationToken cancellationToken = default);
 
 
         [Obsolete("Use Download instead")]

@@ -147,9 +147,16 @@ namespace RestRequest.Builder
         }
 
 
-        public async Task DownloadFromBreakPointAsync(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, CancellationToken cancellationToken = default)
+        public async Task DownloadFromBreakPointAsync(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, CancellationToken cancellationToken = default)
         {
-            var totalLength = await GetHttpLength(_url);
+            var check = await GetHttpLength(_url);
+            if (!check.Succeed)
+            {
+                onError?.Invoke(check.ErrorMessage);
+                return;
+            }
+
+            var totalLength = check.Length;
             FileStream fileStream = null;
             long len = 0;
             try
@@ -182,19 +189,18 @@ namespace RestRequest.Builder
                     {
                         int size = await stream.ReadAsync(buffer, 0, 1024, cancellationToken);
                         len += size;
-                        var p = Math.Round((decimal)len / totalLength * 100, 1);
-                        onProgressChanged?.Invoke(totalLength, len, p);
+                        var p = Math.Round((decimal)len / totalLength * 100, 2);
                         if (size == 0)
                             break;
                         await fileStream.WriteAsync(buffer, 0, size, cancellationToken);
+                        onProgressChanged?.Invoke(totalLength, len, p);
                     }
+                    onCompleted?.Invoke();
                 }
-                onCompleted?.Invoke();
-
             }
             catch (Exception e)
             {
-                throw;
+                onError?.Invoke(e.Message);
             }
             finally
             {
@@ -203,9 +209,8 @@ namespace RestRequest.Builder
         }
 
 
-        async Task<long> GetHttpLength(Uri uri)
+        async Task<(bool Succeed, long Length, string ErrorMessage)> GetHttpLength(Uri uri)
         {
-            long length = 0;
             try
             {
                 var req = (HttpWebRequest)WebRequest.CreateDefault(uri);
@@ -213,16 +218,12 @@ namespace RestRequest.Builder
                 req.Timeout = 5000;
                 using (var res = (HttpWebResponse)await req.GetResponseAsync())
                 {
-                    if (res.StatusCode == HttpStatusCode.OK)
-                    {
-                        length = res.ContentLength;
-                    }
+                    return res.StatusCode == HttpStatusCode.OK ? (true, res.ContentLength, "") : (false, 0, $"Failed to check file size, status code is {res.StatusCode}.");
                 }
-                return length;
             }
-            catch (Exception)
+            catch (WebException e)
             {
-                return 0;
+                return (false, 0, e.Message);
             }
         }
 

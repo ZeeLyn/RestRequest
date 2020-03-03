@@ -19,6 +19,9 @@ namespace WZL.RestRequest.Example
            }, () =>
            {
                Console.WriteLine("完成");
+           }, (err) =>
+           {
+               Console.WriteLine(err);
            });
             return;
             var r0 = HttpRequest.Get("http://localhost:61389/api/values/2").ResponseValue<string>();
