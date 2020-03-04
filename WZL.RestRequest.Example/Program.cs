@@ -15,7 +15,7 @@ namespace WZL.RestRequest.Example
         {
             await HttpRequest.Get("https://lingque-oss-jssdk.oss-cn-beijing.aliyuncs.com/beiqi_drive/video/473e391c4bd64410b0012d8f7aa57538.mp4").DownloadFromBreakPointAsync("d:\\download\\download.mp4", (total, current, progress) =>
            {
-               Console.WriteLine("total:{0},download:{1},progress:{2}", total, current, progress);
+               Console.WriteLine("total:{0},download:{1},progress:{2},r:{3}", total, current, progress, (decimal)current / total);
            }, () =>
            {
                Console.WriteLine("完成");
@@ -23,7 +23,8 @@ namespace WZL.RestRequest.Example
            {
                Console.WriteLine(err);
            });
-            return;
+            Console.WriteLine("不阻塞");
+            Console.ReadKey();
             var r0 = HttpRequest.Get("http://localhost:61389/api/values/2").ResponseValue<string>();
             Console.WriteLine("0:succeed:{0},status:{1},value:{2},error:{3}", r0.Succeed, r0.StatusCode, r0.Content,
                 r0.FailMessage);
