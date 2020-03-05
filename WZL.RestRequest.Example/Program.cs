@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using RestRequest;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
@@ -13,25 +14,29 @@ namespace WZL.RestRequest.Example
     {
         static async Task Main(string[] args)
         {
-            await HttpRequest.Get("https://lingque-oss-jssdk.oss-cn-beijing.aliyuncs.com/beiqi_drive/video/473e391c4bd64410b0012d8f7aa57538.mp4").DownloadFromBreakPointAsync("d:\\download\\download.mp4", (total, current, progress) =>
-           {
-               Console.WriteLine("total:{0},download:{1},progress:{2},r:{3}", total, current, progress, (decimal)current / total);
-           }, () =>
-           {
-               Console.WriteLine("完成");
-           }, (err) =>
-           {
-               Console.WriteLine(err);
-           });
-            Console.WriteLine("不阻塞");
+            var c = new CancellationTokenSource();
+            await HttpRequest
+                .Get(
+                    "https://lingque-oss-jssdk.oss-cn-beijing.aliyuncs.com/beiqi_drive/video/473e391c4bd64410b0012d8f7aa57538.mp4")
+                .DownloadFromBreakPointAsync("d:\\download\\download.mp4",
+                    (total, current, progress) =>
+                    {
+                        Console.WriteLine("total:{0},download:{1},progress:{2},r:{3}", total, current, progress,
+                            (decimal)current / total);
+                    }, () => { Console.WriteLine("完成"); }, (err) => { Console.WriteLine("error:{0}", err); }, (downloaded, total) =>
+                     {
+                         Console.WriteLine("Cancelled");
+                     }, c.Token);
+
             Console.ReadKey();
+            c.Cancel();
+            Console.ReadKey();
+
+
             var r0 = HttpRequest.Get("http://localhost:61389/api/values/2").ResponseValue<string>();
             Console.WriteLine("0:succeed:{0},status:{1},value:{2},error:{3}", r0.Succeed, r0.StatusCode, r0.Content,
                 r0.FailMessage);
 
-
-            //Console.ReadKey();
-            //return;
 
             var r1 = HttpRequest.Get("http://localhost:61389/api/values/2").ResponseValue<int>();
             Console.WriteLine("1:succeed:{0},status:{1},value:{2},error:{3}", r1.Succeed, r1.StatusCode, r1.Content,

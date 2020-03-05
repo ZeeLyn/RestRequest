@@ -23,9 +23,9 @@ namespace RestRequest.Interface
         bool Download(string saveFileName, HttpStatusCode succeedStatus = HttpStatusCode.OK);
 
 
-        Task DownloadFromBreakPoint(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, CancellationToken cancellationToken = default);
+        Task DownloadFromBreakPoint(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, Action<long, long> onAborted = default, CancellationToken cancellationToken = default);
 
-        Task DownloadFromBreakPointAsync(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, CancellationToken cancellationToken = default);
+        Task DownloadFromBreakPointAsync(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, Action<long, long> onAborted = default, CancellationToken cancellationToken = default);
 
 
         [Obsolete("Use Download instead")]

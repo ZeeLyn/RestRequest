@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace RestRequest.Builder
 {
@@ -19,7 +20,10 @@ namespace RestRequest.Builder
         public Action OnCompleted { get; set; }
 
         public Action<string> OnError { get; set; }
+        public Action<long, long> OnAborted { get; set; }
 
         public FileStream FileStream { get; set; }
+
+        public CancellationToken CancellationToken { get; set; }
     }
 }

@@ -14,20 +14,6 @@ namespace RestRequest.Builder
     {
         private async Task<(bool Succeed, HttpStatusCode StatusCode, byte[] ResponseBytes, string FailMessage, Dictionary<string, string> Headers)> ExecuteRequestAsync(CancellationToken cancellationToken, HttpStatusCode succeedStatus = HttpStatusCode.OK)
         {
-            //using (var builder = new RequestBuilder(this))
-            //{
-            //    builder.BuildRequest();
-            //    await builder.WriteRequestBodyAsync(cancellationToken);
-            //    using (var response = await builder.GetResponseAsync())
-            //    using (var contentStream = response.GetResponseStream())
-            //    {
-            //        var headers = response.Headers.AllKeys.ToDictionary(key => key, key => response.Headers.Get(key));
-            //        var bytes = await contentStream.AsBytesAsync(cancellationToken);
-            //        return (response.StatusCode == succeedStatus, response.StatusCode,
-            //            succeedStatus == response.StatusCode ? bytes : null,
-            //            succeedStatus == response.StatusCode ? "" : bytes.AsString(), headers);
-            //    }
-            //}
             var result = await ExecuteRequestReturnResponseAsync(cancellationToken, succeedStatus);
             using (result.Response)
             using (var contentStream = result.Response.GetResponseStream())
@@ -146,8 +132,11 @@ namespace RestRequest.Builder
                 res.ResponseBytes.SaveAs(saveFileName);
         }
 
-        public async Task DownloadFromBreakPoint(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, CancellationToken cancellationToken = default)
+        public async Task DownloadFromBreakPoint(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, Action<long, long> onAborted = default, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(saveFileName))
+                throw new ArgumentNullException(nameof(saveFileName));
+
             var check = await GetHttpLength(_url);
             if (!check.Succeed)
             {
@@ -180,19 +169,42 @@ namespace RestRequest.Builder
                 }
 
                 var res = await ExecuteRequestReturnResponseAsync(cancellationToken);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    onAborted?.Invoke(len, totalLength);
+                    return;
+                }
                 var buffer = new byte[1024];
                 using (res.Response)
                 using (var stream = res.Response.GetResponseStream())
                 {
-                    while (true)
+                    if (stream != null)
                     {
-                        int size = await stream.ReadAsync(buffer, 0, 1024, cancellationToken);
-                        len += size;
-                        var p = Math.Round((decimal)len / totalLength * 100, 3);
-                        if (size == 0)
-                            break;
-                        await fileStream.WriteAsync(buffer, 0, size, cancellationToken);
-                        onProgressChanged?.Invoke(totalLength, len, p);
+                        while (true)
+                        {
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                onAborted?.Invoke(len, totalLength);
+                                return;
+                            }
+                            var size = await stream.ReadAsync(buffer, 0, 1024, cancellationToken);
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                onAborted?.Invoke(len, totalLength);
+                                return;
+                            }
+                            len += size;
+                            var p = Math.Round((decimal)len / totalLength * 100, 3);
+                            if (size == 0)
+                                break;
+                            await fileStream.WriteAsync(buffer, 0, size, cancellationToken);
+                            onProgressChanged?.Invoke(totalLength, len, p);
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                onAborted?.Invoke(len, totalLength);
+                                return;
+                            }
+                        }
                     }
                     onCompleted?.Invoke();
                 }
@@ -207,17 +219,21 @@ namespace RestRequest.Builder
             }
         }
 
-        public async Task DownloadFromBreakPointAsync(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, CancellationToken cancellationToken = default)
+        public async Task DownloadFromBreakPointAsync(string saveFileName, Action<long, long, decimal> onProgressChanged = default, Action onCompleted = default, Action<string> onError = default, Action<long, long> onAborted = default, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(saveFileName))
+                throw new ArgumentNullException(nameof(saveFileName));
+
             var check = await GetHttpLength(_url);
             if (!check.Succeed)
             {
                 onError?.Invoke(check.ErrorMessage);
                 return;
             }
-            FileStream fileStream = null;
+
             try
             {
+                FileStream fileStream;
                 if (File.Exists(saveFileName))
                 {
                     fileStream = File.OpenWrite(saveFileName);
@@ -240,55 +256,75 @@ namespace RestRequest.Builder
                 var builder = new RequestBuilder(this);
                 builder.BuildRequest();
                 await builder.WriteRequestBodyAsync(cancellationToken);
-                builder.Request.BeginGetResponse(DownloadAsync, new DownloadAsyncState
+
+                builder.Request.BeginGetResponse(async asyncResult =>
+                {
+                    var asyncState = (DownloadAsyncState)asyncResult.AsyncState;
+                    var len = asyncState.FileStream.Length;
+                    try
+                    {
+                        var buffer = new byte[1024];
+                        var response = (HttpWebResponse)asyncState.Request.EndGetResponse(asyncResult);
+                        using (response)
+                        using (asyncState.FileStream)
+                        using (var stream = response.GetResponseStream())
+                        {
+                            if (stream != null)
+                            {
+                                while (true)
+                                {
+                                    if (asyncState.CancellationToken.IsCancellationRequested)
+                                    {
+                                        asyncState.OnAborted?.Invoke(len, asyncState.TotalLength);
+                                        return;
+                                    }
+                                    var size = await stream.ReadAsync(buffer, 0, 1024, asyncState.CancellationToken);
+                                    if (asyncState.CancellationToken.IsCancellationRequested)
+                                    {
+                                        asyncState.OnAborted?.Invoke(len, asyncState.TotalLength);
+                                        return;
+                                    }
+                                    len += size;
+                                    var p = Math.Round((decimal)len / asyncState.TotalLength * 100, 3);
+                                    if (size == 0)
+                                        break;
+                                    await asyncState.FileStream.WriteAsync(buffer, 0, size, asyncState.CancellationToken);
+                                    asyncState.OnProgressChanged?.Invoke(asyncState.TotalLength, len, p);
+                                    if (asyncState.CancellationToken.IsCancellationRequested)
+                                    {
+                                        asyncState.OnAborted?.Invoke(len, asyncState.TotalLength);
+                                        return;
+                                    }
+                                }
+                            }
+                            asyncState.OnCompleted?.Invoke();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        asyncState.OnError?.Invoke(e.Message);
+                    }
+                    finally
+                    {
+                        asyncState.Request.Abort();
+                    }
+
+                }, new DownloadAsyncState
                 {
                     Request = builder.Request,
                     SaveFileName = saveFileName,
                     OnProgressChanged = onProgressChanged,
                     OnCompleted = onCompleted,
                     OnError = onError,
+                    OnAborted = onAborted,
                     TotalLength = check.Length,
-                    FileStream = fileStream
+                    FileStream = fileStream,
+                    CancellationToken = cancellationToken
                 });
             }
             catch (Exception e)
             {
                 onError?.Invoke(e.Message);
-            }
-        }
-
-        void DownloadAsync(IAsyncResult asyncResult)
-        {
-            var asyncState = (DownloadAsyncState)asyncResult.AsyncState;
-            long len = asyncState.FileStream.Length;
-            try
-            {
-                var buffer = new byte[1024];
-                var response = (HttpWebResponse)asyncState.Request.EndGetResponse(asyncResult);
-                using (response)
-                using (var stream = response.GetResponseStream())
-                {
-                    while (true)
-                    {
-                        int size = stream.Read(buffer, 0, 1024);
-                        len += size;
-                        var p = Math.Round((decimal)len / asyncState.TotalLength * 100, 3);
-                        if (size == 0)
-                            break;
-                        asyncState.FileStream.Write(buffer, 0, size);
-                        asyncState.OnProgressChanged?.Invoke(asyncState.TotalLength, len, p);
-                    }
-                    asyncState.OnCompleted?.Invoke();
-                }
-            }
-            catch (Exception e)
-            {
-                asyncState.OnError?.Invoke(e.Message);
-            }
-            finally
-            {
-                asyncState.FileStream?.Dispose();
-                asyncState.Request.Abort();
             }
         }
 
