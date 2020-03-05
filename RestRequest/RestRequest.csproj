@@ -8,7 +8,7 @@
     <Company />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/1100100/RestRequest</PackageProjectUrl>
-    <Version>1.1.4</Version>
+    <Version>1.2.0</Version>
     <AssemblyVersion>1.1.4.0</AssemblyVersion>
     <FileVersion>1.1.4.0</FileVersion>
     <PackageIconUrl>https://raw.githubusercontent.com/1100100/RestRequest/master/icon.png</PackageIconUrl>

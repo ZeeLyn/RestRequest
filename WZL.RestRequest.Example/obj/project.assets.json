@@ -687,7 +687,7 @@
           "ref/netstandard1.3/System.Threading.Tasks.dll": {}
         }
       },
-      "RestRequest/1.1.4": {
+      "RestRequest/1.2.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
@@ -2935,7 +2935,7 @@
         "system.threading.tasks.nuspec"
       ]
     },
-    "RestRequest/1.1.4": {
+    "RestRequest/1.2.0": {
       "type": "project",
       "path": "../RestRequest/RestRequest.csproj",
       "msbuildProject": "../RestRequest/RestRequest.csproj"
@@ -2946,7 +2946,7 @@
       "CaptchaGen.NetCore >= 1.0.2",
       "Microsoft.NETCore.App >= 2.0.0",
       "Newtonsoft.Json >= 12.0.3",
-      "RestRequest >= 1.1.4"
+      "RestRequest >= 1.2.0"
     ]
   },
   "packageFolders": {
