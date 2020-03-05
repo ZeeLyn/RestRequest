@@ -27,7 +27,7 @@ namespace WZL.RestRequest.Example
                      {
                          Console.WriteLine("Cancelled");
                      }, c.Token);
-
+            Console.WriteLine("Press any key to cancel download ?");
             Console.ReadKey();
             c.Cancel();
             Console.ReadKey();
