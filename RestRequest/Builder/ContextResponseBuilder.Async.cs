@@ -174,7 +174,8 @@ namespace RestRequest.Builder
                     onAborted?.Invoke(len, totalLength);
                     return;
                 }
-                var buffer = new byte[1024];
+                var bufferLength = 1024 * 1024;
+                var buffer = new byte[bufferLength];
                 using (res.Response)
                 using (var stream = res.Response.GetResponseStream())
                 {
@@ -187,7 +188,7 @@ namespace RestRequest.Builder
                                 onAborted?.Invoke(len, totalLength);
                                 return;
                             }
-                            var size = await stream.ReadAsync(buffer, 0, 1024, cancellationToken);
+                            var size = await stream.ReadAsync(buffer, 0, bufferLength, cancellationToken);
                             if (cancellationToken.IsCancellationRequested)
                             {
                                 onAborted?.Invoke(len, totalLength);
@@ -263,7 +264,8 @@ namespace RestRequest.Builder
                     var len = asyncState.FileStream.Length;
                     try
                     {
-                        var buffer = new byte[1024];
+                        var bufferLength = 1024 * 1024;
+                        var buffer = new byte[bufferLength];
                         var response = (HttpWebResponse)asyncState.Request.EndGetResponse(asyncResult);
                         using (response)
                         using (asyncState.FileStream)
@@ -278,7 +280,7 @@ namespace RestRequest.Builder
                                         asyncState.OnAborted?.Invoke(len, asyncState.TotalLength);
                                         return;
                                     }
-                                    var size = await stream.ReadAsync(buffer, 0, 1024, asyncState.CancellationToken);
+                                    var size = await stream.ReadAsync(buffer, 0, bufferLength, asyncState.CancellationToken);
                                     if (asyncState.CancellationToken.IsCancellationRequested)
                                     {
                                         asyncState.OnAborted?.Invoke(len, asyncState.TotalLength);

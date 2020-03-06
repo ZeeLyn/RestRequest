@@ -21,8 +21,7 @@ namespace WZL.RestRequest.Example
                 .DownloadFromBreakPointAsync("d:\\download\\download.mp4",
                     (total, current, progress) =>
                     {
-                        Console.WriteLine("total:{0},download:{1},progress:{2},r:{3}", total, current, progress,
-                            (decimal)current / total);
+                        Console.WriteLine("total:{0},download:{1},progress:{2},r:{3}", total, current, progress, (decimal)current / total);
                     }, () => { Console.WriteLine("完成"); }, (err) => { Console.WriteLine("error:{0}", err); }, (downloaded, total) =>
                      {
                          Console.WriteLine("Cancelled");
